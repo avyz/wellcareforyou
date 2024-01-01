@@ -1,0 +1,486 @@
+$body-color: #1c1c1c;
+$main-color: #0057b8;
+$heading-color: #111111;
+$white-color: #ffffff;
+$black-color: #000000;
+$font-size: 15px;
+$transition: all ease .5s;
+$border-radius: 5px;
+$box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
+
+.theme-dark {
+    body {
+        background: #1a1a1a;
+        color: $white-color;
+    }
+    a {
+        color: $white-color;
+    }
+    .bg-color-f8f9fa {
+        background-color: #121212;
+    }
+    .bg-color-091c47 {
+        background-color: #000000;
+    }
+    .bg-color-f1f5f8 {
+        background-color: #000000;
+    }
+    .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+        color: $white-color;
+    }
+    .navbar-area {
+        background-color: #121212;
+        .navbar-brand {
+			.main-logo {
+				display: none;
+			}
+			.white-logo {
+				display: block;
+			}
+		}
+    }
+    .desktop-nav .navbar .navbar-nav .nav-item a {
+        color: $white-color;
+    }
+    .desktop-nav .navbar .navbar-nav .nav-item .dropdown-menu {
+        background: #121212;
+    }
+    .desktop-nav .navbar .navbar-nav .nav-item .dropdown-menu li a {
+        border-color: #222222;
+        &:hover {
+            color: $main-color;
+        }
+        &.active {
+            color: $main-color;
+        }
+    }
+    .desktop-nav .navbar .navbar-nav .nav-item .dropdown-menu li a {
+        color: $white-color;
+        &:hover {
+            color: $main-color;
+        }
+        &.active {
+            color: $main-color;
+        }
+    }
+    .desktop-nav .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu li a {
+        color: $white-color;
+        border-color: #222222;
+        &:hover {
+            color: $main-color;
+        }
+        &.active {
+            color: $main-color;
+        }
+    }
+    .desktop-nav .navbar .others-options ul li .cart {
+        color: $white-color;
+    }
+    .desktop-nav .navbar .others-options ul li .option-item .search-btn {
+        color: $white-color;
+    }
+    .default-btn {
+        &:hover {
+            background-color: $black-color;
+        }
+    }
+    .desktop-nav .navbar .others-options ul li .option-item .search-overlay.search-popup {
+        background-color: $black-color;
+    }
+    .desktop-nav .navbar .others-options ul li .option-item .search-overlay.search-popup .search-form .search-input {
+        border-color: #222222;
+        background-color: $black-color;
+    }
+    .navbar-area.is-sticky {
+        background-color: $black-color !important;
+    }
+    .mobile-responsive-nav {
+        .main-logo {
+            display: none;
+        }
+        .white-logo {
+            display: block;
+        }
+    }
+    .mobile-responsive-nav .mobile-responsive-menu.mean-container a.meanmenu-reveal span {
+        background: #ffffff;
+    }
+    .others-option-for-responsive .dot-menu .inner .circle {
+        background: #ffffff;
+    }
+    .form-control {
+        background-color: $black-color !important;
+        border-color: #222222 !important;
+        color: $white-color !important;
+    }
+    .page-banner-content {
+        background-color: rgba(17, 16, 16, 0.8);
+    }
+    .page-banner-content ul li::before {
+        background-color: $white-color;
+    }
+    .swiper-slide::before {
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.852) 37.5%, rgba(255, 255, 255, 0) 67.19%);
+    }
+    .single-futcher {
+        background-color: #121212;
+    }
+    .choose-us-area::before {
+        background: linear-gradient(90deg, #000000 0%, #000000 37.5%, rgba(0, 0, 0, 0.5) 100%);
+    }
+    .choose-us-area {
+        background-image: unset;
+    }
+    .choose-us-img .ambulance-services {
+        background-color: $black-color;
+    }
+    .single-urgent {
+        background-color: $black-color;
+    }
+    .appointment-form {
+        background-color: #060606;
+    }
+    .client-area::before {
+        background-color: #121212;
+    }
+    .section-title.left-title h2 {
+        color: $black-color;
+    }
+    .single-client {
+        background-color: #121212;
+        img {
+            border-radius: 50px;
+        }
+    }
+    .client-slide.owl-theme .owl-nav .owl-prev, .client-slide.owl-theme .owl-nav .owl-next {
+        background-color: $black-color;
+    }
+    .single-blog .blog-content h3 {
+        a {
+            color: $white-color;
+        }
+    }
+    .swiper-pagination-bullet {
+        background: rgba(14, 14, 14, 0.9);
+        color: $white-color;
+    }
+    .swiper-pagination-bullet-active {
+        background-color: $main-color;
+    }
+    .hero-area .pagination-btn {
+        &::after {
+            border: 1px solid rgba(121, 121, 121, 0.2);
+        }
+        &::before {
+            border: 1px solid rgba(121, 121, 121, 0.2);
+        }
+    }
+    .hero-area .socila-link {
+        &::after {
+            border: 1px solid rgba(121, 121, 121, 0.2);
+        }
+        &::before {
+            border: 1px solid rgba(121, 121, 121, 0.2);
+        }
+    }
+    .appointment-area::before {
+        background-color: #121212;
+    }
+    .single-solution .icon {
+        background-color: $black-color;
+        border-color: #121212;
+    }
+    .single-urgent .icon {
+        background-color: #1a1a1a;
+    }
+    .our-mison-area::before {
+        background-color: #121212;
+    }
+    .pagination-area .page-numbers {
+        background-color: #323232;
+        color: $white-color;
+        &.current {
+            background-color: $main-color;
+        }
+    }
+    .sidebar-widget {
+        background-color: #282828;
+    }
+    .find-doctors {
+        background-color: $black-color;
+    }
+    .form-select {
+        color: $white-color;
+    }
+    .doctor-details-content {
+        background-color: #282828;
+    }
+    .doctor-content ul li span {
+        color: $main-color;
+    }
+    .doctor-informetion h2 {
+        background-color: #282828;
+    }
+    .sidebar-widget.review p {
+        border-color: #383838;
+        background-color: #000000;
+    }
+    .single-client {
+        background-color: #1e1e1e ;
+    }
+    .payment-content .online-payment {
+        background-color: #282828;
+        .form-group label {
+            color: $white-color;
+        }
+    }
+    .appointments-conetnt {
+        .requestor {
+            background-color: #282828;
+        }
+    }
+    .appointments-form {
+        background-color: #282828;
+    }
+    .single-hospital .hospital-content {
+        background-color: $black-color;
+    }
+    .single-hospital .hospital-content h3 a {
+        color: $white-color;
+    }
+    .sidebar-widget.conditions .accordion {
+        background-color: #282828;
+    }
+    .sidebar-widget.conditions .accordion-button {
+        color: $white-color;
+    }
+    .single-consult-online {
+        background-color: #282828;
+    }
+    .section-title.left-title h2 {
+        color: $white-color;
+    }
+    .visitors-sludebar {
+        background-color: #282828;
+        img {
+            filter: invert(1);
+        }
+        h4 {
+            border-bottom: 1px solid #424141;
+        }
+    }
+    .single-patients {
+        background-color: #282828;
+    }
+    .single-patients .default-btn {
+        color: $white-color;
+    }
+    .accordion-item {
+        color: $white-color;
+    }
+    .frequently-asked .accordion-button {
+        color: $white-color;
+    }
+    .single-patient-information {
+        background-color: #282828;
+    }
+    .srarch-result {
+        background-color: #282828;
+    }
+    .cart-controller .cart-table table thead tr th {
+        color: $white-color;
+    }
+    .cart-controller .cart-table table tbody tr td a {
+        color: $white-color;
+    }
+    .cart-controller .cart-table table tbody tr td {
+        color: $white-color;
+    }
+    .cart-totals {
+        background-color: #282828;
+    }
+    .cart-totals ul li {
+        color: $white-color;
+        border-color: #3e3e3e;
+        span {
+            color: $white-color;
+        }
+    }
+    .cart-controller .cart-table table tbody tr td {
+        border-color: #3e3e3e;
+    }
+    .cart-controller .cart-table table tbody tr {
+        border-color: #3e3e3e;
+    }
+    .checkout-wrap .billing-details {
+        background-color: #282828;
+        .form-group label {
+            color: $white-color;
+        }
+    }
+    .checkout-wrap .faq-accordion {
+        background-color: #282828;
+    }
+    .checkout-wrap .faq-accordion .accordion-button {
+        color: $white-color;
+    }
+    .product-details-desc .sku li {
+        color: $white-color;
+    }
+    .product-details-desc .sku li span {
+        color: $main-color;
+    }
+    .product-details-desc .price del {
+        color: $white-color;
+    }
+    .product-details-desc .product-add-to-cart .quantities {
+        color: $white-color;
+    }
+    .product-details-desc .socila-link li a {
+        background-color: #000000;
+    }
+    .product-details-desc .product-add-to-cart .input-counter input {
+        background-color: #000000;
+    }
+    .product-details-tab {
+        background-color: #282828;
+    }
+    .product-details-tab .nav-tabs .nav-item .nav-link {
+        color: $white-color;
+    }
+    .product-details-tab .nav-tabs .nav-item .nav-link.active {
+        background-color: transparent;
+        color: $main-color;
+    }
+    .product-details-tab .product-details-additional-content ul li {
+        color: $main-color;
+    }
+    .product-details-tab .product-details-additional-content ul li span {
+        color: $white-color;
+    }
+    .product-details-tab .product-details-review-content .product-review-form .review-comments .review-item .review-report-link {
+        color: $white-color;
+    }
+    .product-details-tab .nav-tabs {
+        border-bottom: 1px solid #1a1a1a;
+    }
+    .product-details-tab .product-details-additional-content ul li {
+        border-color: #3e3e3e;
+    }
+    .product-details-tab .product-details-review-content .product-review-form .review-comments .review-item {
+        border-color: #3c3c3c;
+    }
+    .product-details-tab .product-details-review-content .product-review-form .review-form form .form-group label {
+        color: $white-color;
+    }
+    .single-help-card {
+        background-color: #282828;
+    }
+    .single-help-card .icon {
+        background-color: #1a1a1a;
+    }
+    .coming-soon-content {
+        background-color: #282828;
+        img {
+            filter: invert(1);
+        }
+    }
+    .coming-soon-content form .form-group .input-newsletter {
+        background-color: #3e3e3e;
+        color: $white-color;
+        border-color: #4d4d4d;
+    }
+    .blog-details-content blockquote {
+        background-color: #282828;
+        span::before {
+            background-color: $white-color;
+        }
+    }
+    .blog-details-content .tag-social .socila-link li span {
+        color: $white-color;
+    }
+    .blog-details-content .tag-social .tags li {
+        span {
+            color: $white-color;
+        }
+        a {
+            color: $white-color;
+        }
+    }
+    .blog-details-content .prev-next a i {
+        background-color: #282828;
+    }
+    .sidebar-widget.tags ul li a {
+        background-color: #1a1a1a;
+        &:hover {
+            background-color: $main-color;
+        }
+    }
+    .sidebar-widget .src-form .src-btn {
+        color: #ffffff;
+    }
+    .contact-form {
+        background-color: #282828;
+        .form-group {
+            label {
+                color: $white-color;
+            }
+        }
+    }
+    .single-footer-widget {
+        margin-bottom: 30px;
+        .logo {
+            .main-logo {
+                display: none;
+            }
+            .white-logo {
+                display: block;
+            }
+        }
+    }
+    .left-informetion::before {
+        background-color: #383838;
+    }
+    .checkout-wrap .billing-details h3 {
+        border-bottom: 1px solid #1b1b1b;
+    }
+    .product-details-desc .product-add-to-cart .input-counter input {
+        color: $white-color;
+    }
+    .login-register-form-area.register::before {
+        background-color: #303030;
+    }
+    .form-select {
+        color: $white-color;
+        option {
+            color: $white-color;
+            background-color: $white-color;
+        }
+    }
+    .desktop-nav .navbar .others-options ul li .option-item .search-overlay.search-popup .search-form .search-input {
+        color: $white-color;
+    }
+    .single-footer-widget .import-link li a {
+        color: #ffffff;
+    }
+    .single-footer-widget .info li a {
+        color: #ffffff;
+    }
+    .client-area {
+        .section-title.left-title {
+            background-color: #1e1e1e;
+        }
+        .quat {
+            border-radius: 0;
+        }
+    }
+    .desktop-nav .navbar .others-options ul li .cart {
+        img {
+            filter: brightness(5000);
+        }
+    }
+    .desktop-nav .navbar .others-options ul li .option-item .search-btn {
+        filter: brightness(5000);
+    }
+    
+}

@@ -1,0 +1,7 @@
+__ci_last_regenerate|i:1703611060;_ci_previous_url|s:28:"http://localhost:8080/comics";notif|s:246:"<script>Swal.fire({
+                title: "Success",
+                text: "Attack On Titan Final berhasil diubah",
+                icon: "success",
+                timer: 1500,
+                showConfirmButton: false
+              });</script>";__ci_vars|a:1:{s:5:"notif";s:3:"old";}
