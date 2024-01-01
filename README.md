@@ -1,2 +1,2 @@
-# wellcareforyou
-Web app hospital service
+To init wellcareforyou
+php spark serve
