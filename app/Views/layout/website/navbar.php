@@ -27,7 +27,7 @@
                             <a href="/news-blog" class="nav-link border-style menu-link">News & Blog</a>
                         </li>
                         <li class="nav-item pt-3 pb-2">
-                            <a href="/hospital" class="nav-link border-style menu-link">Hospital</a>
+                            <a href="/hospitals" class="nav-link border-style menu-link">Hospital</a>
                         </li>
                         <li class="nav-item pt-3 pb-2">
                             <a href="/doctors" class="nav-link border-style menu-link">Doctors</a>
@@ -49,8 +49,8 @@
                                 <a href="my-account.html">Login</a>
                             </li>
                             <li>
-                                <form id="mySelectLang" action="/" method="get">
-                                    <select id="select-lang" class="select2" name="language">
+                                <form id="mySelectLangDesktop" action="/" method="get">
+                                    <select onchange="changeLang(this)" class="select2 select-lang" name="language" data-type="desktop">
                                         <option value="id" data-img-src="/assets/website/images/lang/flag-icon-indonesia.png">
                                             ID
                                         </option>
@@ -66,7 +66,7 @@
         </div>
     </div>
 
-    <div class="others-option-for-responsive" style="vertical-align: middle;">
+    <div class="others-option-for-responsive d-block d-lg-none" style="vertical-align: middle;">
         <div class="container">
             <div class="dot-menu">
                 <div class="inner">
@@ -85,8 +85,8 @@
                                 <a href="/login">Login</a>
                             </li>
                             <li style="border-left: 1px solid black;">
-                                <form id="mySelectLang" action="/" method="get">
-                                    <select id="select-lang" class="select2" name="language">
+                                <form id="mySelectLangMobile" action="/" method="get">
+                                    <select onchange="changeLang(this)" class="select2 select-lang" name="language" data-type="mobile">
                                         <option value="id" data-img-src="/assets/website/images/lang/flag-icon-indonesia.png">
                                             ID
                                         </option>

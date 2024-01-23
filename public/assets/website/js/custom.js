@@ -241,7 +241,7 @@
 			'width': 170,
 			'elementHandlers': specialElementHandlers
 		});
-		doc.save('bexi-template.pdf');
+		doc.save('wellcare.pdf');
 	});
 
 	// Search Popup JS
@@ -288,6 +288,9 @@
 	});
 
 	var currentUrl = window.location.href;
+	var origin = window.location.origin;
+
+	currentUrl = origin + "/" + currentUrl.split("/")[3]
 
 	// Menemukan elemen <a> yang sesuai dengan path URL
 	var navLinks = $('.menu-link');
@@ -299,7 +302,7 @@
 		}
 	})
 
-	$('#select-lang').select2({
+	$('.select-lang').select2({
 		templateResult: formatResult,
 		templateSelection: formatResult,
 		escapeMarkup: function (m) {
@@ -308,7 +311,7 @@
 	});
 
 	// Hide search input using Select2 method
-	$('#select-lang').on('select2:open', function () {
+	$('.select-lang').on('select2:open', function () {
 		$('.select2-search').hide();
 	});
 
@@ -324,10 +327,18 @@
 		return $result;
 	}
 
-	$(document).on("change", "#select-lang", function () {
-		$("#mySelectLang").submit()
-	})
+	const date = new Date();
+	$("#c-year").text(date.getFullYear());
 })(jQuery);
+
+function changeLang(e) {
+	const type = $(e).data('type');
+	if (type == 'desktop') {
+		$("#mySelectLangDesktop").submit()
+	} else {
+		$("#mySelectLangMobile").submit()
+	}
+}
 
 // try {
 // 	// function to set a given theme/color-scheme

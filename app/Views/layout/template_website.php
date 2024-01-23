@@ -45,121 +45,21 @@
     <?= $this->renderSection('bodyWebsite'); ?>
 
     <!-- Start Footer Area -->
-    <div class="footer-area bg-color-f1f5f8 pt-100 pb-70">
-        <div class="container">
+    <div class="footer-area bg-color-0057b8 pt-100 pb-70">
+        <div class="container text-white">
             <div class="row">
                 <div class="col-lg-3 col-sm-6">
                     <div class="single-footer-widget">
                         <a href="index.html" class="logo">
-                            <img src="/assets/website/images/logo.png" class="main-logo" alt="logo">
+                            <img src="/assets/website/images/logo_white.png" class="main-logo" alt="logo">
                         </a>
-                        <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Donec sollicitudin molestie.</p>
-                        <h4>177 Devon Lane Miami, MK 3355</h4>
-                        <ul class="info">
-                            <li>
-                                <span>EMAIL US:</span>
-                                <a href="mailto:info@bexi.com">info@bexi.com</a>
-                            </li>
-                            <li>
-                                <span>CALL US:</span>
-                                <a href="tel:1-885-665-2022">1-885-665-2022</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-footer-widget">
-                        <h3>Departments</h3>
-
-                        <ul class="import-link">
-                            <li>
-                                <a href="department.html">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                    Emergency Departments
-                                </a>
-                            </li>
-                            <li>
-                                <a href="department-orthopedics.html">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                    Orthopedics
-                                </a>
-                            </li>
-                            <li>
-                                <a href="department.html">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                    Neurosciences
-                                </a>
-                            </li>
-                            <li>
-                                <a href="department.html">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                    Gastroenterology
-                                </a>
-                            </li>
-                            <li>
-                                <a href="department.html">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                    Bariatric Surgery
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-footer-widget">
-                        <h3>Helpful Links</h3>
-
-                        <ul class="import-link">
-                            <li>
-                                <a href="find-a-doctor.html">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                    Find a Doctor
-                                </a>
-                            </li>
-                            <li>
-                                <a href="hospital.html">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                    Find a Hospital
-                                </a>
-                            </li>
-                            <li>
-                                <a href="products.html">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                    Buy Medicine
-                                </a>
-                            </li>
-                            <li>
-                                <a href="terms-conditions.html">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                    Terms of Use
-                                </a>
-                            </li>
-                            <li>
-                                <a href="privacy-policy.html">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                    Privacy Policy
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-footer-widget">
-                        <h3>Subscribe Our Newsletter</h3>
-
-                        <form class="newsletter-form" data-toggle="validator">
-                            <input type="email" class="form-control" placeholder="Email address" name="EMAIL" required autocomplete="off">
-
-                            <button class="default-btn" type="submit">
-                                Submit now
-                            </button>
-
-                            <div id="validator-newsletter" class="form-result"></div>
-                        </form>
-
+                        <p class="text-white">Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Donec sollicitudin molestie.</p>
+                        <h4 class="text-white">Registration</h4>
+                        <p class="mt-1 text-white">
+                            Monday - Saturday
+                            <br>
+                            08.00 - 16.00 (GMT +8)
+                        </p>
                         <ul class="socila-link">
                             <li>
                                 <a href="https://www.facebook.com/" target="_blank">
@@ -167,18 +67,105 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="https://www.facebook.com/" target="_blank">
+                                <a href="https://www.twitter.com/" target="_blank">
                                     <img src="/assets/website/images/svg-icon/twitter.svg" alt="Image">
                                 </a>
                             </li>
                             <li>
-                                <a href="https://www.facebook.com/" target="_blank">
+                                <a href="https://www.linkedin.com/" target="_blank">
                                     <img src="/assets/website/images/svg-icon/linkedin.svg" alt="Image">
                                 </a>
                             </li>
                             <li>
                                 <a href="https://www.instagram.com/" target="_blank">
                                     <img src="/assets/website/images/svg-icon/instagram.svg" alt="Image">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-footer-widget ps-lg-4">
+                        <h3 class="text-white">COMPANY</h3>
+
+                        <ul class="import-link">
+                            <li>
+                                <a class="text-white" href="/about">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                    About Us
+                                </a>
+                            </li>
+                            <li>
+                                <a class="text-white" href="/privacy-policy">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                    Privacy Policy
+                                </a>
+                            </li>
+                            <li>
+                                <a class="text-white" href="/terms-conditions">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                    Terms & Conditions
+                                </a>
+                            </li>
+                            <li>
+                                <a class="text-white" href="/news-blog">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                    News & Blog
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h3 class="text-white">DIRECTORY</h3>
+
+                        <ul class="import-link">
+                            <li>
+                                <a class="text-white" href="/hospitals">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                    Hospitals
+                                </a>
+                            </li>
+                            <li>
+                                <a class="text-white" href="/doctors">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                    Doctors
+                                </a>
+                            </li>
+                            <li>
+                                <a class="text-white" href="/pharmacies">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                    Pharmacies
+                                </a>
+                            </li>
+                            <li>
+                                <a class="text-white" href="/specialists">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                    Specialists
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h3 class="text-white">GET IN TOUCH</h3>
+
+                        <ul class="import-link">
+                            <li>
+                                <a class="text-white" href="/contact-us">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                    Contact Us
+                                </a>
+                            </li>
+                            <li>
+                                <a class="text-white" href="/carreer">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                    Carreer
                                 </a>
                             </li>
                         </ul>
@@ -192,12 +179,17 @@
     <!-- Start Copyright Area -->
     <div class="copy-right-area">
         <div class="container">
-            <p>© Bexi is Proudly Owned by <a href="https://envytheme.com/" target="_blank">EnvyTheme</a></p>
+            <p>© <span id="c-year"></span> Renavi Projekt-D copyright</p>
         </div>
     </div>
     <!-- End Copyright Area -->
 
     <!-- Start Go Top Area -->
+    <div class="wa-button">
+        <a href="https://wa.me/123456789" target="_blank">
+            <i class="ri-whatsapp-line"></i>
+        </a>
+    </div>
     <div class="go-top">
         <i class="ri-arrow-up-s-fill"></i>
         <i class="ri-arrow-up-s-fill"></i>

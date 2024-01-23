@@ -23,8 +23,7 @@ class About extends BaseController
             'title' => $this->setTitle('About'),
             'metaDescription' => $this->setMetaDescription($description),
             'layout' => $this->dirLayoutWebsite,
-            'section' => $this->dirSectionWebsite,
-            'is_menu' => 'about'
+            'section' => $this->dirSectionWebsite
         ];
 
         return view('website/about/body', $data);

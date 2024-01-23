@@ -23,10 +23,37 @@ class Home extends BaseController
             'title' => $this->setTitle('Home'),
             'metaDescription' => $this->setMetaDescription($description),
             'layout' => $this->dirLayoutWebsite,
-            'section' => $this->dirSectionWebsite,
-            'is_menu' => 'home'
+            'section' => $this->dirSectionWebsite
         ];
 
         return view('website/home/body', $data);
+    }
+
+    public function terms()
+    {
+        session()->set('menu', 'home');
+        $description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente inventore natus, ullam explicabo accusantium dicta.";
+        $data = [
+            'title' => $this->setTitle('Terms and Conditions'),
+            'metaDescription' => $this->setMetaDescription($description),
+            'layout' => $this->dirLayoutWebsite,
+            'section' => $this->dirSectionWebsite
+        ];
+
+        return view('website/home/terms-conditions', $data);
+    }
+
+    public function privacy()
+    {
+        session()->set('menu', 'home');
+        $description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente inventore natus, ullam explicabo accusantium dicta.";
+        $data = [
+            'title' => $this->setTitle('Terms and Conditions'),
+            'metaDescription' => $this->setMetaDescription($description),
+            'layout' => $this->dirLayoutWebsite,
+            'section' => $this->dirSectionWebsite
+        ];
+
+        return view('website/home/privacy-policy', $data);
     }
 }

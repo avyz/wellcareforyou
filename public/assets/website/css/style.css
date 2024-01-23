@@ -49,12 +49,13 @@ root style
 :root {
   --main-color: #143185;
   --second-color: #3e80dd;
+  --bg-color: #0057b8;
 }
 
 
 body {
   font-size: 16px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #1c1c1c;
 }
 
@@ -72,6 +73,35 @@ a:hover {
 
 a:focus {
   text-decoration: none;
+}
+
+.bg-color-main {
+  background-color: var(--bg-color);
+}
+
+.bg-color-light-blue {
+  background-color: #9dc3de;
+}
+
+.text-blue {
+  color: var(--bg-color);
+}
+
+.btn-outline-blue {
+  --bs-btn-color: var(--bg-color);
+  --bs-btn-border-color: var(--bg-color);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--bg-color);
+  --bs-btn-hover-border-color: var(--bg-color);
+  --bs-btn-focus-shadow-rgb: 248, 249, 250;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--bg-color);
+  --bs-btn-active-border-color: var(--bg-color);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--bg-color);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--bg-color);
+  --bs-gradient: none;
 }
 
 button {
@@ -101,7 +131,7 @@ h5,
 h6 {
   color: #111111;
   font-weight: 700;
-  font-family: "Noto Serif", serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 h2 {
@@ -246,7 +276,7 @@ Bg-color Style*/
 }
 
 .bg-color-0057b8 {
-  background-color: #0057b8;
+  background-color: #143185;
 }
 
 .bg-color-f1f5f8 {
@@ -267,9 +297,10 @@ Default Btn Area Style*/
   display: -ms-inline-flexbox;
   display: inline-flex;
   padding: 16px 50px;
-  background-color: #0057b8;
+  background-color: var(--main-color);
   border-radius: 5px;
-  border: 1px solid #0057b8;
+  border: 1px solid var(--main-color);
+  ;
   font-weight: 500;
   font-size: 16px;
   line-height: 22px;
@@ -1420,8 +1451,8 @@ Others Option For Responsive Area Style
 Hero Area Style
 ======================================================*/
 .hero-area {
-  margin-left: 100px;
-  margin-right: 100px;
+  margin-left: 0;
+  margin-right: 0;
   position: relative;
 }
 
@@ -1591,7 +1622,7 @@ Hero Area Style
   opacity: 1;
   background-color: transparent;
   border: 1px solid rgba(9, 28, 71, 0.2);
-  font-family: "Noto Serif", serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 25px;
   -webkit-transition: all ease 0.5s;
   transition: all ease 0.5s;
@@ -1977,7 +2008,7 @@ Choose Us Content Area Style
   border-radius: 50%;
   -webkit-transition: all ease 0.5s;
   transition: all ease 0.5s;
-  font-family: "Noto Serif", serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .choose-us-content ul li span::before {
@@ -2028,7 +2059,7 @@ Choose Us Content Area Style
 
 .choose-us-img .ambulance-services .ambulance-info {
   margin-left: 30px;
-  font-family: "Noto Serif", serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .choose-us-img .ambulance-services .ambulance-info span {
@@ -2300,7 +2331,7 @@ Solution Area Style
   border-radius: 50%;
   color: #ffffff;
   font-size: 25px;
-  font-family: "Noto Serif", serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .single-solution .icon i {
@@ -2561,7 +2592,7 @@ Footer Area Style
 
 .single-footer-widget h4 {
   font-size: 18px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 500;
 }
 
@@ -2953,6 +2984,12 @@ Sidebar Widget Area Style
   margin-bottom: 30px;
 }
 
+.sidebar-widget ul::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 87, 184, 0.3);
+  border-radius: 5px;
+
+}
+
 .sidebar-widget:last-child {
   margin-bottom: 0;
 }
@@ -2970,6 +3007,15 @@ Sidebar Widget Area Style
   margin-bottom: 0;
   list-style-type: none;
   padding: 30px;
+}
+
+.sidebar-widget.departments ul {
+  overflow-y: scroll;
+  max-height: 350px;
+}
+
+.sidebar-widget.departments ul::-webkit-scrollbar {
+  width: 5px;
 }
 
 .sidebar-widget.departments ul li {
@@ -3106,7 +3152,7 @@ Sidebar Widget Area Style
   padding: 0;
   font-weight: 600;
   font-size: 18px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .sidebar-widget.conditions .accordion-button:focus {
@@ -3504,7 +3550,7 @@ Payment Area Style
 
 .payment-content h4 {
   font-size: 16px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin-bottom: 50px;
 }
 
@@ -3770,6 +3816,14 @@ Hospital Area Style
 /*
 Hospital Details Area Style
 ======================================================*/
+.package-list {
+  margin-top: 30px;
+}
+
+.package-list h2 {
+  border-left: red 5px solid;
+}
+
 .hospital-details-content h2 {
   font-size: 35px;
   margin-bottom: 15px;
@@ -4187,7 +4241,7 @@ Product Area Style
 
 .single-product .product-content h3 {
   font-size: 25px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
   font-size: 18px;
   line-height: 36px;
@@ -4486,7 +4540,7 @@ Product Details Area Style
   font-weight: 400;
   font-size: 25px;
   line-height: 32px;
-  font-family: "Noto Serif", serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .product-details-tab .nav-tabs .nav-item .nav-link::before {
@@ -6095,6 +6149,35 @@ Preloader Area Style*/
   }
 }
 
+/* Whatsapp button */
+.wa-button {
+  position: fixed;
+  cursor: pointer;
+  background-color: green;
+  z-index: 4;
+  width: 50px;
+  text-align: center;
+  height: 52px;
+  line-height: 42px;
+  left: 2%;
+  top: 85%;
+  border-radius: 25px;
+}
+
+.wa-button i {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  color: #ffffff;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  font-size: 30px;
+}
+
 /*
 Go Top Style*/
 .go-top {
@@ -6786,6 +6869,15 @@ Animation Area Style*/
 .help-faq-area .accordion-button {
   font-size: 25px;
   font-weight: 400;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+  color: white;
+}
+
+.breadcrumb-item.active {
+  font-weight: bold;
+  color: white;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -5,40 +5,40 @@
 <div class="hero-area">
     <div class="swiper hero-slide">
         <div class="swiper-wrapper">
-            <div class="swiper-slide" style="background-image:url(/assets/website/images/hero/wellcareforyou.png)">
+            <div class="swiper-slide" style="background-image:url(/assets/website/images/hero/wellcareforyou.jpg)">
                 <div class="container">
-                    <div class="hero-content">
+                    <div class="hero-content px-4">
                         <h1>Our strength is your well-being</h1>
                         <p>Donec sollicitudin molestie malesuada. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.</p>
                         <div class="hero-btn">
-                            <a href="about-us.html" class="default-btn">Learn more</a>
-                            <a href="contact-us.html" class="default-btn active">Contact us</a>
+                            <a href="/about" class="default-btn">Learn more</a>
+                            <a href="/contact-us" class="default-btn active">Contact us</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="swiper-slide" style="background-image:url(/assets/website/images/hero/bg-1.jpg)">
+            <div class="swiper-slide" style="background-image:url(/assets/website/images/hero/wellcareforyou.jpg)">
                 <div class="container">
-                    <div class="hero-content">
-                        <h1>We want to heal the patient with services</h1>
+                    <div class="hero-content px-4">
+                        <h1>We want to heal the patient</h1>
                         <p>Donec sollicitudin molestie malesuada. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.</p>
                         <div class="hero-btn">
-                            <a href="about-us.html" class="default-btn">Learn more</a>
-                            <a href="contact-us.html" class="default-btn active">Contact us</a>
+                            <a href="/about" class="default-btn">Learn more</a>
+                            <a href="/contact-us" class="default-btn active">Contact us</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="swiper-slide" style="background-image:url(/assets/website/images/hero/bg-1.jpg)">
+            <div class="swiper-slide" style="background-image:url(/assets/website/images/hero/wellcareforyou.jpg)">
                 <div class="container">
-                    <div class="hero-content width-three">
-                        <h1>Need your expertise we are ready</h1>
+                    <div class="hero-content px-4">
+                        <h1>Need your expertise</h1>
                         <p>Donec sollicitudin molestie malesuada. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.</p>
                         <div class="hero-btn">
-                            <a href="about-us.html" class="default-btn">Learn more</a>
-                            <a href="contact-us.html" class="default-btn active">Contact us</a>
+                            <a href="/about" class="default-btn">Learn more</a>
+                            <a href="/contact-us" class="default-btn active">Contact us</a>
                         </div>
                     </div>
                 </div>
@@ -46,91 +46,182 @@
         </div>
     </div>
 
-    <div class="pagination-btn">
-        <div class="swiper-pagination"></div>
-    </div>
+    <div class="swiper-pagination"></div>
+    <!-- <div class="pagination-btn">
+    </div> -->
 
-    <ul class="socila-link">
+    <!-- <ul class="socila-link">
         <li>
             <a href="https://www.facebook.com/" target="_blank">
                 <img src="/assets/website/images/svg-icon/facebook.svg" alt="Image">
             </a>
         </li>
         <li>
-            <a href="https://www.facebook.com/" target="_blank">
+            <a href="https://www.twitter.com/" target="_blank">
                 <img src="/assets/website/images/svg-icon/twitter.svg" alt="Image">
             </a>
         </li>
         <li>
-            <a href="https://www.facebook.com/" target="_blank">
+            <a href="https://www.linkedin.com/" target="_blank">
                 <img src="/assets/website/images/svg-icon/linkedin.svg" alt="Image">
             </a>
         </li>
-    </ul>
+    </ul> -->
 </div>
 <!-- End Hero Area -->
 
+<!-- Country Area -->
+<div class="country-area pt-100 pb-70">
+    <div class="container px-5">
+        <div class="section-title mb-1">
+            <span class="top-title">CHOOSE COUNTRY</span>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-10 col-lg-10">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-center">
+                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-china.png" alt="china">
+                            <div>
+                                China
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="text-center">
+                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-indonesia.png" alt="indonesia">
+                            <div>
+                                Indonesia
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="text-center">
+                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-malaysia.png" alt="malaysia">
+                            <div>
+                                Malaysia
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="text-center">
+                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-singapura.png" alt="singapura">
+                            <div>
+                                Singapura
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="text-center">
+                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-taiwan.png" alt="taiwan">
+                            <div>
+                                Taiwan
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="text-center">
+                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-thailand.png" alt="thailand">
+                            <div>
+                                Thailand
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form action="/" method="post">
+            <div class="mt-4 row justify-content-center">
+                <div class="mt-2 mt-xl-0 col-md-12 col-lg-2">
+                    <select class="form-select" name="hospital" id="hospital">
+                        <option value="" selected>Select Hospital</option>
+                        <option value="hospital1">Hospital 1</option>
+                        <option value="hospital2">Hospital 2</option>
+                        <option value="hospital3">Hospital 3</option>
+                        <option value="hospital4">Hospital 4</option>
+                        <option value="hospital5">Hospital 5</option>
+                    </select>
+                </div>
+                <div class="mt-2 mt-xl-0 col-md-3 col-lg-4">
+                    <select class="form-select" name="specialist" id="specialist">
+                        <option value="" selected>Select Specialist</option>
+                        <option value="specialist1">Specialist 1</option>
+                        <option value="specialist2">Specialist 2</option>
+                        <option value="specialist3">Specialist 3</option>
+                        <option value="specialist4">Specialist 4</option>
+                        <option value="specialist5">Specialist 5</option>
+                    </select>
+                </div>
+                <div class="mt-2 mt-xl-0 col-md-3 col-lg-2">
+                    <select class="form-select" name="location" id="location">
+                        <option value="" selected>Select Location</option>
+                        <option value="location1">Location 1</option>
+                        <option value="location2">Location 2</option>
+                        <option value="location3">Location 3</option>
+                        <option value="location4">Location 4</option>
+                        <option value="location5">Location 5</option>
+                    </select>
+                </div>
+                <div class="mt-2 mt-xl-0 col-md-3 col-lg-2">
+                    <select class="form-select" name="doctor_name" id="doctor_name">
+                        <option value="" selected>Select Doctor</option>
+                        <option value="doctor_name1">Doctor 1</option>
+                        <option value="doctor_name2">Doctor 2</option>
+                        <option value="doctor_name3">Doctor 3</option>
+                        <option value="doctor_name4">Doctor 4</option>
+                        <option value="doctor_name5">Doctor 5</option>
+                    </select>
+                </div>
+                <div class="mt-2 mt-xl-0 col-md-3 col-lg-2">
+                    <select class="form-select" name="doctor_gender" id="doctor_gender">
+                        <option value="" selected>Select Gender</option>
+                        <option value="doctor_gender1">Gender 1</option>
+                        <option value="doctor_gender2">Gender 2</option>
+                        <option value="doctor_gender3">Gender 3</option>
+                        <option value="doctor_gender4">Gender 4</option>
+                        <option value="doctor_gender5">Gender 5</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                <button class="py-2 default-btn px-auto d-flex justify-content-center" type="submit" style="width: 320px;max-width:100%">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- End Country Area -->
+
 <!-- Start Futcher Area -->
-<div class="futcher-area pt-100 pb-70">
+<div class="futcher-area pt-70 pb-70">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-2 col-sm-4 col-md-4">
+            <div class="col-lg-4 col-sm-4 col-md-4">
                 <div class="single-futcher">
                     <div class="icon-one d-flex justify-content-between">
                         <i class="flaticon-consultation opacity0"></i>
                         <i class="flaticon-consultation opacity1"></i>
                     </div>
-                    <h3>Consult Online</h3>
+                    <h3>Find a lab, Clinic & Hospital</h3>
                 </div>
             </div>
 
-            <div class="col-lg-2 col-sm-4 col-md-4">
-                <div class="single-futcher">
-                    <div class="icon-one d-flex justify-content-between">
-                        <i class="flaticon-patient opacity0"></i>
-                        <i class="flaticon-patient opacity1"></i>
-                    </div>
-                    <h3>Patients & Visitors</h3>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-sm-4 col-md-4">
-                <div class="single-futcher">
-                    <div class="icon-one d-flex justify-content-between">
-                        <i class="flaticon-drugs opacity0"></i>
-                        <i class="flaticon-drugs opacity1"></i>
-                    </div>
-                    <h3>Buy Medicine</h3>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-sm-4 col-md-4">
-                <div class="single-futcher">
-                    <div class="icon-one d-flex justify-content-between">
-                        <i class="flaticon-pay opacity0"></i>
-                        <i class="flaticon-pay opacity1"></i>
-                    </div>
-                    <h3 class="play">Pay a Bill</h3>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-sm-4 col-md-4">
+            <div class="col-lg-4 col-sm-4 col-md-4">
                 <div class="single-futcher">
                     <div class="icon-one d-flex justify-content-between">
                         <i class="flaticon-search opacity0"></i>
                         <i class="flaticon-search opacity1"></i>
                     </div>
-                    <h3>Find a Doctors</h3>
+                    <h3>Visit a Doctors</h3>
                 </div>
             </div>
 
-            <div class="col-lg-2 col-sm-4 col-md-4">
+            <div class="col-lg-4 col-sm-4 col-md-4">
                 <div class="single-futcher">
                     <div class="icon-one d-flex justify-content-between">
-                        <i class="flaticon-hospital opacity0"></i>
-                        <i class="flaticon-hospital opacity1"></i>
+                        <i class="flaticon-drugs opacity0"></i>
+                        <i class="flaticon-drugs opacity1"></i>
                     </div>
-                    <h3>Find a Hospital</h3>
+                    <h3>Find a Pharmacy</h3>
                 </div>
             </div>
         </div>
@@ -138,8 +229,21 @@
 </div>
 <!-- End Futcher Area -->
 
+<!-- Mini Appointment -->
+<div class="futcher-area py-5 bg-color-main">
+    <div class="px-5 text-center">
+        <h2 class="text-white">
+            We Take Care Your Health
+            <a href="#appointment">
+                <button type="button" class="border border-3 btn btn-outline-blue mt-2 ms-0 ms-md-2 mt-md-0">Make an appointment today</button>
+            </a>
+        </h2>
+    </div>
+</div>
+<!-- End -->
+
 <!-- Start Who We Are Area -->
-<div class="who-we-are-area pb-70">
+<div class="who-we-are-area pt-100">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
@@ -152,7 +256,7 @@
                         </div>
                         <div class="col-lg-5 col-md-6">
                             <div class="who-we-are-img-2">
-                                <h3>Connect With <span>Bexi</span> Health Care</h3>
+                                <h3>Connect With <span>Wellcareforyou</span> Health Care</h3>
                                 <img src="/assets/website/images/about/about-2.jpg" alt="image">
                             </div>
                         </div>
@@ -210,12 +314,12 @@
 </div>
 <!-- End Who We Are Area -->
 
-<!-- Start Our Department Area -->
+<!-- Start Our Specialist Area -->
 <div class="our-department-area bg-color-f8f9fa pt-100 pb-70">
     <div class="container">
         <div class="section-title">
-            <span class="top-title">OUR DEPARTMENT</span>
-            <h2>Our hospital has all kinds of departments, so you can get all kinds of treatment</h2>
+            <span class="top-title">OUR SPECIALIST</span>
+            <h2>Our hospital has all kinds of specialist, so you can get all kinds of treatment</h2>
         </div>
 
         <div class="row justify-content-center">
@@ -225,7 +329,7 @@
 
                     <div class="department-content one">
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Dental
                             </a>
                         </h3>
@@ -238,15 +342,15 @@
                             <i class="flaticon-fracture"></i>
                         </div>
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Dental
                             </a>
                         </h3>
                         <p>Pellentesque in ipsum id orci porta dapibus. Nulla quis lorem ut libero malesuada feugiat. Sed porttitor lectus nibh.</p>
-                        <a href="department-orthopedics.html" class="read-more">
+                        <!-- <a href="#" class="read-more">
                             Read More
                             <i class="ri-arrow-right-line"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -257,7 +361,7 @@
 
                     <div class="department-content one">
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Orthopedics
                             </a>
                         </h3>
@@ -270,15 +374,15 @@
                             <i class="flaticon-fracture"></i>
                         </div>
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Orthopedics
                             </a>
                         </h3>
                         <p>Pellentesque in ipsum id orci porta dapibus. Nulla quis lorem ut libero malesuada feugiat. Sed porttitor lectus nibh.</p>
-                        <a href="department-orthopedics.html" class="read-more">
+                        <!-- <a href="#" class="read-more">
                             Read More
                             <i class="ri-arrow-right-line"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -289,7 +393,7 @@
 
                     <div class="department-content one">
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Neurosciences
                             </a>
                         </h3>
@@ -302,15 +406,15 @@
                             <i class="flaticon-fracture"></i>
                         </div>
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Neurosciences
                             </a>
                         </h3>
                         <p>Pellentesque in ipsum id orci porta dapibus. Nulla quis lorem ut libero malesuada feugiat. Sed porttitor lectus nibh.</p>
-                        <a href="department-orthopedics.html" class="read-more">
+                        <!-- <a href="#" class="read-more">
                             Read More
                             <i class="ri-arrow-right-line"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -321,7 +425,7 @@
 
                     <div class="department-content one">
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Cancer care
                             </a>
                         </h3>
@@ -334,15 +438,15 @@
                             <i class="flaticon-fracture"></i>
                         </div>
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Cancer care
                             </a>
                         </h3>
                         <p>Pellentesque in ipsum id orci porta dapibus. Nulla quis lorem ut libero malesuada feugiat. Sed porttitor lectus nibh.</p>
-                        <a href="department-orthopedics.html" class="read-more">
+                        <!-- <a href="#" class="read-more">
                             Read More
                             <i class="ri-arrow-right-line"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -353,7 +457,7 @@
 
                     <div class="department-content one">
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Gastroenterology
                             </a>
                         </h3>
@@ -366,15 +470,15 @@
                             <i class="flaticon-fracture"></i>
                         </div>
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Gastroenterology
                             </a>
                         </h3>
                         <p>Pellentesque in ipsum id orci porta dapibus. Nulla quis lorem ut libero malesuada feugiat. Sed porttitor lectus nibh.</p>
-                        <a href="department-orthopedics.html" class="read-more">
+                        <!-- <a href="#" class="read-more">
                             Read More
                             <i class="ri-arrow-right-line"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -385,7 +489,7 @@
 
                     <div class="department-content one">
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Medicine
                             </a>
                         </h3>
@@ -398,15 +502,15 @@
                             <i class="flaticon-fracture"></i>
                         </div>
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Medicine
                             </a>
                         </h3>
                         <p>Pellentesque in ipsum id orci porta dapibus. Nulla quis lorem ut libero malesuada feugiat. Sed porttitor lectus nibh.</p>
-                        <a href="department-orthopedics.html" class="read-more">
+                        <!-- <a href="#" class="read-more">
                             Read More
                             <i class="ri-arrow-right-line"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -417,7 +521,7 @@
 
                     <div class="department-content one">
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Cardiology
                             </a>
                         </h3>
@@ -430,15 +534,15 @@
                             <i class="flaticon-fracture"></i>
                         </div>
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Cardiology
                             </a>
                         </h3>
                         <p>Pellentesque in ipsum id orci porta dapibus. Nulla quis lorem ut libero malesuada feugiat. Sed porttitor lectus nibh.</p>
-                        <a href="department-orthopedics.html" class="read-more">
+                        <!-- <a href="#" class="read-more">
                             Read More
                             <i class="ri-arrow-right-line"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -449,7 +553,7 @@
 
                     <div class="department-content one">
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Surgery
                             </a>
                         </h3>
@@ -462,15 +566,15 @@
                             <i class="flaticon-fracture"></i>
                         </div>
                         <h3>
-                            <a href="department-orthopedics.html">
+                            <a href="#">
                                 Surgery
                             </a>
                         </h3>
                         <p>Pellentesque in ipsum id orci porta dapibus. Nulla quis lorem ut libero malesuada feugiat. Sed porttitor lectus nibh.</p>
-                        <a href="department-orthopedics.html" class="read-more">
+                        <!-- <a href="#" class="read-more">
                             Read More
                             <i class="ri-arrow-right-line"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -517,7 +621,7 @@
                         <img src="/assets/website/images/icon/icon-2.svg" alt="Image">
                         <div class="ambulance-info">
                             <span>24/7 Hours Service</span>
-                            <a href="tel:1-885-665-2022">1-885-665-2022</a>
+                            <a href="tel:1-23-456-789">1-23-456-789</a>
                         </div>
                     </div>
                 </div>
@@ -531,61 +635,101 @@
 <div class="our-team-area bg-color-f1f5f8 pt-100 pb-70">
     <div class="container">
         <div class="section-title team-title">
-            <span class="top-title">OUR SPECIALISTS</span>
-            <h2>We have all the professional specialists in our hospital</h2>
+            <span class="top-title">OUR DOCTORS</span>
+            <h2>We have all the professional doctors in our hospital</h2>
         </div>
 
         <div class="row justify-content-center">
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6 text-center">
                 <div class="single-team">
                     <img src="/assets/website/images/team/team-1.jpg" alt="Image">
                     <h3>
-                        <a href="find-a-doctor.html">Glenn Arredondo</a>
+                        <a href="#">Glenn Arredondo</a>
                     </h3>
                     <span>Family Physicians</span>
+                    <div class="mt-3">
+                        <a href="#">
+                            <button class="btn btn-info p-2">View Profile</button>
+                        </a>
+                        <a href="#">
+                            <button class="default-btn p-2">Book Now</button>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6 text-center">
                 <div class="single-team">
                     <img src="/assets/website/images/team/team-2.jpg" alt="Image">
                     <h3>
-                        <a href="find-a-doctor.html">Dorthy Winters</a>
+                        <a href="#">Dorthy Winters</a>
                     </h3>
                     <span>Gastroenterologists</span>
+                    <div class="mt-3">
+                        <a href="#">
+                            <button class="btn btn-info p-2">View Profile</button>
+                        </a>
+                        <a href="#">
+                            <button class="default-btn p-2">Book Now</button>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6 text-center">
                 <div class="single-team">
                     <img src="/assets/website/images/team/team-3.jpg" alt="Image">
                     <h3>
-                        <a href="find-a-doctor.html">Christopher Perreault</a>
+                        <a href="#">Christopher Perreault</a>
                     </h3>
                     <span>Medicine Specialists</span>
+                    <div class="mt-3">
+                        <a href="#">
+                            <button class="btn btn-info p-2">View Profile</button>
+                        </a>
+                        <a href="#">
+                            <button class="default-btn p-2">Book Now</button>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-lg-3 col-sm-6">
+            <div class="col-lg-3 col-sm-6 text-center">
                 <div class="single-team">
                     <img src="/assets/website/images/team/team-4.jpg" alt="Image">
                     <h3>
-                        <a href="find-a-doctor.html">Linda Flores</a>
+                        <a href="#">Linda Flores</a>
                     </h3>
                     <span>Gynecologists</span>
+                    <div class="mt-3">
+                        <a href="#">
+                            <button class="btn btn-info p-2">View Profile</button>
+                        </a>
+                        <a href="#">
+                            <button class="default-btn p-2">Book Now</button>
+                        </a>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <div class="mt-3 text-center">
+            <a href="#">
+                <button class="default-btn">
+                    View All Doctors
+                </button>
+            </a>
         </div>
     </div>
 </div>
 <!-- End Our Team Area -->
 
 <!-- Start Urgent Area -->
-<div class="urgent-area ptb-100">
+<div class="urgent-area pt-100">
     <div class="container">
         <div class="section-title services-title">
-            <span class="top-title">URGENT SERVICES</span>
-            <h2>See our hospital's emergency care services</h2>
+            <span class="top-title">OUR SERVICE</span>
+            <h2>See our hospital's care services</h2>
         </div>
 
         <div class="urgent-slide owl-carousel owl-theme">
@@ -665,86 +809,6 @@
     </div>
 </div>
 <!-- End Urgent Area -->
-
-<!-- Start Appointment Area -->
-<div class="appointment-area">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-5 p-0">
-                <div class="appointment-img">
-                    <h3>Help us get the treatment you need</h3>
-                </div>
-            </div>
-            <div class="col-lg-7 p-0">
-                <div class="appointment-form">
-                    <h2>Make An Appointment</h2>
-
-                    <form>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>NAME</label>
-                                    <input type="text" class="form-control" placeholder="Craig McNutt">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>CHOOSE DOCTOR NAME</label>
-                                    <select class="form-select form-control" aria-label="Default select example">
-                                        <option selected>Barbara Ybarra</option>
-                                        <option value="1">Ybarra Daek</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>EMAIL</label>
-                                    <input type="email" class="form-control" placeholder="bexi@gmail.com">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>SELECT DEPARTMENT</label>
-                                    <select class="form-select form-control" aria-label="Default select example">
-                                        <option selected>Cardiologists</option>
-                                        <option value="1">Medicine</option>
-                                        <option value="2">Cardiology</option>
-                                        <option value="3">Surgery</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>PHONE</label>
-                                    <input type="text" class="form-control" placeholder="***********">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div class="form-group">
-                                    <label>DATE</label>
-                                    <input type="date" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label>APPOINTMENT NOTE</label>
-                                    <textarea class="form-control" cols="30" rows="6" placeholder="write your note here..."></textarea>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <button type="submit" class="default-btn active">
-                                    Make an appointment
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Appointment Area -->
 
 <!-- Start Solution Area -->
 <div class="solution-area bg-color-f8f9fa pt-100 pb-70">
@@ -964,6 +1028,151 @@
 </div>
 <!-- End Blog Area -->
 
+<!-- As Seen On Area -->
+<div class="as-seen-on-area bg-color-f8f9fa pt-100 pb-70">
+    <div class="container">
+        <div class="section-title solution-title">
+            <span class="top-title">AS SEEN ON</span>
+            <h2>Some media as seen on</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-solution">
+                    <img src="/assets/website/images/blog/blog-1.jpg" alt="Image">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-solution">
+                    <img src="/assets/website/images/blog/blog-1.jpg" alt="Image">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-solution">
+                    <img src="/assets/website/images/blog/blog-1.jpg" alt="Image">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-solution">
+                    <img src="/assets/website/images/blog/blog-1.jpg" alt="Image">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Solution Area -->
+
+<!-- Popular Search Area -->
+<div class="popular-search-area bg-color-light-blue pt-70 pb-70">
+    <div class="container">
+        <div class="section-title solution-title mb-3">
+            <span class="top-title text-blue">Popular Search</span>
+            <h2 class="text-blue">Some popular who user search</h2>
+        </div>
+        <div class="text-center">
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem ipsum dolor sit amet</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, quis?</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+            <span class="btn btn-outline-blue px-1 py-0 my-1">
+                <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
+            </span>
+        </div>
+    </div>
+</div>
+<!-- End Solution Area -->
 
 
 <?= $this->endSection(); ?>
