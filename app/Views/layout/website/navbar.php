@@ -46,7 +46,7 @@
                         <ul class="d-flex align-items-center">
                             <li>
                                 <i class="ri-user-3-line"></i>
-                                <a href="my-account.html">Login</a>
+                                <a href="/login">Login</a>
                             </li>
                             <li>
                                 <form id="mySelectLangDesktop" action="/" method="get">

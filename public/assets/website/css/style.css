@@ -87,7 +87,7 @@ a:focus {
   color: var(--bg-color);
 }
 
-.btn-outline-blue {
+.btn-outline-blue.label-badge {
   --bs-btn-color: var(--bg-color);
   --bs-btn-border-color: var(--bg-color);
   --bs-btn-hover-color: #fff;
@@ -1666,6 +1666,17 @@ Hero Area Style
 .hero-content.width-three {
   max-width: 860px;
 } */
+
+/*
+Country Area Style
+======================================================*/
+.country-area .col .text-center {
+  padding: 5px;
+}
+
+.country-area .col .text-center:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
 
 /*
 Futcher Area Style

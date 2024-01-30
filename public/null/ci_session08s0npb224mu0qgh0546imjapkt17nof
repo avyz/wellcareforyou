@@ -1,0 +1,10 @@
+__ci_last_regenerate|i:1706599622;_ci_previous_url|s:101:"http://localhost:8080/verification?token=c2371b64568e5c2e734250f7016fcb51&email=dhecovera%40gmail.com";notif|s:392:"<script>Swal.fire({
+                title: "Warning",
+                text: "We sent otp code to dhecovera@gmail.com, please check it",
+                icon: "warning",
+                timer: 0,
+                showConfirmButton: true,
+                showCancelButton: true,
+                confirmButtonColor: "#fff",
+                cancelButtonColor: "#fe2628",
+              });</script>";__ci_vars|a:1:{s:5:"notif";s:3:"old";}

@@ -80,52 +80,64 @@
             <div class="col-10 col-lg-10">
                 <div class="row">
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-china.png" alt="china">
-                            <div>
-                                China
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-china.png" alt="china">
+                                <div>
+                                    China
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-indonesia.png" alt="indonesia">
-                            <div>
-                                Indonesia
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-indonesia.png" alt="indonesia">
+                                <div>
+                                    Indonesia
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-malaysia.png" alt="malaysia">
-                            <div>
-                                Malaysia
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-malaysia.png" alt="malaysia">
+                                <div>
+                                    Malaysia
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-singapura.png" alt="singapura">
-                            <div>
-                                Singapura
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-singapura.png" alt="singapura">
+                                <div>
+                                    Singapura
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-taiwan.png" alt="taiwan">
-                            <div>
-                                Taiwan
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-taiwan.png" alt="taiwan">
+                                <div>
+                                    Taiwan
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-thailand.png" alt="thailand">
-                            <div>
-                                Thailand
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-thailand.png" alt="thailand">
+                                <div>
+                                    Thailand
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -235,7 +247,7 @@
         <h2 class="text-white">
             We Take Care Your Health
             <a href="#appointment">
-                <button type="button" class="border border-3 btn btn-outline-blue mt-2 ms-0 ms-md-2 mt-md-0">Make an appointment today</button>
+                <button type="button" class="border border-3 btn btn-outline-blue mt-2 ms-0 ms-md-2 mt-md-0 text-white">Make an appointment today</button>
             </a>
         </h2>
     </div>
@@ -1073,100 +1085,100 @@
             <h2 class="text-blue">Some popular who user search</h2>
         </div>
         <div class="text-center">
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem ipsum dolor sit amet</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, quis?</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
-            <span class="btn btn-outline-blue px-1 py-0 my-1">
+            <span class="btn btn-outline-blue label-badge px-1 py-0 my-1">
                 <small style="font-size: 0.6rem;vertical-align:middle">Lorem, ipsum</small>
             </span>
         </div>

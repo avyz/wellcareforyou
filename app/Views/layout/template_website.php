@@ -4,7 +4,7 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
 
     <!-- Links Of CSS File -->
     <link rel="stylesheet" href="/assets/website/css/bootstrap.min.css">
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/assets/website/css/select2.min.css">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/assets/website/images/favicon.png">
+    <link rel="icon" type="image/png" href="/assets/website/images/favicon.ico">
     <!-- Title -->
     <title><?= $title; ?></title>
 

@@ -73,7 +73,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="form-group">
                             <label>EMAIL</label>
-                            <input type="email" name="email" id="email" class="form-control" required data-error="Please enter your email" placeholder="info@bexi.com">
+                            <input type="email" name="email" id="email" class="form-control" required data-error="Please enter your email" placeholder="info@wellcare.com">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>

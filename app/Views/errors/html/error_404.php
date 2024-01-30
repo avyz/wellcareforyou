@@ -52,8 +52,8 @@
                     <?php endif; ?>
                 </p>
                 <div class="d-block">
-                    <a href="/" class="default-btn">
-                        Go To Home
+                    <a href="javascript:void(0)" class="default-btn" onclick="return window.history.go(-1);">
+                        Go Back
                     </a>
                 </div>
             </div>

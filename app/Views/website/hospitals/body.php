@@ -13,52 +13,64 @@
             <div class="col-10 col-lg-10">
                 <div class="row">
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-china.png" alt="china">
-                            <div>
-                                China
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-china.png" alt="china">
+                                <div>
+                                    China
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-indonesia.png" alt="indonesia">
-                            <div>
-                                Indonesia
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-indonesia.png" alt="indonesia">
+                                <div>
+                                    Indonesia
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-malaysia.png" alt="malaysia">
-                            <div>
-                                Malaysia
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-malaysia.png" alt="malaysia">
+                                <div>
+                                    Malaysia
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-singapura.png" alt="singapura">
-                            <div>
-                                Singapura
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-singapura.png" alt="singapura">
+                                <div>
+                                    Singapura
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-taiwan.png" alt="taiwan">
-                            <div>
-                                Taiwan
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-taiwan.png" alt="taiwan">
+                                <div>
+                                    Taiwan
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col">
-                        <div class="text-center">
-                            <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-thailand.png" alt="thailand">
-                            <div>
-                                Thailand
+                        <a href="javascript:void(0)">
+                            <div class="text-center">
+                                <img class="rounded-circle my-4" style="width: 25px;height:24px;" src="/assets/website/images/lang/flag-icon-thailand.png" alt="thailand">
+                                <div>
+                                    Thailand
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>

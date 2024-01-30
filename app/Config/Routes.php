@@ -41,6 +41,37 @@ $routes->get('/contact-us', 'Website\Contact\Contact::index');
 // End Contact
 // End Website Section
 
+// Auth Section
+// login
+$routes->get('/login', 'Auth\Auth::index');
+$routes->post('/auth-login', 'Auth\Auth::authLogin');
+// end login
+// login
+$routes->get('/register', 'Auth\Auth::register');
+$routes->post('/auth-register', 'Auth\Auth::authRegister');
+$routes->get('/verification', 'Auth\Auth::requestOtp');
+$routes->post('/verify', 'Auth\Auth::verifyOtp');
+$routes->get('/resend/(:any)', 'Auth\Auth::resendOtp/$1');
+// end login
+// logout
+$routes->get('/logout', 'Auth\Auth::logOut');
+// end logout
+// Login Google
+$routes->get('/auth-google', 'Auth\Auth::authGoogle');
+$routes->get('/redirect-google', 'Auth\Auth::callbackGoogle');
+// End Login Google
+// Login Facebook
+$routes->get('/auth-facebook', 'Auth\Auth::authFacebook');
+$routes->get('/redirect-facebook', 'Auth\Auth::callbackFacebook');
+// End Login Facebook
+// End Auth Section
+
+// CMS Section
+// Dashboard User
+$routes->get('/user/dashboard', 'Cms\Users\Users::index');
+// End Dashboard User
+// End CMS Section
+
 
 
 // $routes->get('/item', 'Pages\Pages::item');

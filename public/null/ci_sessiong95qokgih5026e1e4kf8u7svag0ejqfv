@@ -1,0 +1,9 @@
+__ci_last_regenerate|i:1706532316;_ci_previous_url|s:27:"http://localhost:8080/login";notif|s:320:"<script>Swal.fire({
+                title: "Error",
+                text: "avifsafrudin@gmail.com tidak aktif",
+                icon: "error",
+                timer: 0,
+                showConfirmButton: true,
+                showCancelButton: true,
+                confirmButtonColor: "#fff",
+              });</script>";__ci_vars|a:1:{s:5:"notif";s:3:"old";}

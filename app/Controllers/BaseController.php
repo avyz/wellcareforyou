@@ -57,10 +57,54 @@ abstract class BaseController extends Controller
         // E.g.: $this->session = \Config\Services::session();
     }
 
-    // Layout Var
+    // Layout Var Website
     protected $dirLayoutWebsite = "layout/template_website";
-    // Section Var
+    // Section Var Website
     protected $dirSectionWebsite = "bodyWebsite";
+
+    // Layout Var Auth
+    protected $dirLayoutAuth = "layout/template_auth";
+    // Section Var Auth
+    protected $dirSectioAuth = "bodyAuth";
+
+    // OAuth
+    protected $providers = [
+        'google' => [
+            'clientId'     => '668260322681-hfuvetkstlt7qk134qetp3j4pbfd7c2d.apps.googleusercontent.com',
+            'clientSecret' => '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',
+            'redirectUri'  => 'http://localhost:8080/redirect-google',
+            'scopes'       => ['email', 'profile'],
+        ],
+        'facebook' => [
+            'clientId'     => '1099916397702406',
+            'clientSecret' => '9785e1d220e6dd70d66f41e901a50107',
+            'redirectUri'  => 'http://localhost:8080/redirect-facebook',
+            'graphApiVersion' => 'v19.0',
+            'scopes'       => ['email', 'public_profile'],
+        ],
+    ];
+
+    // GET DATA OAuth
+    protected function getOauthName($user)
+    {
+        return $user->getName();
+    }
+
+    protected function getOauthFirstName($user)
+    {
+        return $user->getFirstName();
+    }
+
+    protected function getOauthLastName($user)
+    {
+        return $user->getLastName();
+    }
+
+    protected function getOauthEmail($user)
+    {
+        return $user->getEmail();
+    }
+    // END DATA OAuth
 
     // meta description
     public function setTitle($title)
@@ -81,54 +125,92 @@ abstract class BaseController extends Controller
         return Time::now()->format('Y-m-d H:i:s');
     }
 
-    // Session Notification
-    public function sessionMessage($status, $categories, $type)
+    public function dateTimeModify($request)
     {
-        $msg = "";
+        // FORMAT DATETIME MYSQL
+        return Time::now()->modify($request)->format('Y-m-d H:i:s');
+    }
+
+    // Session Notification
+    public function sessionMessage($status, $description = "")
+    {
+        $msg = $description;
         $icon = "";
         $title = "";
         $timer = 0;
         $showConfirmButton = false;
+        $showCancelButton = false;
         switch ($status) {
             case 'success':
                 $title = "Success";
-                $msg = "$categories berhasil $type";
                 $icon = "success";
                 $timer = 1500;
                 $showConfirmButton = false;
+                $showCancelButton = false;
                 break;
             case 'error':
                 $title = "Error";
-                $msg = "$categories gagal $type";
                 $icon = "error";
                 $timer = 0;
                 $showConfirmButton = true;
+                $showCancelButton = false;
                 break;
-            case 'default':
+            case 'warning':
+                $title = "Warning";
+                $icon = "warning";
+                $timer = 0;
+                $showConfirmButton = true;
+                $showCancelButton = true;
+                break;
+            case 'info':
+                $title = "Info";
+                $icon = "info";
+                $timer = 0;
+                $showConfirmButton = true;
+                $showCancelButton = false;
+                break;
+            default:
                 $title = "Error";
                 $msg = "Sepertinya ada masalah, mohon hubungi kami";
                 $icon = "error";
                 $timer = 0;
                 $showConfirmButton = true;
-                break;
+                $showCancelButton = false;
         };
 
         $message = "";
         if ($showConfirmButton) {
-            $message = '<script>Swal.fire({
+            if ($showCancelButton) {
+                $message = '<script>Swal.fire({
                 title: "' . $title . '",
                 text: "' . $msg . '",
                 icon: "' . $icon . '",
                 timer: ' . $timer . ',
-                showConfirmButton: true
+                showConfirmButton: true,
+                showCancelButton: true,
+                confirmButtonColor: "#fff",
+                cancelButtonColor: "#fe2628",
               });</script>';
+            } else {
+                $message = '<script>Swal.fire({
+                title: "' . $title . '",
+                text: "' . $msg . '",
+                icon: "' . $icon . '",
+                timer: ' . $timer . ',
+                showConfirmButton: true,
+                showCancelButton: false,
+                confirmButtonColor: "#fff",
+                cancelButtonColor: "#fe2628",
+              });</script>';
+            }
         } else {
             $message = '<script>Swal.fire({
                 title: "' . $title . '",
                 text: "' . $msg . '",
                 icon: "' . $icon . '",
                 timer: ' . $timer . ',
-                showConfirmButton: false
+                showConfirmButton: false,
+                showCancelButton: false
               });</script>';
         }
 
@@ -139,5 +221,21 @@ abstract class BaseController extends Controller
     public function unlinkImage($path)
     {
         return unlink($path);
+    }
+
+    // Fungsi untuk menghasilkan 4 angka acak unik
+    public function generateUniqueRandomNumbers()
+    {
+
+        // Menggabungkan angka menjadi satu string
+        $uniqueId = substr(uniqid(), -4);
+
+        // Mengambil hanya karakter numerik
+        $numericOnly = preg_replace("/[^1-9]/", "", $uniqueId);
+
+        // Pastikan panjangnya tetap empat digit dengan str_pad
+        $result = str_pad($numericOnly, 4, rand(1, 9), STR_PAD_LEFT);
+
+        return $result;
     }
 }

@@ -1,0 +1,10 @@
+__ci_last_regenerate|i:1706602270;_ci_previous_url|s:101:"http://localhost:8080/verification?token=c2371b64568e5c2e734250f7016fcb51&email=dhecovera%40gmail.com";notif|s:361:"<script>Swal.fire({
+                title: "Error",
+                text: "OTP is expired, we resend it",
+                icon: "error",
+                timer: 0,
+                showConfirmButton: true,
+                showCancelButton: false,
+                confirmButtonColor: "#fff",
+                cancelButtonColor: "#fe2628",
+              });</script>";__ci_vars|a:1:{s:5:"notif";s:3:"old";}
