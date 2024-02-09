@@ -201,8 +201,9 @@
                                                                         <td style="padding:18px 0px 18px 0px; line-height:30px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content">
                                                                             <div>
                                                                                 <div style="font-family: inherit"><span style="font-size: 18px">Hello </span><span style="font-size: 18px"><strong><?= $name; ?>,</strong></span></div>
-                                                                                <div style="font-family: inherit"><span style="font-size: 12px">Thank you for your registration at <strong><a href="<?= base_url(); ?>">wellcareforyou.com</a>!</strong></span></div>
-                                                                                <div style="font-family: inherit"><span style="font-size: 12px">Your OTP code is </span><span style="font-size: 14px"><strong><?= $otp; ?></strong></span><span style="font-size: 12px">, please enter your OTP code in your email verification section, or you can click the button below to go to your verification section.</span></div>
+                                                                                <div style="font-family: inherit"><span style="font-size: 12px">Are you forgot your password?</span></div>
+                                                                                <div style="font-family: inherit"><span style="font-size: 12px">Don't worry, we have created a link to reset your password below</span></div>
+                                                                                <div style="font-family: inherit"><span style="font-size: 12px"></span><span style="font-size: 12px">Please click the button below to go to your reset password section.</span></div>
                                                                                 <div></div>
                                                                             </div>
                                                                         </td>
@@ -217,7 +218,7 @@
                                                                                 <tbody>
                                                                                     <tr>
                                                                                         <td align="center" bgcolor="#143185" class="inner-td" style="border-radius:6px; font-size:16px; text-align:center; background-color:inherit;">
-                                                                                            <a href="<?= base_url('/verification?token=' . $token . '&email=' . $email) ?>" style="background-color:#143185; border:1px solid #f7f7f8; border-color:#f7f7f8; border-radius:6px; border-width:1px; color:#ffffff; display:inline-block; font-size:14px; font-weight:bold; letter-spacing:0px; line-height:normal; padding:12px 18px 12px 18px; text-align:center; text-decoration:none; border-style:solid;" target="_blank">Verify Your Email</a>
+                                                                                            <a href="<?= base_url('/reset-password?token=' . $token . '&email=' . $email) ?>" style="background-color:#143185; border:1px solid #f7f7f8; border-color:#f7f7f8; border-radius:6px; border-width:1px; color:#ffffff; display:inline-block; font-size:14px; font-weight:bold; letter-spacing:0px; line-height:normal; padding:12px 18px 12px 18px; text-align:center; text-decoration:none; border-style:solid;" target="_blank">Reset Password</a>
                                                                                         </td>
                                                                                     </tr>
                                                                                 </tbody>
@@ -231,7 +232,7 @@
                                                                     <tr>
                                                                         <td style="padding:18px 0px 18px 0px; line-height:30px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content">
                                                                             <div>
-                                                                                <div style="font-family: inherit"><span style="font-size: 12px"><strong>Please attention! Your OTP will active for 1 hours</strong></span></div>
+                                                                                <div style="font-family: inherit"><span style="font-size: 12px"><strong>Please attention! Your link will active for 1 hours</strong></span></div>
                                                                                 <div></div>
                                                                             </div>
                                                                         </td>
@@ -323,20 +324,12 @@
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
-                                                            <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed" data-muid="2a898a4d-42f2-4046-a8de-feb50d7bc342.1">
+                                                            <table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="2a898a4d-42f2-4046-a8de-feb50d7bc342.1">
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td style="
-                                                                                padding: 18px 0px 0px 0px;
-                                                                                line-height: 30px;
-                                                                                text-align: center;
-                                                                                vertical-align: bottom;" height="100%" valign="top" bgcolor="" role="module-content">
+                                                                        <td style="padding:18px 0px 18px 0px; line-height:30px; text-align:center;vertical-align:bottom" height="100%" valign="top" bgcolor="" role="module-content">
                                                                             <div>
-                                                                                <div style="font-family: inherit">
-                                                                                    <span style="font-size: 9px"><strong>This email is sent automatic by
-                                                                                            bot, please don't reply this
-                                                                                            email</strong></span>
-                                                                                </div>
+                                                                                <div style="font-family: inherit"><span style="font-size: 9px"><strong>This email is sent automatic by our bot, please don't reply this email</strong></span></div>
                                                                                 <div></div>
                                                                             </div>
                                                                         </td>
@@ -346,23 +339,20 @@
                                                         </td>
                                                     </tr>
                                                 </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <!--[if mso]>
+                                                <!--[if mso]>
                                   </td>
                                 </tr>
                               </table>
                             </center>
                             <![endif]-->
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-            </table>
-            </td>
-            </tr>
             </table>
         </div>
     </center>

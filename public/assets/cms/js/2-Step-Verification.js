@@ -29,8 +29,8 @@ for (let i = 0; i < inputs.length; i++) {
     if (i === inputs.length - 1 && inputs[i].value !== '') {
       // console.log(i)
       inputs[i].closest('form')
-      inputs[i].closest('form').querySelector('.btn-optin-confirm').disabled = false;
       document.getElementById("verifyData").submit();
+      inputs[i].closest('form').querySelector('.btn-optin-confirm').disabled = true;
       return true;
     } else if (inputs[i].value !== '') {
       inputs[i + 1].focus();

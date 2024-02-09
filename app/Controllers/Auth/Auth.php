@@ -25,7 +25,7 @@ class Auth extends BaseController
             'title' => $this->setTitle('Login'),
             'metaDescription' => $this->setMetaDescription($description),
             'layout' => $this->dirLayoutAuth,
-            'section' => $this->dirSectioAuth
+            'section' => $this->dirSectionAuth
         ];
         return view('auth/body', $data);
     }
@@ -58,16 +58,54 @@ class Auth extends BaseController
             $token_data = $this->userModel::dataTokenByEmail($email);
 
             if (!$dataUsersByEmail) {
-                session()->setFlashdata("notif", $this->sessionMessage('error', "{$dataUsersByEmail['email']} tidak ditemukan"));
+                $data = [
+                    'email' => $email,
+                    'activity' => 'Login',
+                    'description' => 'Email not found',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
+                session()->setFlashdata("notif", $this->sessionMessage('error', "Email not found"));
                 return redirect()->back()->withInput();
             } else {
                 if ($dataUsersByEmail['is_active'] == 0) {
-                    session()->setFlashdata("notif", $this->sessionMessage('error', "{$dataUsersByEmail['email']} tidak aktif"));
+                    $data = [
+                        'email' => $email,
+                        'activity' => 'Login',
+                        'description' => 'Email not active',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+                    session()->setFlashdata("notif", $this->sessionMessage('error', "{$dataUsersByEmail['email']} not active"));
                     return redirect()->back()->withInput();
                 } else {
                     if (password_verify($password, $dataUsersByEmail['password'])) {
 
                         if ($dataUsersByEmail['is_verified'] == 0) {
+
+                            $data = [
+                                'email' => $email,
+                                'activity' => 'Login',
+                                'description' => 'User login but not verified',
+                                'created_at' => $this->dateTime(),
+                                'updated_at' => $this->dateTime()
+                            ];
+
+                            $throw_id = false;
+                            $table_name = 'log_auth_table';
+
+                            $this->helperModel::insertData($data, $throw_id, $table_name);
+
                             return redirect()->to('/verification?token=' . $token_data['token'] . '&email=' . $email);
                         } else {
                             // Buat Session
@@ -81,10 +119,35 @@ class Auth extends BaseController
 
                             session()->set($sessUser);
 
+                            $data = [
+                                'email' => $email,
+                                'activity' => 'Login',
+                                'description' => 'User login',
+                                'created_at' => $this->dateTime(),
+                                'updated_at' => $this->dateTime()
+                            ];
+
+                            $throw_id = false;
+                            $table_name = 'log_auth_table';
+
+                            $this->helperModel::insertData($data, $throw_id, $table_name);
+
                             return redirect()->to('/user/dashboard');
                         }
                     } else {
-                        session()->setFlashdata("notif", $this->sessionMessage('error', "Password salah"));
+                        $data = [
+                            'email' => $email,
+                            'activity' => 'Login',
+                            'description' => 'Wrong password',
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+
+                        $throw_id = false;
+                        $table_name = 'log_auth_table';
+
+                        $this->helperModel::insertData($data, $throw_id, $table_name);
+                        session()->setFlashdata("notif", $this->sessionMessage('error', "Wrong password"));
                         return redirect()->back()->withInput();
                     }
                 }
@@ -149,11 +212,37 @@ class Auth extends BaseController
                     $table_name = 'user_table';
 
                     $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                    $data = [
+                        'email' => $this->getOauthEmail($user),
+                        'activity' => 'Register',
+                        'description' => 'User register with Google',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
                 }
             } else {
                 $icon = "error";
                 if ($dataUsersByEmail['is_active'] == 0) {
-                    session()->setFlashdata("notif", $this->sessionMessage($icon, "{$dataUsersByEmail['email']} tidak aktif"));
+                    $data = [
+                        'email' => $this->getOauthEmail($user),
+                        'activity' => 'Login',
+                        'description' => 'User login with Google but the account not active',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                    session()->setFlashdata("notif", $this->sessionMessage($icon, "{$dataUsersByEmail['email']} not active"));
                     return redirect()->back();
                 } else {
                     // Buat Session
@@ -167,7 +256,21 @@ class Auth extends BaseController
 
                     session()->set($sessUser);
                     if ($user) {
-                        return redirect()->to('/user/dashboards');
+
+                        $data = [
+                            'email' => $this->getOauthEmail($user),
+                            'activity' => 'Login',
+                            'description' => 'User login with Google',
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+
+                        $throw_id = false;
+                        $table_name = 'log_auth_table';
+
+                        $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                        return redirect()->to('/user/dashboard');
                     } else {
                         throw new \CodeIgniter\Exceptions\PageNotFoundException("Page is not found");
                     }
@@ -228,11 +331,37 @@ class Auth extends BaseController
                 $table_name = 'user_table';
 
                 $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                $data = [
+                    'email' => $this->getOauthEmail($user),
+                    'activity' => 'Register',
+                    'description' => 'User register with Google',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
             }
         } else {
             $icon = "error";
             if ($dataUsersByEmail['is_active'] == 0) {
-                session()->setFlashdata("notif", $this->sessionMessage($icon, "{$dataUsersByEmail['email']} tidak aktif"));
+                $data = [
+                    'email' => $this->getOauthEmail($user),
+                    'activity' => 'Login',
+                    'description' => 'User try to login with Google but the account not active',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                session()->setFlashdata("notif", $this->sessionMessage($icon, "{$dataUsersByEmail['email']} not active"));
                 return redirect()->back();
             } else {
                 // Buat Session
@@ -246,6 +375,20 @@ class Auth extends BaseController
 
                 session()->set($sessUser);
                 if ($user) {
+
+                    $data = [
+                        'email' => $this->getOauthEmail($user),
+                        'activity' => 'Login',
+                        'description' => 'User login with Google',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+
                     return redirect()->to('/user/dashboard');
                 } else {
                     throw new \CodeIgniter\Exceptions\PageNotFoundException("Page is not found");
@@ -312,11 +455,38 @@ class Auth extends BaseController
                     $table_name = 'user_table';
 
                     $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                    $data = [
+                        'email' => $this->getOauthEmail($user),
+                        'activity' => 'Register',
+                        'description' => 'User register with Facebook',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
                 }
             } else {
                 $icon = "error";
                 if ($dataUsersByEmail['is_active'] == 0) {
-                    session()->setFlashdata("notif", $this->sessionMessage($icon, "{$dataUsersByEmail['email']} tidak aktif"));
+
+                    $data = [
+                        'email' => $this->getOauthEmail($user),
+                        'activity' => 'Login',
+                        'description' => 'User try to login with Facebook, but the account not active',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                    session()->setFlashdata("notif", $this->sessionMessage($icon, "{$dataUsersByEmail['email']} not active"));
                     return redirect()->back();
                 } else {
                     // Buat Session
@@ -330,6 +500,18 @@ class Auth extends BaseController
 
                     session()->set($sessUser);
                     if ($user) {
+                        $data = [
+                            'email' => $this->getOauthEmail($user),
+                            'activity' => 'Login',
+                            'description' => 'User login with Facebook',
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+
+                        $throw_id = false;
+                        $table_name = 'log_auth_table';
+
+                        $this->helperModel::insertData($data, $throw_id, $table_name);
                         return redirect()->to('/user/dashboard');
                     } else {
                         throw new \CodeIgniter\Exceptions\PageNotFoundException("Page is not found");
@@ -391,10 +573,37 @@ class Auth extends BaseController
                 $table_name = 'user_table';
 
                 $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                $data = [
+                    'email' => $this->getOauthEmail($user),
+                    'activity' => 'Register',
+                    'description' => 'User register with Facebook',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
             }
         } else {
             $icon = "error";
             if ($dataUsersByEmail['is_active'] == 0) {
+
+                $data = [
+                    'email' => $this->getOauthEmail($user),
+                    'activity' => 'Login',
+                    'description' => 'User try to login with Facebook, but the account is not active',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
+
                 session()->setFlashdata("notif", $this->sessionMessage($icon, "{$dataUsersByEmail['email']} tidak aktif"));
                 return redirect()->back();
             } else {
@@ -409,6 +618,20 @@ class Auth extends BaseController
 
                 session()->set($sessUser);
                 if ($user) {
+
+                    $data = [
+                        'email' => $this->getOauthEmail($user),
+                        'activity' => 'Login',
+                        'description' => 'User login with Facebook',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+
                     return redirect()->to('/user/dashboard');
                 } else {
                     throw new \CodeIgniter\Exceptions\PageNotFoundException("Page is not found");
@@ -426,7 +649,7 @@ class Auth extends BaseController
             'title' => $this->setTitle('Register'),
             'metaDescription' => $this->setMetaDescription($description),
             'layout' => $this->dirLayoutAuth,
-            'section' => $this->dirSectioAuth
+            'section' => $this->dirSectionAuth
         ];
 
         return view('auth/register', $data);
@@ -519,6 +742,19 @@ class Auth extends BaseController
                 $table_name = 'user_table';
 
                 $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                $data = [
+                    'email' => $email,
+                    'activity' => 'Register',
+                    'description' => 'User register',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
             }
 
             $data = [
@@ -561,9 +797,34 @@ class Auth extends BaseController
             }
 
             if ($sendgrid->send($email_config)) {
+                $data = [
+                    'email' => $email,
+                    'activity' => 'Register',
+                    'description' => 'OTP has sent to email user',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
                 session()->setFlashdata("notif", $this->sessionMessage('info', "We sent otp code to {$token['email']}, please check it"));
                 return redirect()->to('/verification?token=' . $csrf_token . '&email=' . $email);
             } else {
+                $data = [
+                    'email' => $email,
+                    'activity' => 'Register',
+                    'description' => 'Failed sent email otp when register',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
+
                 session()->setFlashdata("notif", $this->sessionMessage('error', "Failed send email, please resend it"));
                 return redirect()->to('/verification?token=' . $csrf_token . '&email=' . $email);
             }
@@ -583,12 +844,26 @@ class Auth extends BaseController
                     'title' => $this->setTitle('Verification'),
                     'metaDescription' => $this->setMetaDescription($description),
                     'layout' => $this->dirLayoutAuth,
-                    'section' => $this->dirSectioAuth,
+                    'section' => $this->dirSectionAuth,
                     'email' => $email
                 ];
 
                 return view('auth/request-otp', $data);
             } else {
+
+                $data = [
+                    'email' => $email,
+                    'activity' => 'Register',
+                    'description' => 'Token or email invalid',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
+
                 throw new \CodeIgniter\Exceptions\PageNotFoundException("Token or email invalid");
             }
         } else {
@@ -641,13 +916,53 @@ class Auth extends BaseController
                                 ];
 
                                 session()->set($sessUser);
+
+                                $data = [
+                                    'email' => $email,
+                                    'activity' => 'Register',
+                                    'description' => 'Verify email user suceeded',
+                                    'created_at' => $this->dateTime(),
+                                    'updated_at' => $this->dateTime()
+                                ];
+
+                                $throw_id = false;
+                                $table_name = 'log_auth_table';
+
+                                $this->helperModel::insertData($data, $throw_id, $table_name);
+
                                 session()->setFlashdata("notif", $this->sessionMessage('success', "Email is verified!"));
                                 return redirect()->to('/user/dashboard');
                             } else {
+                                $data = [
+                                    'email' => $email,
+                                    'activity' => 'Register',
+                                    'description' => 'Failed to delete token',
+                                    'created_at' => $this->dateTime(),
+                                    'updated_at' => $this->dateTime()
+                                ];
+
+                                $throw_id = false;
+                                $table_name = 'log_auth_table';
+
+                                $this->helperModel::insertData($data, $throw_id, $table_name);
+
                                 session()->setFlashdata("notif", $this->sessionMessage('error', "Oops, something went wrong"));
                                 return redirect()->back();
                             }
                         } else {
+                            $data = [
+                                'email' => $email,
+                                'activity' => 'Register',
+                                'description' => 'Failed to update verified',
+                                'created_at' => $this->dateTime(),
+                                'updated_at' => $this->dateTime()
+                            ];
+
+                            $throw_id = false;
+                            $table_name = 'log_auth_table';
+
+                            $this->helperModel::insertData($data, $throw_id, $table_name);
+
                             session()->setFlashdata("notif", $this->sessionMessage('error', "Oops, something went wrong"));
                             return redirect()->back();
                         }
@@ -688,18 +1003,69 @@ class Auth extends BaseController
                         }
 
                         if ($sendgrid->send($email_config)) {
+                            $data = [
+                                'email' => $email,
+                                'activity' => 'Register',
+                                'description' => 'OTP is expired',
+                                'created_at' => $this->dateTime(),
+                                'updated_at' => $this->dateTime()
+                            ];
+
+                            $throw_id = false;
+                            $table_name = 'log_auth_table';
+
+                            $this->helperModel::insertData($data, $throw_id, $table_name);
                             session()->setFlashdata("notif", $this->sessionMessage('error', "OTP is expired, we resend it"));
                             return redirect()->back();
                         } else {
+                            $data = [
+                                'email' => $email,
+                                'activity' => 'Register',
+                                'description' => 'Failed sent email OTP when verify',
+                                'created_at' => $this->dateTime(),
+                                'updated_at' => $this->dateTime()
+                            ];
+
+                            $throw_id = false;
+                            $table_name = 'log_auth_table';
+
+                            $this->helperModel::insertData($data, $throw_id, $table_name);
+
                             session()->setFlashdata("notif", $this->sessionMessage('error', "Something went wrong when send email"));
                             return redirect()->back();
                         }
                     }
                 } else {
+                    $data = [
+                        'email' => $email,
+                        'activity' => 'Register',
+                        'description' => 'OTP Invalid',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+
                     session()->setFlashdata("notif", $this->sessionMessage('error', "OTP invalid"));
                     return redirect()->back();
                 }
             } else {
+                $data = [
+                    'email' => $email,
+                    'activity' => 'Register',
+                    'description' => 'Token invalid',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
+
                 session()->setFlashdata("notif", $this->sessionMessage('error', "Token invalid"));
                 return redirect()->back();
             }
@@ -753,13 +1119,54 @@ class Auth extends BaseController
                 }
 
                 if ($sendgrid->send($email_config)) {
+                    $data = [
+                        'email' => $email,
+                        'activity' => 'Register',
+                        'description' => 'OTP has been resend',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+
                     session()->setFlashdata("notif", $this->sessionMessage('success', "OTP has been resend"));
                     return redirect()->back();
                 } else {
+
+                    $data = [
+                        'email' => $email,
+                        'activity' => 'Register',
+                        'description' => 'Failed sent email when resend OTP',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+
                     session()->setFlashdata("notif", $this->sessionMessage('error', "Something went wrong when send email"));
                     return redirect()->back();
                 }
             } else {
+
+                $data = [
+                    'email' => $email,
+                    'activity' => 'Register',
+                    'description' => 'User has resend token, but the token is invalid',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
+
                 session()->setFlashdata("notif", $this->sessionMessage('error', "Token invalid"));
                 return redirect()->back();
             }
@@ -768,11 +1175,373 @@ class Auth extends BaseController
             return redirect()->back();
         }
     }
+
+    public function forgotPassword()
+    {
+        $description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente inventore natus, ullam explicabo accusantium dicta.";
+        $data = [
+            'title' => $this->setTitle('Password Reset'),
+            'metaDescription' => $this->setMetaDescription($description),
+            'layout' => $this->dirLayoutAuth,
+            'section' => $this->dirSectionAuth
+        ];
+        return view('auth/recovery_password', $data);
+    }
+
+    public function recoveryPassword()
+    {
+        $rules = [
+            'email' => [
+                'label' => 'Email',
+                'rules' => 'required|valid_email|is_unique[token_table.email]',
+                'errors' => [
+                    'required' => 'The Email is required',
+                    'is_unique' => 'Email already exist'
+                ]
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput();
+        } else {
+            $email = $this->request->getVar('email');
+            $csrf_token_name = $this->request->getVar('csrf_token_name');
+            $dataUsersByEmail = $this->userModel::dataUsersByEmail($email);
+
+            if ($dataUsersByEmail) {
+                if ($dataUsersByEmail['is_active'] == 1) {
+                    $data = [
+                        'email' => $email,
+                        'otp' => $this->generateUniqueRandomNumbers(),
+                        'token' => $csrf_token_name,
+                        'time_expired' => $this->dateTimeModify('+60 minutes'),
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $insert = $this->helperModel::insertData($data, false, 'token_table');
+
+                    $email_config = new \SendGrid\Mail\Mail();
+                    if ($insert) {
+                        $token = $this->userModel::dataTokenByEmail($email);
+
+                        $email_config->setFrom('avizer95@gmail.com', 'Well Care Development');
+                        $email_config->setSubject('Password Reset ' . $email);
+                        $email_config->addTo($email);
+
+                        $data_email = [
+                            'name' => $dataUsersByEmail['nama_depan'],
+                            'token' => $token['token'],
+                            'email' => $token['email'],
+                        ];
+
+                        $email_config->addContent(
+                            "text/html",
+                            view('auth/template_reset_password', $data_email)
+                        );
+                        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+                    }
+
+                    if ($sendgrid->send($email_config)) {
+                        $data = [
+                            'email' => $email,
+                            'activity' => 'Recovery Password',
+                            'description' => 'Recovery link has been sent to email user',
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+
+                        $throw_id = false;
+                        $table_name = 'log_auth_table';
+
+                        $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                        session()->setFlashdata("notif", $this->sessionMessage('info', "Recovery link has been send to " . $email));
+                        return redirect()->to("/login");
+                    } else {
+                        $data = [
+                            'email' => $email,
+                            'activity' => 'Recovery Password',
+                            'description' => 'Failed sent email recovery password',
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+
+                        $throw_id = false;
+                        $table_name = 'log_auth_table';
+
+                        $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                        session()->setFlashdata("notif", $this->sessionMessage('error', "Something went wrong when send email"));
+                        return redirect()->back();
+                    }
+                } else {
+                    $data = [
+                        'email' => $email,
+                        'activity' => 'Recovery Password',
+                        'description' => 'Email not active',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                    session()->setFlashdata("notif", $this->sessionMessage('error', $email . " not active"));
+                    return redirect()->back();
+                }
+            } else {
+                $data = [
+                    'email' => $email,
+                    'activity' => 'Recovery Password',
+                    'description' => 'Email not found',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                session()->setFlashdata("notif", $this->sessionMessage('error', "Email not found"));
+                return redirect()->back();
+            }
+        }
+    }
+
+    public function resetPassword()
+    {
+        $email = $this->request->getVar('email');
+        $token_data = $this->userModel::dataTokenByEmail($email);
+        if ($token_data) {
+            if (strtotime($token_data['time_expired']) > strtotime($this->dateTime())) {
+                $description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente inventore natus, ullam explicabo accusantium dicta.";
+                $data = [
+                    'title' => $this->setTitle('Your New Password'),
+                    'metaDescription' => $this->setMetaDescription($description),
+                    'layout' => $this->dirLayoutAuth,
+                    'section' => $this->dirSectionAuth,
+                    'email' => $email
+                ];
+                return view('auth/reset_password', $data);
+            } else {
+
+                $data = [
+                    'email' => $email,
+                    'activity' => 'Recovery Password',
+                    'description' => 'Link Expired',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                $data = [
+                    'otp' => $this->generateUniqueRandomNumbers(),
+                    'token' => csrf_hash(),
+                    'time_expired' => $this->dateTimeModify('+60 minutes'),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $where = [
+                    'email' => $email,
+                ];
+
+                $update = $this->helperModel::updateData($where, $data, 'token_table');
+
+                $dataUsersByEmail = $this->userModel::dataUsersByEmail($email);
+
+                $email_config = new \SendGrid\Mail\Mail();
+
+                if ($update) {
+
+                    $token = $this->userModel::dataTokenByEmail($email);
+
+                    $email_config->setFrom('avizer95@gmail.com', 'Well Care Development');
+                    $email_config->setSubject('Password Reset ' . $email);
+                    $email_config->addTo($email);
+
+
+                    $data_email = [
+                        'name' => $dataUsersByEmail['nama_depan'],
+                        'token' => $token['token'],
+                        'email' => $token['email'],
+                    ];
+
+                    $email_config->addContent(
+                        "text/html",
+                        view('auth/template_reset_password', $data_email)
+                    );
+                    $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+                }
+
+                if ($sendgrid->send($email_config)) {
+                    $data = [
+                        'email' => $email,
+                        'activity' => 'Recovery Password',
+                        'description' => 'Recovery link has been resend',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+                } else {
+                    $data = [
+                        'email' => $email,
+                        'activity' => 'Recovery Password',
+                        'description' => 'Failed sent email when try to resend recovery link',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+                }
+
+                session()->setFlashdata("notif", $this->sessionMessage('info', "Link expired, we sent new link for you"));
+                return redirect()->to('/login');
+            }
+        } else {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Page not found");
+        }
+    }
+
+    public function newPassword($email)
+    {
+        $rules = [
+            'password' => [
+                'label' => 'Password',
+                'rules' => 'required|min_length[8]|regex_match[/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).*$/]',
+                'errors' => [
+                    'min_length' => 'The Password length must least 8 character',
+                    'regex_match' => 'The Password must first letter capital, number, and symbol (ex. $, !, @ etc)',
+                ]
+            ],
+            'confirm_password' => [
+                'label' => 'Confirm Password',
+                'rules' => 'required|matches[password]'
+            ],
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput();
+        } else {
+            $password = $this->request->getVar('password');
+
+            $token_data = $this->userModel::dataTokenByEmail($email);
+
+            if ($token_data) {
+                if ($token_data['email'] == $email) {
+                    $data = [
+                        'password' => password_hash($password, PASSWORD_DEFAULT),
+                        'updated_at' => $this->dateTime()
+                    ];
+                    $where = [
+                        'email' => $email,
+                    ];
+
+                    $update = $this->helperModel::updateData($where, $data, 'auth_table');
+
+                    if ($update) {
+                        $where = 'email';
+                        $table = 'token_table';
+                        $hard_delete = true;
+
+                        $data = [];
+
+                        $delete = $this->helperModel::deleteData($where, $email, $data, $table, $hard_delete);
+
+                        if ($delete) {
+                            session()->setFlashdata("notif", $this->sessionMessage('success', "Password recovered"));
+                            return redirect()->to('/login');
+                        } else {
+                            $data = [
+                                'email' => $email,
+                                'activity' => 'Recovery Password',
+                                'description' => 'Failed to delete token',
+                                'created_at' => $this->dateTime(),
+                                'updated_at' => $this->dateTime()
+                            ];
+
+                            $throw_id = false;
+                            $table_name = 'log_auth_table';
+
+                            $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                            session()->setFlashdata("notif", $this->sessionMessage('error', "Something went wrong"));
+                            return redirect()->to('/login');
+                        }
+                    } else {
+                        $data = [
+                            'email' => $email,
+                            'activity' => 'Recovery Password',
+                            'description' => 'Failed to update password',
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+
+                        $throw_id = false;
+                        $table_name = 'log_auth_table';
+
+                        $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                        session()->setFlashdata("notif", $this->sessionMessage('error', "Something went wrong, please try again"));
+                        return redirect()->back();
+                    }
+                } else {
+
+                    $data = [
+                        'email' => $email,
+                        'activity' => 'Recovery Password',
+                        'description' => 'Email not found',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                    session()->setFlashdata("notif", $this->sessionMessage('error', "Email not found"));
+                    return redirect()->back();
+                }
+            } else {
+                session()->setFlashdata("notif", $this->sessionMessage('error', "Email not exist or to much request"));
+                return redirect()->to('/login');
+            }
+        }
+    }
     // END
 
     // Auth Logout
     public function logOut()
     {
+
+        $data = [
+            'email' => session()->get('email'),
+            'activity' => 'Logout',
+            'description' => 'User Logout',
+            'created_at' => $this->dateTime(),
+            'updated_at' => $this->dateTime()
+        ];
+
+        $throw_id = false;
+        $table_name = 'log_auth_table';
+
+        $this->helperModel::insertData($data, $throw_id, $table_name);
+
         session()->destroy();
 
         return redirect()->to('/login');

@@ -27,7 +27,7 @@
                         <?php endif; ?>
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <h2>Sign Up</h2>
+                                <h2>Register</h2>
                                 <p>Please fill in the form below to register</p>
 
                             </div>
@@ -79,7 +79,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label">Confirm Password</label>
-                                                <div class="input-group border-group <?= validation_show_error('password') ? 'is-invalid' : '' ?>">
+                                                <div class="input-group border-group <?= validation_show_error('confirm_password') ? 'is-invalid' : '' ?>">
                                                     <input type="password" name="confirm_password" class="form-control">
                                                     <div class="d-flex align-items-center text-center" type="button" onclick="showPassword(this, 'confirm_password')">
                                                         <i class="ri-eye-2-line"></i>
@@ -108,7 +108,7 @@
 
                                 <div class="col-12">
                                     <div class="mb-4">
-                                        <button type="submit" class="btn default-btn w-100">SIGN UP</button>
+                                        <button type="submit" class="btn default-btn w-100">REGISTER</button>
                                     </div>
                                 </div>
                             </form>
@@ -146,7 +146,7 @@
 
                             <div class="col-12">
                                 <div class="text-center">
-                                    <p class="mb-0">Already have an account ? <a href="/login" class="text-warning">Sign in</a></p>
+                                    <p class="mb-0">Already have an account ? <a href="/login" class="text-warning">Login</a></p>
                                 </div>
                             </div>
 

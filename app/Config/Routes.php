@@ -6,7 +6,8 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-// Website Section
+// WEBSITE SECTION
+
 // Home
 $routes->get('/', 'Website\Home\Home::index');
 $routes->get('/terms-conditions', 'Website\Home\Home::terms');
@@ -39,9 +40,11 @@ $routes->get('/specialists', 'Website\Specialists\Specialists::index');
 // Contact
 $routes->get('/contact-us', 'Website\Contact\Contact::index');
 // End Contact
-// End Website Section
 
-// Auth Section
+// END WEBSITE SECTION
+
+// AUTH SECTION
+
 // login
 $routes->get('/login', 'Auth\Auth::index');
 $routes->post('/auth-login', 'Auth\Auth::authLogin');
@@ -64,13 +67,21 @@ $routes->get('/redirect-google', 'Auth\Auth::callbackGoogle');
 $routes->get('/auth-facebook', 'Auth\Auth::authFacebook');
 $routes->get('/redirect-facebook', 'Auth\Auth::callbackFacebook');
 // End Login Facebook
-// End Auth Section
+// Reset Password
+$routes->get('/forgot-password', 'Auth\Auth::forgotPassword');
+$routes->post('/recovery-password', 'Auth\Auth::recoveryPassword');
+$routes->get('/reset-password', 'Auth\Auth::resetPassword');
+$routes->put('/new-password/(:any)', 'Auth\Auth::newPassword/$1');
+// End Reset Password
+// End AUTH SECTION
 
-// CMS Section
+// CMS SECTION
+
 // Dashboard User
 $routes->get('/user/dashboard', 'Cms\Users\Users::index');
 // End Dashboard User
-// End CMS Section
+
+// End CMS SECTION
 
 
 

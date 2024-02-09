@@ -30,7 +30,7 @@
                         <?php endif; ?>
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <h2>Sign In</h2>
+                                <h2>Login</h2>
                                 <p>Please enter your email and password to login</p>
                             </div>
                             <form action="/auth-login" method="post">
@@ -64,13 +64,13 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="mb-3">
-                                        <a href="javascript:void(0);" class="text-dark">Forgot Password?</a>
+                                        <a href="/forgot-password" class="text-dark">Forgot Password?</a>
                                     </div>
                                 </div>
 
                                 <div class="col-12">
                                     <div class="mb-4">
-                                        <button type="submit" class="btn default-btn w-100">SIGN IN</button>
+                                        <button type="submit" class="btn default-btn w-100">LOGIN</button>
                                     </div>
                                 </div>
                             </form>
@@ -107,7 +107,7 @@
 
                             <div class="col-12">
                                 <div class="text-center">
-                                    <p class="mb-0">Dont't have an account ? <a href="/register" class="text-warning">Sign Up</a></p>
+                                    <p class="mb-0">Dont't have an account ? <a href="/register" class="text-warning">Register</a></p>
                                 </div>
                             </div>
                         </div>

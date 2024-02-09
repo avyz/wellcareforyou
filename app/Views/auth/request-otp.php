@@ -7,20 +7,6 @@
 
         <div class="row justify-content-center">
 
-            <div class="col-6 d-lg-flex d-none h-100 my-auto top-0 start-0 text-center justify-content-center flex-column">
-                <!-- <div class="auth-cover-bg-image"></div>
-                <div class="auth-overlay"></div> -->
-
-                <div class="auth-cover">
-
-                    <div class="position-relative">
-                        <img class="img-fluid" src="/assets/cms/img/login-banner.png" alt="auth-img">
-                    </div>
-
-                </div>
-
-            </div>
-
             <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-8 col-12 d-flex flex-column align-self-center mx-auto mx-lg-2">
                 <div class="card">
                     <div class="card-body">
@@ -30,7 +16,7 @@
                         <form action="/verify" method="POST" id="verifyData">
                             <?= csrf_field() ?>
                             <input type="hidden" name="email" class="form-control" value="<?= $email ?>">
-                            <div class="row">
+                            <div class="row text-center">
                                 <div class="col-md-12 mb-3">
                                     <h2>Verification Email</h2>
                                     <p>Enter the code for verification.</p>
@@ -58,7 +44,7 @@
 
                                 <div class="col-12 mt-4">
                                     <div class="mb-4">
-                                        <button type="submit" class="btn btn-secondary btn-optin-confirm w-100" disabled>VERIFY</button>
+                                        <button type="submit" class="btn btn-secondary btn-optin-confirm w-100">VERIFY</button>
                                     </div>
                                 </div>
 

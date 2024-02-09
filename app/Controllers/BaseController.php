@@ -57,15 +57,20 @@ abstract class BaseController extends Controller
         // E.g.: $this->session = \Config\Services::session();
     }
 
-    // Layout Var Website
+    // Layout Website
     protected $dirLayoutWebsite = "layout/template_website";
-    // Section Var Website
+    // Section Website
     protected $dirSectionWebsite = "bodyWebsite";
 
-    // Layout Var Auth
+    // Layout Auth
     protected $dirLayoutAuth = "layout/template_auth";
-    // Section Var Auth
-    protected $dirSectioAuth = "bodyAuth";
+    // Section Auth
+    protected $dirSectionAuth = "bodyAuth";
+
+    // Layout CMS
+    protected $dirLayoutCms = "layout/template_cms";
+    // Section CMS
+    protected $dirSectionCms = "bodyCms";
 
     // OAuth
     protected $providers = [
