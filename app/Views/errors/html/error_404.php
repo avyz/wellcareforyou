@@ -53,6 +53,7 @@
                 </p>
                 <div class="d-block">
                     <a href="javascript:void(0)" class="default-btn" onclick="return window.history.go(-1);">
+                        <!-- <a href="/" class="default-btn"> -->
                         Go Back
                     </a>
                 </div>

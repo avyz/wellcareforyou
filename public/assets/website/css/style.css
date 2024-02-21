@@ -1220,6 +1220,25 @@ Navbar Area Style
   content: "\ef72";
 }
 
+.others-options .dropdown-toggle::after {
+  display: inline-block;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: none !important;
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+}
+
+.others-options .dropdown-menu li:hover {
+  background-color: #afccee;
+}
+
+.others-options .dropdown-menu li a:hover {
+  color: black;
+}
+
 /*
 Others Option For Responsive Area Style
 ======================================================*/
@@ -1267,7 +1286,7 @@ Others Option For Responsive Area Style
 
 .others-option-for-responsive .container .container {
   position: absolute;
-  right: -2px;
+  right: 0;
   top: 15px;
   max-width: 255px;
   margin-left: auto;

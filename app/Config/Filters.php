@@ -2,6 +2,8 @@
 
 namespace Config;
 
+use App\Filters\AdminFilters;
+use App\Filters\SuperAdminFilters;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -25,6 +27,8 @@ class Filters extends BaseConfig
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
+        'admin' => AdminFilters::class,
+        'superadmin' => SuperAdminFilters::class
     ];
 
     /**
@@ -36,7 +40,7 @@ class Filters extends BaseConfig
      */
     public array $globals = [
         'before' => [
-            // 'honeypot',
+            'honeypot',
             'csrf',
             // 'invalidchars',
         ],

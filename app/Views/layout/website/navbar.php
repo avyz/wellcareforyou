@@ -1,7 +1,7 @@
 <!-- Start Navbar Area -->
 <div class="navbar-area shadow-sm">
     <div class="mobile-responsive-nav">
-        <div class="container">
+        <div class="container-xxl px-md-5">
             <div class="mobile-responsive-menu">
                 <div class="logo">
                     <a href="/">
@@ -13,7 +13,7 @@
     </div>
 
     <div class="desktop-nav">
-        <div class="container px-5">
+        <div class="container-xxl px-md-5">
             <nav class="navbar navbar-expand-md navbar-light">
                 <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
                     <ul class="navbar-nav">
@@ -44,9 +44,24 @@
                     </ul>
                     <div class="others-options">
                         <ul class="d-flex align-items-center">
-                            <li>
+                            <li class="nav-item">
                                 <i class="ri-user-3-line"></i>
-                                <a href="/login">Login</a>
+                                <?php if (session()->get('email')) : ?>
+                                    <a href="javascript:void(0)" class="dropdown-toggle border-style" data-bs-toggle="dropdown">Hi, <?= session()->get('nama_depan') ?></a>
+                                    <ul class="dropdown-menu" style="font-size: 0.9em;">
+                                        <li class="dropdown-item">
+                                            <a href="/my-account">My Account</a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a href="/profile">Profile</a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a href="/logout">Logout</a>
+                                        </li>
+                                    </ul>
+                                <?php else : ?>
+                                    <a href="/login">Login</a>
+                                <?php endif; ?>
                             </li>
                             <li>
                                 <form id="mySelectLangDesktop" action="/" method="get">
@@ -82,7 +97,22 @@
                         <ul>
                             <li>
                                 <i class="ri-user-3-line"></i>
-                                <a href="/login">Login</a>
+                                <?php if (session()->get('email')) : ?>
+                                    <a href="javascript:void(0)" class="dropdown-toggle border-style" data-bs-toggle="dropdown">Hi, <?= session()->get('nama_depan') ?></a>
+                                    <ul class="dropdown-menu" style="font-size: 0.9em;">
+                                        <li class="dropdown-item">
+                                            <a href="/my-account">My Account</a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a href="/profile">Profile</a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a href="/logout">Logout</a>
+                                        </li>
+                                    </ul>
+                                <?php else : ?>
+                                    <a href="/login">Login</a>
+                                <?php endif; ?>
                             </li>
                             <li style="border-left: 1px solid black;">
                                 <form id="mySelectLangMobile" action="/" method="get">
@@ -103,3 +133,14 @@
     </div>
 </div>
 <!-- End Navbar Area -->
+
+<script>
+    function changeLang(e) {
+        const type = $(e).data('type');
+        if (type == 'desktop') {
+            $("#mySelectLangDesktop").submit()
+        } else {
+            $("#mySelectLangMobile").submit()
+        }
+    }
+</script>

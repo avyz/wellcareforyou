@@ -4,20 +4,32 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Role extends Migration
+class MenusChildren extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'role_id' => [
+            'menu_children_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'role' => [
+            'menu_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+            ],
+            'menu_children_name' => [
                 'type' => 'VARCHAR',
-                'constraint' => '10',
+                'constraint' => '50',
+            ],
+            'menu_children_icon' => [
+                'type' => 'VARCHAR',
+                'constraint' => '50',
+            ],
+            'menu_children_url' => [
+                'type' => 'VARCHAR',
+                'constraint' => '128',
             ],
             'created_at' => [
                 'type' => 'datetime'
@@ -29,21 +41,13 @@ class Role extends Migration
                 'type' => 'INT',
                 'constraint' => '1'
             ],
-            'is_master' => [
-                'type' => 'INT',
-                'constraint' => '1'
-            ],
-            'is_admin' => [
-                'type' => 'INT',
-                'constraint' => '1'
-            ],
         ]);
-        $this->forge->addKey('role_id', true);
-        $this->forge->createTable('role_table');
+        $this->forge->addKey('menu_children_id', true);
+        $this->forge->createTable('menu_children_table');
     }
 
     public function down()
     {
-        $this->forge->dropTable('role_table');
+        $this->forge->dropTable('menu_children_table');
     }
 }

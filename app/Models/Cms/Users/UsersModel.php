@@ -38,10 +38,13 @@ class UsersModel extends Model
         T0.email,
         T0.password,
         T1.role,
+        T1.is_master,
+        T1.is_admin,
         T2.*,
         T0.is_verified,
         T0.is_active,
-        T0.login_type
+        T0.login_type,
+        T0.is_lockscreen
         FROM auth_table T0 
         LEFT JOIN role_table T1 ON T1.role_id = T0.role_id
         LEFT JOIN user_table T2 ON T2.auth_id = T0.auth_id

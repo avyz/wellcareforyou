@@ -49,6 +49,10 @@ class Auth extends Migration
                 'type' => 'INT',
                 'constraint' => '1'
             ],
+            'is_lockscreen' => [
+                'type' => 'INT',
+                'constraint' => '1'
+            ],
         ]);
         $this->forge->addKey('auth_id', true);
         $this->forge->createTable('auth_table');

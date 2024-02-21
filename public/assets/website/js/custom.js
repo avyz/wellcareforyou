@@ -6,22 +6,6 @@
 		meanScreenWidth: "991"
 	});
 
-	// Sticky, Go To Top JS
-	$(window).on('scroll', function () {
-		// Header Sticky JS
-		if ($(this).scrollTop() > 150) {
-			$('.navbar-area').addClass("is-sticky");
-		}
-		else {
-			$('.navbar-area').removeClass("is-sticky");
-		};
-
-		// Go To Top JS
-		var scrolled = $(window).scrollTop();
-		if (scrolled > 300) $('.go-top').addClass('active');
-		if (scrolled < 300) $('.go-top').removeClass('active');
-	});
-
 	// Click Event JS
 	$('.go-top').on('click', function () {
 		$("html, body").animate({ scrollTop: "0" }, 50);
@@ -203,7 +187,7 @@
 
 	// AJAX MailChimp JS
 	$(".newsletter-form").ajaxChimp({
-		url: "https://Envy Theme.us20.list-manage.com/subscribe/post?u=60e1ffe2e8a68ce1204cd39a5&amp;id=42d6d188d9", // Your url MailChimp
+		url: "", // Your url MailChimp
 		callback: callbackFunction
 	});
 
@@ -290,7 +274,10 @@
 	var currentUrl = window.location.href;
 	var origin = window.location.origin;
 
+	// console.log(currentUrl.replace("#_=_", '').split("/"));
 	currentUrl = origin + "/" + currentUrl.split("/")[3]
+
+
 
 	// Menemukan elemen <a> yang sesuai dengan path URL
 	var navLinks = $('.menu-link');
@@ -321,7 +308,7 @@
 		}
 
 		var $result = $(
-			'<span><img src="' + result.element.dataset.imgSrc + '" class="border rounded-circle" style="width:25px;height:25px"/> ' + result.text + '</span>'
+			'<span><img src="' + result.element.dataset.imgSrc + '" class="rounded-circle" style="width:25px;height:25px"/> ' + result.text + '</span>'
 		);
 
 		return $result;
@@ -331,11 +318,3 @@
 	$("#c-year").text(date.getFullYear());
 })(jQuery);
 
-function changeLang(e) {
-	const type = $(e).data('type');
-	if (type == 'desktop') {
-		$("#mySelectLangDesktop").submit()
-	} else {
-		$("#mySelectLangMobile").submit()
-	}
-}

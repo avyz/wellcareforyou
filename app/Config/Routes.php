@@ -73,13 +73,38 @@ $routes->post('/recovery-password', 'Auth\Auth::recoveryPassword');
 $routes->get('/reset-password', 'Auth\Auth::resetPassword');
 $routes->put('/new-password/(:any)', 'Auth\Auth::newPassword/$1');
 // End Reset Password
+
+// Lockscreen
+$routes->get('/lockscreen', 'Auth\Auth::lockScreen');
+$routes->post('/unlock', 'Auth\Auth::unlock');
+// End Lockscreen
+
+// Check idle
+$routes->get('/check-activity', 'Auth\Auth::checkActivity');
+// End check idle
+
 // End AUTH SECTION
 
 // CMS SECTION
 
+// USER
+
 // Dashboard User
-$routes->get('/user/dashboard', 'Cms\Users\Users::index');
+$routes->get('/dashboard', 'Cms\Users\Users::index');
+// $routes->get('/user-management', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
 // End Dashboard User
+// Menu Management
+$routes->get('/menu-management/admin', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
+$routes->get('/menu-management/user', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
+// End Menu Management
+
+// END USER
+
+// ADMIN
+
+
+
+// END ADMIN
 
 // End CMS SECTION
 

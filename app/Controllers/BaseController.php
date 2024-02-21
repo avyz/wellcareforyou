@@ -243,4 +243,34 @@ abstract class BaseController extends Controller
 
         return $result;
     }
+
+    protected $timeIdle = 3600;
+
+    public function checkIdle($view = "")
+    {
+        // Check if user is logged in
+        if (!session()->get('email')) {
+            return redirect()->to('/login');
+        }
+
+        if (session()->get('is_lockscreen') == 1) {
+            return redirect()->to('/lockscreen');
+        }
+
+        // Check last activity time
+        $lastActivity = session()->get('last_activity');
+        $idleTime = $this->timeIdle; // = 60 minutes
+        if (time() - $lastActivity >= $idleTime) {
+            if (session()->get('is_master') != 0 || session()->get('is_admin') != 0) {
+                return redirect()->to('/lockscreen');
+            };
+            // Logout user if idle time exceeded
+            return redirect()->to('/logout');
+        } else {
+            // Update last activity time
+            session()->set('last_activity', time());
+        }
+
+        return $view;
+    }
 }

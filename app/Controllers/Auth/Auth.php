@@ -7,6 +7,8 @@ use App\Controllers\BaseController;
 use App\Models\Cms\Users\UsersModel;
 use App\Models\HelperModel;
 
+use function PHPUnit\Framework\throwException;
+
 class Auth extends BaseController
 {
 
@@ -20,14 +22,18 @@ class Auth extends BaseController
 
     public function index()
     {
-        $description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente inventore natus, ullam explicabo accusantium dicta.";
-        $data = [
-            'title' => $this->setTitle('Login'),
-            'metaDescription' => $this->setMetaDescription($description),
-            'layout' => $this->dirLayoutAuth,
-            'section' => $this->dirSectionAuth
-        ];
-        return view('auth/body', $data);
+        if (session()->get('email')) {
+            return redirect()->to('/dashboard');
+        } else {
+            $description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente inventore natus, ullam explicabo accusantium dicta.";
+            $data = [
+                'title' => $this->setTitle('Login'),
+                'metaDescription' => $this->setMetaDescription($description),
+                'layout' => $this->dirLayoutAuth,
+                'section' => $this->dirSectionAuth
+            ];
+            return view('auth/body', $data);
+        }
     }
 
     public function authLogin()
@@ -115,6 +121,11 @@ class Auth extends BaseController
                                 'nama_lengkap' => $dataUsersByEmail['nama_lengkap'],
                                 'nama_depan' => $dataUsersByEmail['nama_depan'],
                                 'nama_belakang' => $dataUsersByEmail['nama_belakang'],
+                                'last_activity' => time(),
+                                'is_master' => $dataUsersByEmail['is_master'],
+                                'is_admin' => $dataUsersByEmail['is_admin'],
+                                'photo' => $dataUsersByEmail['photo'],
+                                'is_lockscreen' => $dataUsersByEmail['is_lockscreen'],
                             ];
 
                             session()->set($sessUser);
@@ -132,7 +143,7 @@ class Auth extends BaseController
 
                             $this->helperModel::insertData($data, $throw_id, $table_name);
 
-                            return redirect()->to('/user/dashboard');
+                            return redirect()->to('/dashboard');
                         }
                     } else {
                         $data = [
@@ -248,10 +259,15 @@ class Auth extends BaseController
                     // Buat Session
                     $sessUser = [
                         'email' => $this->getOauthEmail($user),
-                        'role' => 'User',
+                        'role' => $dataUsersByEmail['role'],
                         'nama_lengkap' => $this->getOauthName($user),
                         'nama_depan' => $this->getOauthFirstName($user),
                         'nama_belakang' => $this->getOauthLastName($user),
+                        'last_activity' => time(),
+                        'is_master' => $dataUsersByEmail['is_master'],
+                        'is_admin' => $dataUsersByEmail['is_admin'],
+                        'photo' => $dataUsersByEmail['photo'],
+                        'is_lockscreen' => $dataUsersByEmail['is_lockscreen'],
                     ];
 
                     session()->set($sessUser);
@@ -270,7 +286,7 @@ class Auth extends BaseController
 
                         $this->helperModel::insertData($data, $throw_id, $table_name);
 
-                        return redirect()->to('/user/dashboard');
+                        return redirect()->to('/dashboard');
                     } else {
                         throw new \CodeIgniter\Exceptions\PageNotFoundException("Page is not found");
                     }
@@ -367,10 +383,15 @@ class Auth extends BaseController
                 // Buat Session
                 $sessUser = [
                     'email' => $this->getOauthEmail($user),
-                    'role' => 'User',
+                    'role' => $dataUsersByEmail['role'],
                     'nama_lengkap' => $this->getOauthName($user),
                     'nama_depan' => $this->getOauthFirstName($user),
                     'nama_belakang' => $this->getOauthLastName($user),
+                    'last_activity' => time(),
+                    'is_master' => $dataUsersByEmail['is_master'],
+                    'is_admin' => $dataUsersByEmail['is_admin'],
+                    'photo' => $dataUsersByEmail['photo'],
+                    'is_lockscreen' => $dataUsersByEmail['is_lockscreen'],
                 ];
 
                 session()->set($sessUser);
@@ -389,7 +410,7 @@ class Auth extends BaseController
 
                     $this->helperModel::insertData($data, $throw_id, $table_name);
 
-                    return redirect()->to('/user/dashboard');
+                    return redirect()->to('/dashboard');
                 } else {
                     throw new \CodeIgniter\Exceptions\PageNotFoundException("Page is not found");
                 }
@@ -492,10 +513,15 @@ class Auth extends BaseController
                     // Buat Session
                     $sessUser = [
                         'email' => $this->getOauthEmail($user),
-                        'role' => 'User',
+                        'role' => $dataUsersByEmail['role'],
                         'nama_lengkap' => $this->getOauthName($user),
                         'nama_depan' => $this->getOauthFirstName($user),
                         'nama_belakang' => $this->getOauthLastName($user),
+                        'last_activity' => time(),
+                        'is_master' => $dataUsersByEmail['is_master'],
+                        'is_admin' => $dataUsersByEmail['is_admin'],
+                        'photo' => $dataUsersByEmail['photo'],
+                        'is_lockscreen' => $dataUsersByEmail['is_lockscreen'],
                     ];
 
                     session()->set($sessUser);
@@ -512,7 +538,7 @@ class Auth extends BaseController
                         $table_name = 'log_auth_table';
 
                         $this->helperModel::insertData($data, $throw_id, $table_name);
-                        return redirect()->to('/user/dashboard');
+                        return redirect()->to('/dashboard');
                     } else {
                         throw new \CodeIgniter\Exceptions\PageNotFoundException("Page is not found");
                     }
@@ -610,10 +636,15 @@ class Auth extends BaseController
                 // Buat Session
                 $sessUser = [
                     'email' => $this->getOauthEmail($user),
-                    'role' => 'User',
+                    'role' => $dataUsersByEmail['role'],
                     'nama_lengkap' => $this->getOauthName($user),
                     'nama_depan' => $this->getOauthFirstName($user),
                     'nama_belakang' => $this->getOauthLastName($user),
+                    'last_activity' => time(),
+                    'is_master' => $dataUsersByEmail['is_master'],
+                    'is_admin' => $dataUsersByEmail['is_admin'],
+                    'photo' => $dataUsersByEmail['photo'],
+                    'is_lockscreen' => $dataUsersByEmail['is_lockscreen'],
                 ];
 
                 session()->set($sessUser);
@@ -632,7 +663,7 @@ class Auth extends BaseController
 
                     $this->helperModel::insertData($data, $throw_id, $table_name);
 
-                    return redirect()->to('/user/dashboard');
+                    return redirect()->to('/dashboard');
                 } else {
                     throw new \CodeIgniter\Exceptions\PageNotFoundException("Page is not found");
                 }
@@ -913,6 +944,11 @@ class Auth extends BaseController
                                     'nama_lengkap' => $dataUsersByEmail['nama_lengkap'],
                                     'nama_depan' => $dataUsersByEmail['nama_depan'],
                                     'nama_belakang' => $dataUsersByEmail['nama_belakang'],
+                                    'last_activity' => time(),
+                                    'is_master' => $dataUsersByEmail['is_master'],
+                                    'is_admin' => $dataUsersByEmail['is_admin'],
+                                    'photo' => $dataUsersByEmail['photo'],
+                                    'is_lockscreen' => $dataUsersByEmail['is_lockscreen'],
                                 ];
 
                                 session()->set($sessUser);
@@ -931,7 +967,7 @@ class Auth extends BaseController
                                 $this->helperModel::insertData($data, $throw_id, $table_name);
 
                                 session()->setFlashdata("notif", $this->sessionMessage('success', "Email is verified!"));
-                                return redirect()->to('/user/dashboard');
+                                return redirect()->to('/dashboard');
                             } else {
                                 $data = [
                                     'email' => $email,
@@ -1545,5 +1581,167 @@ class Auth extends BaseController
         session()->destroy();
 
         return redirect()->to('/login');
+    }
+
+    // Lockscreen
+    public function lockScreen()
+    {
+        $email = session()->get('email');
+        $nama_lengkap = session()->get('nama_lengkap');
+        $dataUsersByEmail = $this->userModel::dataUsersByEmail($email);
+
+        $description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente inventore natus, ullam explicabo accusantium dicta.";
+        $data = [
+            'title' => $this->setTitle('Lockscreen ' . $nama_lengkap),
+            'metaDescription' => $this->setMetaDescription($description),
+            'layout' => $this->dirLayoutAuth,
+            'section' => $this->dirSectionAuth,
+            'nama' => $nama_lengkap,
+            'photo' => session()->get('photo'),
+        ];
+
+        if ($dataUsersByEmail) {
+            if ($dataUsersByEmail['is_lockscreen'] == 0) {
+                $set_statement = [
+                    'is_lockscreen' => 1,
+                ];
+                $where = [
+                    'email' => $email,
+                ];
+
+                $update = $this->helperModel::updateData($where, $set_statement, 'auth_table');
+                if ($update) {
+                    $dataUsersByEmail = $this->userModel::dataUsersByEmail($email);
+                    session()->set('is_lockscreen', $dataUsersByEmail['is_lockscreen']);
+                    return view('auth/lockscreen', $data);
+                } else {
+                    $insert_statement = [
+                        'email' => $email,
+                        'activity' => 'Lockscreen',
+                        'description' => 'Failed update is_lockscreen',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($insert_statement, $throw_id, $table_name);
+
+                    throw new \CodeIgniter\Exceptions\PageNotFoundException("Something went wrong");
+                }
+            } else {
+                return view('auth/lockscreen', $data);
+            }
+        } else {
+            return redirect()->to('/login');
+        }
+    }
+
+    public function unlock()
+    {
+        $email = session()->get('email');
+        $password = $this->request->getVar('password');
+
+        $rules = [
+            'password' => [
+                'label' => 'Password',
+                'rules' => 'required'
+            ]
+        ];
+
+        $dataUsersByEmail = $this->userModel::dataUsersByEmail($email);
+        // VALIDASI FORM
+        if (!$this->validate($rules)) {
+            // Redirect ke halaman sebelumnya.
+            return redirect()->back()->withInput();
+        } else {
+            if ($dataUsersByEmail) {
+                if (password_verify($password, $dataUsersByEmail['password'])) {
+
+                    $set_statement = [
+                        'is_lockscreen' => 0,
+                    ];
+                    $where = [
+                        'email' => $email,
+                    ];
+
+                    $update = $this->helperModel::updateData($where, $set_statement, 'auth_table');
+
+                    if ($update) {
+                        $data = [
+                            'email' => $email,
+                            'activity' => 'Lockscreen',
+                            'description' => 'User login',
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+
+                        $throw_id = false;
+                        $table_name = 'log_auth_table';
+
+                        $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                        $dataUsersByEmail = $this->userModel::dataUsersByEmail($email);
+                        session()->set('last_activity', time());
+                        session()->set('is_lockscreen', $dataUsersByEmail['is_lockscreen']);
+                        return redirect()->to('/dashboard');
+                    } else {
+                        $data = [
+                            'email' => $email,
+                            'activity' => 'Lockscreen',
+                            'description' => 'Failed update is_lockscreen when try login',
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+
+                        $throw_id = false;
+                        $table_name = 'log_auth_table';
+
+                        $this->helperModel::insertData($data, $throw_id, $table_name);
+
+                        session()->setFlashdata("notif", $this->sessionMessage('error', "Something went wrong, please try again"));
+                        return redirect()->back();
+                    }
+                } else {
+                    $data = [
+                        'email' => $email,
+                        'activity' => 'Lockscreen',
+                        'description' => 'Wrong password',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime()
+                    ];
+
+                    $throw_id = false;
+                    $table_name = 'log_auth_table';
+
+                    $this->helperModel::insertData($data, $throw_id, $table_name);
+                    session()->setFlashdata("notif", $this->sessionMessage('error', "Wrong password"));
+                    return redirect()->back();
+                }
+            } else {
+                $data = [
+                    'email' => $email,
+                    'activity' => 'Lockscreen',
+                    'description' => 'Data user not found',
+                    'created_at' => $this->dateTime(),
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $throw_id = false;
+                $table_name = 'log_auth_table';
+
+                $this->helperModel::insertData($data, $throw_id, $table_name);
+                session()->setFlashdata("notif", $this->sessionMessage('error', "Something went wrong, please try again"));
+                return redirect()->back();
+            }
+        }
+    }
+
+    public function checkActivity()
+    {
+        $result['session'] = session()->get('last_activity');
+        $result['checkIdle'] = $this->checkIdle();
+        return json_encode($result);
     }
 }

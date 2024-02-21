@@ -5,6 +5,25 @@
   }
 }
 
+/* Max width 300px */
+@media only screen and (max-width: 300px) {
+  .header-left-content li {
+    font-size: 7px !important;
+  }
+
+  .header-right-content {
+    text-align: center;
+  }
+
+  .header-right-content li {
+    font-size: 7px !important;
+  }
+
+  .header-right-content li .form-select {
+    font-size: 7px !important;
+  }
+}
+
 /* Max width 767px */
 @media only screen and (max-width: 767px) {
   body {
@@ -94,7 +113,7 @@
     padding-right: 0;
     margin-right: 5px;
     border-right: none;
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .header-right-content {
@@ -102,11 +121,11 @@
   }
 
   .header-right-content li {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .header-right-content li .form-select {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   /* Hero Style */
@@ -1220,7 +1239,7 @@
   }
 
   .header-left-content li {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .header-right-content {
@@ -1228,11 +1247,11 @@
   }
 
   .header-right-content li {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .header-right-content li .form-select {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   /* Hero Style */

@@ -4,20 +4,24 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Role extends Migration
+class MenuChildrenTab extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'role_id' => [
+            'menu_tab_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'role' => [
+            'menu_children_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+            ],
+            'menu_tab_name' => [
                 'type' => 'VARCHAR',
-                'constraint' => '10',
+                'constraint' => '50',
             ],
             'created_at' => [
                 'type' => 'datetime'
@@ -29,21 +33,13 @@ class Role extends Migration
                 'type' => 'INT',
                 'constraint' => '1'
             ],
-            'is_master' => [
-                'type' => 'INT',
-                'constraint' => '1'
-            ],
-            'is_admin' => [
-                'type' => 'INT',
-                'constraint' => '1'
-            ],
         ]);
-        $this->forge->addKey('role_id', true);
-        $this->forge->createTable('role_table');
+        $this->forge->addKey('menu_tab_id', true);
+        $this->forge->createTable('menu_children_tab_table');
     }
 
     public function down()
     {
-        $this->forge->dropTable('role_table');
+        $this->forge->dropTable('menu_children_tab_table');
     }
 }
