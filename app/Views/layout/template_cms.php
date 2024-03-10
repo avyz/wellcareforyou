@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-
+    <meta name="csrf-token" content="<?= csrf_hash() ?>">
     <!-- Links Of CSS File -->
     <link href="/assets/cms/css/preloader.css" rel="stylesheet" type="text/css" />
 
@@ -33,6 +33,9 @@
     <link href="/assets/cms/apex/apexcharts.css" rel="stylesheet" type="text/css">
     <link href="/assets/cms/css/dashboard/dash_2.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/assets/website/css/remixicon.css">
+    <link rel="stylesheet" href="/assets/cms/table/datatable/datatables.css" type="text/css">
+    <link rel="stylesheet" href="/assets/cms/table/datatable/dt-global_style.css" type="text/css">
+    <link rel="stylesheet" href="/assets/cms/table/datatable/custom_dt_miscellaneous.css" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
 
@@ -40,7 +43,7 @@
     <link rel="shortcut icon" href="/assets/website/images/favicon.ico" type="image/x-icon">
 
     <!-- Title -->
-    <title><?= $dataMenu['menu']['menu_name']; ?></title>
+    <title><?= $title; ?></title>
 
 </head>
 
@@ -106,38 +109,11 @@
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="/assets/website/js/jquery.min.js"></script>
     <script src="/assets/cms/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/cms/js/perfect-scrollbar.min.js"></script>
-    <script src="/assets/cms/js/mousetrap.min.js"></script>
-    <script src="/assets/cms/js/waves/waves.min.js"></script>
-    <?php if (session()->get('is_master') == 0 && session()->get('is_admin') == 0) : ?>
-        <script src="/assets/website/js/meanmenu.min.js"></script>
-        <script src="/assets/website/js/owl.carousel.min.js"></script>
-        <script src="/assets/website/js/swiper-bundle.min.js"></script>
-        <script src="/assets/website/js/form-validator.min.js"></script>
-        <script src="/assets/website/js/ajaxchimp.min.js"></script>
-        <script src="/assets/website/js/appear.min.js"></script>
-        <script src="/assets/website/js/jspdf.debug.js"></script>
-        <script src="/assets/website/js/select2.min.js"></script>
-        <script src="/assets/website/js/custom.js"></script>
-    <?php else : ?>
-        <script>
-            // Preloader
-            $(window).on('load', function() {
-                $('.preloader').addClass('preloader-deactivate');
-            })
-        </script>
-    <?php endif; ?>
-    <script src="/assets/cms/js/app.js"></script>
-    <!-- END GLOBAL MANDATORY SCRIPTS -->
-
-    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-    <script src="/assets/cms/apex/apexcharts.min.js"></script>
-    <script src="/assets/cms/js/custom.js"></script>
-    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
     <script>
         var runTimeOut;
         const url = window.location.origin;
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
         var isClick = false;
         var countClicked = 0;
 
@@ -189,6 +165,44 @@
 
         runTimeOut = setInterval(checkActivity, <?= $idleTime * 1000; ?>);
     </script>
+
+    <script src="/assets/cms/js/perfect-scrollbar.min.js"></script>
+    <script src="/assets/cms/js/mousetrap.min.js"></script>
+    <script src="/assets/cms/js/waves/waves.min.js"></script>
+    <?php if (session()->get('is_master') == 0 && session()->get('is_admin') == 0) : ?>
+        <script src="/assets/website/js/meanmenu.min.js"></script>
+        <script src="/assets/website/js/owl.carousel.min.js"></script>
+        <script src="/assets/website/js/swiper-bundle.min.js"></script>
+        <script src="/assets/website/js/form-validator.min.js"></script>
+        <script src="/assets/website/js/ajaxchimp.min.js"></script>
+        <script src="/assets/website/js/appear.min.js"></script>
+        <script src="/assets/website/js/jspdf.debug.js"></script>
+        <script src="/assets/website/js/select2.min.js"></script>
+        <script src="/assets/website/js/custom.js"></script>
+    <?php else : ?>
+        <script>
+            // Preloader
+            $(window).on('load', function() {
+                $('.preloader').addClass('preloader-deactivate');
+            })
+        </script>
+    <?php endif; ?>
+    <script src="/assets/cms/js/app.js"></script>
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="/assets/cms/apex/apexcharts.min.js"></script>
+    <script src="/assets/cms/js/custom.js"></script>
+    <script src="/assets/cms/table/datatable/datatables.js"></script>
+    <script src="/assets/cms/table/datatable/button-ext/dataTables.buttons.min.js"></script>
+    <script src="/assets/cms/table/datatable/button-ext/jszip.min.js"></script>
+    <script src="/assets/cms/table/datatable/button-ext/buttons.html5.min.js"></script>
+    <script src="/assets/cms/table/datatable/button-ext/buttons.print.min.js"></script>
+    <script src="/assets/cms/js/datatable_custom.js"></script>
+    <script src="/assets/cms/js/menu-management/custom.js"></script>
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+
+
 </body>
 
 </html>

@@ -7,8 +7,6 @@ use App\Controllers\BaseController;
 use App\Models\Cms\Users\UsersModel;
 use App\Models\HelperModel;
 
-use function PHPUnit\Framework\throwException;
-
 class Auth extends BaseController
 {
 
@@ -1618,7 +1616,7 @@ class Auth extends BaseController
                     $insert_statement = [
                         'email' => $email,
                         'activity' => 'Lockscreen',
-                        'description' => 'Failed update is_lockscreen',
+                        'description' => 'Failed update activity lockscreen when try lockscreen',
                         'created_at' => $this->dateTime(),
                         'updated_at' => $this->dateTime()
                     ];

@@ -244,8 +244,6 @@ function loadTabStatus() {
 // Fungsi untuk mengaktifkan tab berdasarkan status yang tersimpan
 function activateSavedTab() {
     var activeTabId = loadTabStatus();
-    console.log(activeTabId);
-    // console.log(activeTabId);
     if (activeTabId) {
         var tabs = $(".menutab>.nav-link");
         tabs.map(function (index, tab) {
@@ -263,6 +261,7 @@ function activateSavedTab() {
         $("#" + activeTabId + '-tab-pane').addClass('active show');
         // Update target BS
         $("#create-btn").attr("data-bs-target", "#" + activeTabId + "CreateModal");
+        $("#create-btn").attr("data-section-tab", activeTabId + "Create");
     }
 }
 
@@ -283,6 +282,7 @@ function handleTabClick(tabId) {
 
 
     $("#create-btn").attr("data-bs-target", "");
+    $("#create-btn").attr("data-section-tab", "");
 
     // Aktifkan tab yang diklik
     // document.getElementById(tabId).classList.add('active');
@@ -295,10 +295,54 @@ function handleTabClick(tabId) {
         content.classList.remove('show')
         // console.log(content);
     });
+
     // document.getElementById(tabId + '-tab-pane').style.display = 'block';
     $("#" + tabId + '-tab-pane').addClass('active show');
     // Update target BS
     $("#create-btn").attr("data-bs-target", "#" + tabId + "CreateModal");
+    $("#create-btn").attr("data-section-tab", tabId + "Create");
     // Simpan status tab yang aktif ke dalam local storage
     saveTabStatus(tabId);
+}
+
+function deleteConfirmation(e, url, textMessage = '', method) {
+    const id = $(e).data('id');
+    const id_datatable = $(e).data('id_datatable');
+    // const data = {
+    //     id: id
+    // }
+    // console.log(data);
+    Swal.fire({
+        title: 'Are you sure?',
+        text: textMessage ? textMessage : "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#fff',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken // use  CSRF token on request headers
+                },
+                url: url + '/' + id,
+                method: method,
+                // data: data,
+                success: function (data) {
+                    // window.location.reload();
+                    // Update DataTable
+                    var table = $('#' + id_datatable).DataTable(); // Ganti 'yourDataTable' dengan ID dari DataTable Anda
+                    table.ajax.reload(); // Memuat ulang data DataTable
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    console.error(error);
+                }
+            });
+
+        }
+    })
 }

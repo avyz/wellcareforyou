@@ -19,6 +19,10 @@ class MenusManagement extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '50',
             ],
+            'uuid' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
             'role_id' => [
                 'type' => 'INT',
                 'constraint' => 11,

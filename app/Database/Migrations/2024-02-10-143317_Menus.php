@@ -19,6 +19,10 @@ class Menus extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '50',
             ],
+            'uuid' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
             'menu_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '50',

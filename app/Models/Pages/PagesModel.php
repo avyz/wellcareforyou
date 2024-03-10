@@ -9,7 +9,7 @@ class PagesModel extends Model
     public static function dataComics($slug = false)
     {
         $instance = new static();
-        $db = $instance->getDb();
+        $db = $instance->db;
 
         if ($slug == false) {
             return $db->query("SELECT * FROM comics")->getResultArray();

@@ -9,7 +9,7 @@ class UsersModel extends Model
     public static function dataUsers()
     {
         $instance = new static();
-        $db = $instance->getDb();
+        $db = $instance->db;
 
         $query = "SELECT
         T0.email,
@@ -18,7 +18,8 @@ class UsersModel extends Model
         T2.*,
         T0.is_verified,
         T0.is_active,
-        T0.login_type
+        T0.login_type,
+        T0.uuid
         FROM auth_table T0 
         LEFT JOIN role_table T1 ON T1.role_id = T0.role_id
         LEFT JOIN user_table T2 ON T2.auth_id = T0.auth_id
@@ -32,7 +33,7 @@ class UsersModel extends Model
     public static function dataUsersByEmail($email)
     {
         $instance = new static();
-        $db = $instance->getDb();
+        $db = $instance->db;
 
         $query = "SELECT
         T0.email,
@@ -44,7 +45,8 @@ class UsersModel extends Model
         T0.is_verified,
         T0.is_active,
         T0.login_type,
-        T0.is_lockscreen
+        T0.is_lockscreen,
+        T0.role_id
         FROM auth_table T0 
         LEFT JOIN role_table T1 ON T1.role_id = T0.role_id
         LEFT JOIN user_table T2 ON T2.auth_id = T0.auth_id
@@ -58,7 +60,7 @@ class UsersModel extends Model
     public static function dataTokenByEmail($email)
     {
         $instance = new static();
-        $db = $instance->getDb();
+        $db = $instance->db;
 
         $query = "SELECT
         token, email, time_expired, otp FROM token_table

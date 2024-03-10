@@ -15,6 +15,10 @@ class MenuChildrenTab extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
+            'uuid' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
             'menu_children_id' => [
                 'type' => 'INT',
                 'constraint' => 11,

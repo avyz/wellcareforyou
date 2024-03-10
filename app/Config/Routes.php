@@ -89,13 +89,27 @@ $routes->get('/check-activity', 'Auth\Auth::checkActivity');
 
 // USER
 
-// Dashboard User
-$routes->get('/dashboard', 'Cms\Users\Users::index');
+// General View
+$routes->get('/(:segment)', 'Cms\General\General::index/$1', ['filter' => 'superadmin']);
+// $routes->get('/dashboard', 'Cms\General\General::index');
 // $routes->get('/user-management', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
 // End Dashboard User
 // Menu Management
-$routes->get('/menu-management/admin', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
-$routes->get('/menu-management/user', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
+$routes->get('/menu-management/data-menu', 'Cms\MenuManagement\MenuManagement::dataMenu');
+$routes->post('/menu-management/data-menu', 'Cms\MenuManagement\MenuManagement::dataMenu');
+$routes->get('/menu-management/submenu', 'Cms\MenuManagement\MenuManagement::dataSubmenu');
+$routes->post('/menu-management/submenu', 'Cms\MenuManagement\MenuManagement::dataSubmenu');
+$routes->get('/menu-management/tabmenu', 'Cms\MenuManagement\MenuManagement::dataTabMenu');
+$routes->post('/menu-management/tabmenu', 'Cms\MenuManagement\MenuManagement::dataTabMenu');
+$routes->get('/menu-management/action-buttons', 'Cms\MenuManagement\MenuManagement::dtActionButtons');
+$routes->post('/menu-management/admin/create', 'Cms\MenuManagement\MenuManagement::createMenu');
+$routes->get('/menu-management/admin/edit', 'Cms\MenuManagement\MenuManagement::editMenu');
+$routes->put('/menu-management/admin/edit', 'Cms\MenuManagement\MenuManagement::editMenu');
+$routes->put('/menu-management/admin/(:segment)/(:any)', 'Cms\MenuManagement\MenuManagement::delMenu/$1/$2');
+$routes->get('/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2', ['filter' => 'superadmin']);
+$routes->get('/(:segment)/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2/$3', ['filter' => 'superadmin']);
+// $routes->get('/(:segment)/(:segment)/(:segment)/(:any)', 'Cms\General\General::index/$1/$2/$3/$4', ['filter' => 'superadmin']);
+// $routes->get('/menu-management/user', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
 // End Menu Management
 
 // END USER

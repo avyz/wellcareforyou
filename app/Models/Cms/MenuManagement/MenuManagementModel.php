@@ -6,10 +6,121 @@ use CodeIgniter\Model;
 
 class MenuManagementModel extends Model
 {
+
+    // Data Menu
+    public static function dataMenu($filter, $column, $order, $fullData)
+    {
+        $instance = new static();
+        $db = $instance->db;
+
+        if ($fullData == 1) {
+            $query = "
+            SELECT
+            @no:=@no+1 AS number,
+            menu_id,
+            menu_slug,
+            menu_name,
+            menu_icon,
+            menu_url,
+            created_at,
+            updated_at,
+            is_active,
+            uuid
+            FROM `menu_table`, (SELECT @no:= 0) AS no WHERE menu_name LIKE '%$filter%' OR menu_slug LIKE '%$filter%' ORDER BY $column $order;";
+        } else {
+            $query = "
+            SELECT
+            @no:=@no+1 AS number,
+            menu_id,
+            menu_slug,
+            menu_name,
+            menu_icon,
+            menu_url,
+            created_at,
+            updated_at,
+            is_active,
+            uuid
+            FROM `menu_table`, (SELECT @no:= 0) AS no WHERE is_active = 1 AND (menu_name LIKE '%$filter%' OR menu_slug LIKE '%$filter%') ORDER BY $column $order;";
+        }
+
+        $result = $db->query($query)->getResultArray();
+
+        return $result;
+    }
+
+    // Data menu by uuid
+    public static function dataMenuByMenuId($uuid)
+    {
+        $instance = new static();
+        $db = $instance->db;
+
+        $query = "
+        SELECT
+        @no:=@no+1 AS number,
+        menu_id,
+        menu_slug,
+        menu_name,
+        menu_icon,
+        menu_url,
+        created_at,
+        updated_at,
+        is_active,
+        uuid
+        FROM `menu_table`, (SELECT @no:= 0) AS no WHERE uuid='$uuid' ORDER BY menu_id;";
+
+        $result = $db->query($query)->getRowArray();
+
+        return $result;
+    }
+
+    // Data Submenu
+    public static function dataSubmenu($filter, $column, $order)
+    {
+        $instance = new static();
+        $db = $instance->db;
+
+        $query = "SELECT 
+        @no:=@no+1 AS number,
+        menu_children_id,
+        menu_id,
+        menu_children_name,
+        menu_children_icon,
+        menu_children_url,
+        created_at,
+        is_active,
+        uuid
+        FROM `menu_children_table`, (SELECT @no:= 0) AS no WHERE menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+
+        $result = $db->query($query)->getResultArray();
+
+        return $result;
+    }
+
+    // Data Tab
+    public static function dataTabMenu($filter, $column, $order)
+    {
+        $instance = new static();
+        $db = $instance->db;
+
+        $query = "SELECT
+        @no:=@no+1 AS number,
+        menu_tab_id,
+        menu_children_id,
+        menu_tab_name,
+        created_at,
+        is_active,
+        uuid
+        FROM `menu_children_tab_table`, (SELECT @no:= 0) AS no WHERE menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+
+        $result = $db->query($query)->getResultArray();
+
+        return $result;
+    }
+
     public static function sidebar()
     {
         $instance = new static();
-        $db = $instance->getDb();
+        $db = $instance->db;
 
         $query = "SELECT 
         T0.menu_id,
@@ -72,7 +183,7 @@ class MenuManagementModel extends Model
     public static function menuTabByChildrenId($children_id)
     {
         $instance = new static();
-        $db = $instance->getDb();
+        $db = $instance->db;
 
         if ($children_id) {
             $query = "SELECT
@@ -114,10 +225,10 @@ class MenuManagementModel extends Model
         }
     }
 
-    public static function menuBySlug($slug, $lang_code)
+    public static function menuAksesBySlug($slug, $lang_code)
     {
         $instance = new static();
-        $db = $instance->getDb();
+        $db = $instance->db;
 
         if ($lang_code) {
             $query = "SELECT 
@@ -129,6 +240,7 @@ class MenuManagementModel extends Model
         T0.created_at,
         T0.updated_at,
         T0.is_active,
+        T0.lang_code,
         T1.menu_children_id,
         T1.menu_id as 'menu_id_children',
         T1.menu_children_name,
@@ -148,6 +260,7 @@ class MenuManagementModel extends Model
         T0.created_at,
         T0.updated_at,
         T0.is_active,
+        T0.lang_code,
         T1.menu_children_id,
         T1.menu_id as 'menu_id_children',
         T1.menu_children_name,
@@ -160,15 +273,17 @@ class MenuManagementModel extends Model
         }
 
         $query_lang = "SELECT 
-        lang_id, 
-        lang_code, 
-        `language`, 
-        lang_icon, 
-        created_at, 
-        is_active, 
-        is_lang_default
-        FROM `lang_table` 
-        WHERE is_active = 1 ORDER BY lang_id ASC;";
+        T0.lang_id, 
+        T0.lang_code, 
+        T0.`language`, 
+        T0.lang_icon, 
+        T0.created_at, 
+        T0.is_active, 
+        T0.is_lang_default
+        FROM `lang_table` T0
+        WHERE T0.is_active = 1 
+        AND EXISTS (SELECT a.lang_code FROM menu_table a WHERE a.lang_code = T0.lang_code GROUP BY a.lang_code) 
+        ORDER BY T0.lang_id ASC;";
 
         $result = $db->query($query)->getRowArray();
         $sidebars = $db->query($query)->getResultArray();
@@ -230,7 +345,8 @@ class MenuManagementModel extends Model
                     'menu_url' => $result['menu_url'],
                     'created_at' => $result['created_at'],
                     'updated_at' => $result['updated_at'],
-                    'is_active' => $result['is_active']
+                    'is_active' => $result['is_active'],
+                    'lang_code' => $result['lang_code']
                 ];
                 $menu_management[$result['menu_id']]['sidebar'] = $sidebar;
             }
@@ -255,31 +371,55 @@ class MenuManagementModel extends Model
         if ($breadcrumbs) {
             $getSegments = $breadcrumbs->getSegments();
             $segment = $breadcrumbs->getSegment($breadcrumbs->getTotalSegments());
-            $first_segment = self::menuBySlug($breadcrumbs->getSegment(1), $lang_code)['menu'] ?? null;
+            // $first_segment = self::menuAksesBySlug($breadcrumbs->getSegment(1), $lang_code)['menu'] ?? null;
             $i = 1;
-            if ($first_segment) {
-                foreach ($getSegments as $b) {
-                    $subSegments = array_slice($getSegments, 0, $i);
-                    $link = implode('/', $subSegments);
-                    $text = str_replace('-', ' ', $b);
-                    $url = '/' . $link;
-                    $breadcrumb[] = [
-                        'segment' => $first_segment['menu_slug'] === $breadcrumbs->getSegment($i) ? $first_segment['menu_name'] : ucwords($text),
-                        'url' => $segment == $text ? '#' : $url
-                    ];
-                    $i++;
-                }
+            // if ($first_segment) {
+            foreach ($getSegments as $b) {
+                $subSegments = array_slice($getSegments, 0, $i);
+                $link = implode('/', $subSegments);
+                $text = str_replace('-', ' ', $b);
+                $url = '/' . $link;
+                $breadcrumb[] = [
+                    // 'segment' => $first_segment['menu_slug'] === $breadcrumbs->getSegment($i) ? $first_segment['menu_name'] : ucwords($text),
+                    'segment' => ucwords($text),
+                    'url' => $segment == $text ? '#' : $url
+                ];
+                $i++;
             }
+            // }
         }
 
         return $breadcrumb;
+    }
+
+    // Language List
+    public static function languageList()
+    {
+        $instance = new static();
+        $db = $instance->db;
+
+        $query = "SELECT 
+        lang_id, 
+        lang_code, 
+        `language`, 
+        lang_icon, 
+        created_at, 
+        is_active, 
+        is_lang_default
+        FROM `lang_table` 
+        WHERE is_active = 1
+        ORDER BY lang_id ASC;";
+
+        $result = $db->query($query)->getResultArray();
+
+        return $result;
     }
 
     // Language By Language Code
     public static function languageByLangCode($lang_code)
     {
         $instance = new static();
-        $db = $instance->getDb();
+        $db = $instance->db;
         if ($lang_code) {
             $query = "SELECT 
         lang_id, 

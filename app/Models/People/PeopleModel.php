@@ -9,7 +9,7 @@ class PeopleModel extends Model
     public static function dataPeople($perPage, $offset, $search, $is_pagination)
     {
         $instance = new static();
-        $db = $instance->getDb();
+        $db = $instance->db;
 
         $query = "";
         if ($is_pagination) {

@@ -19,6 +19,10 @@ class MenusChildren extends Migration
                 'type' => 'INT',
                 'constraint' => 11,
             ],
+            'uuid' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
             'menu_children_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '50',

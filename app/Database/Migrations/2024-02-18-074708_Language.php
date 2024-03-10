@@ -15,6 +15,10 @@ class Language extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
+            'uuid' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
             'lang_code' => [
                 'type' => 'VARCHAR',
                 'constraint' => '25',

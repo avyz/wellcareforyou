@@ -29,10 +29,26 @@ class Users extends BaseController
             'section' => $this->dirSectionCms,
             'idleTime' => $this->timeIdle,
             'sidebar' => $this->menuManagementModel::sidebar(),
-            'dataMenu' => $this->menuManagementModel::menuBySlug($uri->getSegment(1), $lang_code),
+            'dataMenu' => $this->menuManagementModel::menuAksesBySlug($uri->getSegment(1), $lang_code),
             'breadcrumbs' => $this->menuManagementModel::breadCrumbsBySlug($lang_code),
             'language_row' => $this->menuManagementModel::languageByLangCode($lang_code)
         ];
+
+        $title = null;
+        if ($data['dataMenu']) {
+            if (count($data['dataMenu']['sidebar']) == 0) {
+                $title = $data['dataMenu']['menu']['menu_name'];
+            } else {
+                // dd($data);
+                $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'];
+            }
+            $data['title'] = $title;
+            if ($data) {
+                return $this->checkIdle(view('cms/users/body', $data));
+            }
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Not Found");
+        }
+        return redirect()->to('/login');
 
 
 
@@ -119,9 +135,9 @@ class Users extends BaseController
 
         // $this->helperModel::insertData($data_table, $throw_id, $table_name);
 
-        if ($data['dataMenu']) {
-            return $this->checkIdle(view('cms/users/body', $data));
-        }
-        throw new \CodeIgniter\Exceptions\PageNotFoundException("Halaman tidak ditemukan");
+        // if ($data['dataMenu']) {
+        //     return $this->checkIdle(view('cms/users/body', $data));
+        // }
+        // throw new \CodeIgniter\Exceptions\PageNotFoundException("Halaman tidak ditemukan");
     }
 }

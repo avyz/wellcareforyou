@@ -19,6 +19,10 @@ class User extends Migration
                 'type' => 'INT',
                 'constraint' => 11
             ],
+            'uuid' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
             'photo' => [
                 'type' => 'VARCHAR',
                 'constraint' => '100',

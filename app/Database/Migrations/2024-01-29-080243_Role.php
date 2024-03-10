@@ -15,6 +15,10 @@ class Role extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
+            'uuid' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
             'role' => [
                 'type' => 'VARCHAR',
                 'constraint' => '10',
