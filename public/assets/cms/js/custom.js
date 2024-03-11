@@ -305,9 +305,17 @@ function handleTabClick(tabId) {
     saveTabStatus(tabId);
 }
 
+function updateCsrfToken(token) {
+    $('meta[name="csrf-token"]').attr('content', token);
+
+}
+
 function deleteConfirmation(e, url, textMessage = '', method) {
     const id = $(e).data('id');
+    const namesec = $(e).data('namesec');
     const id_datatable = $(e).data('id_datatable');
+    csrfToken = $('meta[name="csrf-token"]').attr('content');
+    // console.log(csrfToken);
     // const data = {
     //     id: id
     // }
@@ -328,14 +336,20 @@ function deleteConfirmation(e, url, textMessage = '', method) {
                 headers: {
                     'X-CSRF-TOKEN': csrfToken // use  CSRF token on request headers
                 },
-                url: url + '/' + id,
-                method: method,
+                url: url + '/' + namesec + '/' + id,
+                type: method,
                 // data: data,
+                dataType: 'json',
                 success: function (data) {
+                    // console.log(data);
                     // window.location.reload();
                     // Update DataTable
                     var table = $('#' + id_datatable).DataTable(); // Ganti 'yourDataTable' dengan ID dari DataTable Anda
                     table.ajax.reload(); // Memuat ulang data DataTable
+                    // console.log(data);
+                    updateCsrfToken(data.token);
+                    $('.sweet-alert').html(data.notification);
+                    // return data;
                 },
                 error: function (xhr, status, error) {
                     // Handle any errors that occur during the AJAX request

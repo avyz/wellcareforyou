@@ -4,7 +4,7 @@ $(document).ready(function () {
         // console.log(menu_id);
         $.ajax({
             url: url + '/menu-management/admin/edit',
-            method: 'GET',
+            type: 'GET',
             data: {
                 menu_id: menu_id,
                 type: 'view'
@@ -58,7 +58,7 @@ $(document).ready(function () {
         //     value.push(dataValue);
         //     $.ajax({
         //         url: url + '/menu-management/admin/edit',
-        //         method: 'PUT',
+        //         type: 'PUT',
         //         data: value,
         //         beforeSend: function () {
         //             $('#adminEdit button[type="submit"]').attr('disabled', true);

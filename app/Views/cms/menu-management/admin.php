@@ -30,6 +30,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Menu</th>
                             <th>Submenu</th>
                             <th>Url</th>
                             <th>Status</th>
@@ -45,6 +46,8 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Menu</th>
+                            <th>Submenu</th>
                             <th>Tab</th>
                             <th>Status</th>
                             <th>Action</th>

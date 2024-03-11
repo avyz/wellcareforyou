@@ -89,8 +89,6 @@ $routes->get('/check-activity', 'Auth\Auth::checkActivity');
 
 // USER
 
-// General View
-$routes->get('/(:segment)', 'Cms\General\General::index/$1', ['filter' => 'superadmin']);
 // $routes->get('/dashboard', 'Cms\General\General::index');
 // $routes->get('/user-management', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
 // End Dashboard User
@@ -105,12 +103,15 @@ $routes->get('/menu-management/action-buttons', 'Cms\MenuManagement\MenuManageme
 $routes->post('/menu-management/admin/create', 'Cms\MenuManagement\MenuManagement::createMenu');
 $routes->get('/menu-management/admin/edit', 'Cms\MenuManagement\MenuManagement::editMenu');
 $routes->put('/menu-management/admin/edit', 'Cms\MenuManagement\MenuManagement::editMenu');
-$routes->put('/menu-management/admin/(:segment)/(:any)', 'Cms\MenuManagement\MenuManagement::delMenu/$1/$2');
-$routes->get('/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2', ['filter' => 'superadmin']);
-$routes->get('/(:segment)/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2/$3', ['filter' => 'superadmin']);
+$routes->delete('/menu-management/admin/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 // $routes->get('/(:segment)/(:segment)/(:segment)/(:any)', 'Cms\General\General::index/$1/$2/$3/$4', ['filter' => 'superadmin']);
 // $routes->get('/menu-management/user', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
 // End Menu Management
+
+// GENERAL VIEW
+$routes->get('/(:segment)', 'Cms\General\General::index/$1', ['filter' => 'superadmin']);
+$routes->get('/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2', ['filter' => 'superadmin']);
+$routes->get('/(:segment)/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2/$3', ['filter' => 'superadmin']);
 
 // END USER
 

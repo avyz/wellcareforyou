@@ -48,7 +48,7 @@
 </head>
 
 <body class="layout-boxed">
-
+    <div class="sweet-alert"></div>
     <!-- Load Preloader -->
     <?= $this->include('layout/website/preloader'); ?>
     <?php if (session()->get('is_master') == 0 && session()->get('is_admin') == 0) : ?>

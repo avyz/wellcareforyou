@@ -149,7 +149,7 @@ abstract class BaseController extends Controller
             case 'success':
                 $title = "Success";
                 $icon = "success";
-                $timer = 2500;
+                $timer = 1500;
                 $showConfirmButton = false;
                 $showCancelButton = false;
                 break;

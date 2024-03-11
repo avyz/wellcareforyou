@@ -91,4 +91,41 @@ class General extends BaseController
             $this->helperModel::insertData($data_insert, $throw_id, $table_name);
         }
     }
+
+    // DELETE MENU
+    public function delMenu($segment, $table_name, $uuid)
+    {
+        $id = $uuid;
+        $is_active = null;
+        $message = '';
+        if ($segment == 'deactivate') {
+            $is_active = 0;
+            $message = "deactivated";
+        } else if ($segment == 'activate') {
+            $is_active = 1;
+            $message = "activated";
+        } else {
+            $is_active = 0;
+            $message = "deleted";
+        }
+
+        $data_update = [
+            'is_active' => $is_active,
+            'updated_at' => $this->dateTime(),
+        ];
+
+        $columns_id = 'uuid';
+        $this->helperModel::deleteData($columns_id, $id, $data_update, $table_name . '_table', false);
+
+        $session = $this->sessionMessage('success', "data has been " . $message);
+        $token = csrf_hash();
+
+        $result['notification'] = $session;
+        $result['token'] = $token;
+
+        return $this->response->setJSON($result);
+
+        // session()->setFlashdata("notif", $this->sessionMessage('success', "data has been " . $message));
+        // return redirect()->back();
+    }
 }

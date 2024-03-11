@@ -32,7 +32,7 @@ class MenuManagement extends BaseController
         $column = $this->request->getVar('columns')[$orderColumn]['data'];
         $orderDir = $this->request->getVar('order')[0]['dir'];
 
-        $fullData = 1;
+        $fullData = true;
         $data = $this->menuManagementModel::dataMenu($filter, $column, $orderDir, $fullData);
 
         // Hitung jumlah total data
@@ -181,36 +181,6 @@ class MenuManagement extends BaseController
         return $this->response->setJSON($data);
     }
 
-    // DELETE MENU
-    public function delMenu($segment, $uuid)
-    {
-        $id = $uuid;
-        // echo ($id);
-        $is_active = null;
-        $message = '';
-        if ($segment == 'deactivate') {
-            $is_active = 0;
-            $message = "deactivated";
-        } else if ($segment == 'activate') {
-            $is_active = 1;
-            $message = "activated";
-        } else {
-            $is_active = 0;
-            $message = "deleted";
-        }
-
-        $data_update = [
-            'is_active' => $is_active,
-            'updated_at' => $this->dateTime(),
-        ];
-        $where = [
-            'uuid' => $id,
-        ];
-        $this->helperModel::updateData($where, $data_update, 'menu_table');
-        session()->setFlashdata("notif", $this->sessionMessage('success', "data has been " . $message));
-        return redirect()->back();
-    }
-
     // SUBMENU
     public function dataSubmenu()
     {
@@ -222,7 +192,7 @@ class MenuManagement extends BaseController
         $column = $this->request->getVar('columns')[$orderColumn]['data'];
         $orderDir = $this->request->getVar('order')[0]['dir'];
 
-        $fullData = 1;
+        $fullData = true;
         $data = $this->menuManagementModel::dataSubmenu($filter, $column, $orderDir, $fullData);
 
         // Hitung jumlah total data
@@ -258,6 +228,112 @@ class MenuManagement extends BaseController
         return $this->response->setJSON($response);
     }
 
+    // CREATE SUBMENU
+    public function createSubmenu()
+    {
+        $menu_id = $this->request->getVar('menu_id');
+        $menu_children_name = $this->request->getVar('menu_children_name');
+
+        $rules = [
+            'menu_children_name' => [
+                'label' => 'Submenu Name',
+                'rules' => 'trim|required|is_unique[menu_children_table.menu_children_name]|min_length[3]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]',
+                'errors' => [
+                    'required' => 'The Submenu Name is required',
+                    'is_unique' => 'Submenu Name already exist',
+                    'regex_match' => 'Character must be capital, alphabet only and no space in first or end letter',
+                    'trim' => 'Character has space in first or end letter',
+                ]
+            ],
+            'menu_id' => [
+                'label' => 'Menu Name',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'The Menu Name is required',
+                ]
+            ],
+        ];
+        if (!$this->validate($rules)) {
+            session()->setFlashdata("notif", $this->sessionMessage('error', "Oops, something went wrong when create " . $menu_children_name . " please check your input again"));
+            return redirect()->back()->withInput();
+        } else {
+            $data = [
+                'uuid' => $this->helperModel::generateUuid(),
+                'menu_id' => $menu_id,
+                'menu_children_name' => ucwords($menu_children_name),
+                'menu_children_icon' => '<i class="ri-bubble-chart-line"></i>',
+                'menu_children_url' => '/' . url_title($menu_children_name, '-', true),
+                'created_at' => $this->dateTime(),
+                'updated_at' => $this->dateTime(),
+                'is_active' => 1
+            ];
+            $this->helperModel::insertData($data, false, 'menu_children_table');
+
+            session()->setFlashdata("notif", $this->sessionMessage('success', "Submenu " . $menu_children_name . " has been created"));
+            return redirect()->back();
+        }
+    }
+
+    // EDIT SUBMENU
+    public function editSubmenu()
+    {
+        $submenu_id = $this->request->getVar('submenu_id');
+        $edit_menu_id = $this->request->getVar('edit_menu_id');
+        $type = $this->request->getVar('type');
+        $edit_menu_children_name = $this->request->getVar('edit_menu_children_name');
+        $data = $this->menuManagementModel::dataSubmenuByMenuChildrenId($submenu_id);
+
+        if ($type != 'view') {
+
+            $value = "";
+            if ($data['menu_children_name'] == $edit_menu_children_name) {
+                $value = 'trim|required|min_length[3]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]';
+            } else {
+                $value = 'trim|required|is_unique[menu_children_table.menu_children_name]|min_length[3]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]';
+            }
+
+            $rules = [
+                'edit_menu_children_name' => [
+                    'label' => 'Submenu Name',
+                    'rules' => $value,
+                    'errors' => [
+                        'required' => 'The Submenu Name is required',
+                        'is_unique' => 'Submenu Name already exist',
+                        'regex_match' => 'Character must be capital, alphabet only and no space in first or end letter',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
+                'edit_menu_id' => [
+                    'label' => 'Menu Name',
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'The Menu Name is required'
+                    ]
+                ],
+            ];
+            if (!$this->validate($rules)) {
+                session()->setFlashdata("notif", $this->sessionMessage('error', "Oops, something went wrong when update " . $data['menu_children_name'] . " please check your input again"));
+                return redirect()->back()->withInput();
+            } else {
+                $data_update = [
+                    'menu_id' => $edit_menu_id,
+                    'menu_children_name' => ucwords($edit_menu_children_name),
+                    'menu_children_url' => '/' . url_title($edit_menu_children_name, '-', true),
+                    'updated_at' => $this->dateTime(),
+                ];
+
+                $where = [
+                    'uuid' => $submenu_id,
+                ];
+                $this->helperModel::updateData($where, $data_update, 'menu_children_table');
+
+                session()->setFlashdata("notif", $this->sessionMessage('success', "Submenu " . $data['menu_children_name'] . " has been updated"));
+                return redirect()->back();
+            }
+        }
+        return $this->response->setJSON($data);
+    }
+
     // TAB
     public function dataTabMenu()
     {
@@ -269,7 +345,7 @@ class MenuManagement extends BaseController
         $column = $this->request->getVar('columns')[$orderColumn]['data'];
         $orderDir = $this->request->getVar('order')[0]['dir'];
 
-        $fullData = 1;
+        $fullData = true;
         $data = $this->menuManagementModel::dataTabMenu($filter, $column, $orderDir, $fullData);
 
         // Hitung jumlah total data
@@ -304,6 +380,109 @@ class MenuManagement extends BaseController
         return $this->response->setJSON($response);
     }
 
+    // CREATE TAB MENU
+    public function createTabMenu()
+    {
+        $menu_children_id = $this->request->getVar('menu_children_id');
+        $menu_tab_name = $this->request->getVar('menu_tab_name');
+
+        $rules = [
+            'menu_tab_name' => [
+                'label' => 'Tab Menu Name',
+                'rules' => 'trim|required|is_unique[menu_children_tab_table.menu_tab_name]|min_length[3]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]',
+                'errors' => [
+                    'required' => 'The Tab Menu Name is required',
+                    'is_unique' => 'Tab Menu Name already exist',
+                    'regex_match' => 'Character must be capital, alphabet only and no space in first or end letter',
+                    'trim' => 'Character has space in first or end letter',
+                ]
+            ],
+            'menu_children_id' => [
+                'label' => 'Submenu Name',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'The Submenu Name is required',
+                ]
+            ],
+        ];
+        if (!$this->validate($rules)) {
+            session()->setFlashdata("notif", $this->sessionMessage('error', "Oops, something went wrong when create " . $menu_tab_name . " please check your input again"));
+            return redirect()->back()->withInput();
+        } else {
+            $data = [
+                'uuid' => $this->helperModel::generateUuid(),
+                'menu_children_id' => $menu_children_id,
+                'menu_tab_name' => ucwords($menu_tab_name),
+                'created_at' => $this->dateTime(),
+                'updated_at' => $this->dateTime(),
+                'is_active' => 1
+            ];
+            $this->helperModel::insertData($data, false, 'menu_children_tab_table');
+
+            session()->setFlashdata("notif", $this->sessionMessage('success', "Tab Menu " . $menu_tab_name . " has been created"));
+            return redirect()->back();
+        }
+    }
+
+    // EDIT TAB MENU
+    public function editTabMenu()
+    {
+        $tab_menu_id = $this->request->getVar('tab_menu_id');
+        $edit_menu_children_id = $this->request->getVar('edit_menu_children_id');
+        $type = $this->request->getVar('type');
+        $edit_menu_tab_name = $this->request->getVar('edit_menu_tab_name');
+        $data = $this->menuManagementModel::dataTabMenuByMenuTabId($tab_menu_id);
+
+        if ($type != 'view') {
+
+            $value = "";
+            if ($data['menu_tab_name'] == $edit_menu_tab_name) {
+                $value = 'trim|required|min_length[3]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]';
+            } else {
+                $value = 'trim|required|is_unique[menu_children_tab_table.menu_tab_name]|min_length[3]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]';
+            }
+
+            $rules = [
+                'edit_menu_tab_name' => [
+                    'label' => 'Tab Menu Name',
+                    'rules' => $value,
+                    'errors' => [
+                        'required' => 'The Tab Menu Name is required',
+                        'is_unique' => 'Tab Menu Name already exist',
+                        'regex_match' => 'Character must be capital, alphabet only and no space in first or end letter',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
+                'edit_menu_children_id' => [
+                    'label' => 'Submenu Name',
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'The Submenu Name is required'
+                    ]
+                ],
+            ];
+            if (!$this->validate($rules)) {
+                session()->setFlashdata("notif", $this->sessionMessage('error', "Oops, something went wrong when update " . $data['menu_tab_name'] . " please check your input again"));
+                return redirect()->back()->withInput();
+            } else {
+                $data_update = [
+                    'menu_children_id' => $edit_menu_children_id,
+                    'menu_tab_name' => ucwords($edit_menu_tab_name),
+                    'updated_at' => $this->dateTime(),
+                ];
+
+                $where = [
+                    'uuid' => $tab_menu_id,
+                ];
+                $this->helperModel::updateData($where, $data_update, 'menu_children_tab_table');
+
+                session()->setFlashdata("notif", $this->sessionMessage('success', "Tab Menu " . $data['menu_tab_name'] . " has been updated"));
+                return redirect()->back();
+            }
+        }
+        return $this->response->setJSON($data);
+    }
+
     public function dtActionButtons()
     {
         $columnName = $this->request->getVar('columnName');
@@ -325,7 +504,7 @@ class MenuManagement extends BaseController
         // dd($column);
         $dataSelected = ['header' => $arr_header, 'column' => $arr_column];
 
-        $fullData = 0;
+        $fullData = false;
         $data = $this->menuManagementModel::$modelName('', $columnName, 'asc', $fullData);
 
         switch ($buttons) {
