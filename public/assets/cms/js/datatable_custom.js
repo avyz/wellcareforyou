@@ -15,11 +15,12 @@ const buttons = (data) => {
                         type: 'GET',
                         data: {
                             ...data,
+                            lang_code: metaLanguage,
                             buttons: "csv",
                         },
                         success: function (response) {
 
-                            window.open("/menu-management/action-buttons?columnName=" + data.columnName + "&modelName=" + data.modelName + "&header=" + data.header.join(",") + "&column=" + data.column.join(",") + "&buttons=csv");
+                            window.open("/menu-management/action-buttons?columnName=" + data.columnName + "&modelName=" + data.modelName + "&header=" + data.header.join(",") + "&column=" + data.column.join(",") + "&buttons=csv&lang_code=" + metaLanguage);
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
@@ -37,10 +38,11 @@ const buttons = (data) => {
                         type: 'GET',
                         data: {
                             ...data,
+                            lang_code: metaLanguage,
                             buttons: 'excel'
                         },
                         success: function (response) {
-                            window.open("/menu-management/action-buttons?columnName=" + data.columnName + "&modelName=" + data.modelName + "&header=" + data.header.join(",") + "&column=" + data.column.join(",") + "&buttons=excel");
+                            window.open("/menu-management/action-buttons?columnName=" + data.columnName + "&modelName=" + data.modelName + "&header=" + data.header.join(",") + "&column=" + data.column.join(",") + "&buttons=excel&lang_code=" + metaLanguage);
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
@@ -57,6 +59,7 @@ const buttons = (data) => {
                         type: "GET",
                         data: {
                             ...data,
+                            lang_code: metaLanguage,
                             buttons: 'print'
                         },
                         dataType: "json",
@@ -138,9 +141,9 @@ $('#menu-ui-table').DataTable({
     "ajax": {
         "url": url + "/menu-management/data-menu",
         "type": "GET",
-        // data: function (e) {
-        //     console.log(e);
-        // }
+        "data": {
+            lang_code: metaLanguage
+        }
     },
     "dom": dom(),
 
@@ -216,9 +219,9 @@ $('#menu-ui-table').DataTable({
             "render": function (data, type, row, meta) {
                 var button = "<button class='btn px-2 py-1 btn-primary' data-menu_id=" + row.uuid + " id='editMenu' data-bs-toggle='modal' data-bs-target='#menuEditModal'><i class='ri-pencil-line'></i></button>";
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="deleteConfirmation(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menu-ui-table" data-namesec="menu" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menu-ui-table" data-namesec="menu" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="deleteConfirmation(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menu-ui-table" data-namesec="menu" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menu-ui-table" data-namesec="menu" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }
@@ -236,9 +239,9 @@ $('#submenu-ui-table').DataTable({
     "ajax": {
         "url": url + "/menu-management/submenu",
         "type": "GET",
-        // data: function (e) {
-        //     console.log(e);
-        // }
+        "data": {
+            lang_code: metaLanguage
+        }
     },
     "dom": dom(),
 
@@ -299,9 +302,9 @@ $('#submenu-ui-table').DataTable({
             "render": function (data, type, row, meta) {
                 var button = "<button class='btn px-2 py-1 btn-primary' data-menu_children_id=" + row.uuid + " id='editSubmenu' data-bs-toggle='modal' data-bs-target='#submenuEditModal'><i class='ri-pencil-line'></i></button>";
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="deleteConfirmation(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="deleteConfirmation(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }
@@ -319,6 +322,9 @@ $('#tab-ui-table').DataTable({
     "ajax": {
         "url": url + "/menu-management/tabmenu",
         "type": "GET",
+        "data": {
+            lang_code: metaLanguage
+        }
     },
     "dom": dom(),
 
@@ -375,9 +381,9 @@ $('#tab-ui-table').DataTable({
 
                 var button = "<button class='btn px-2 py-1 btn-primary' data-menu_tab_id=" + row.uuid + " id='editTabmenu' data-bs-toggle='modal' data-bs-target='#tabEditModal'><i class='ri-pencil-line'></i></button>";
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="deleteConfirmation(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="deleteConfirmation(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }

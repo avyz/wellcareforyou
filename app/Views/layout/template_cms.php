@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="<?= csrf_hash() ?>">
+    <meta name="language" content="<?= $language_row['lang_code']; ?>">
     <!-- Links Of CSS File -->
     <link href="/assets/cms/css/preloader.css" rel="stylesheet" type="text/css" />
 
@@ -114,6 +115,7 @@
         var runTimeOut;
         const url = window.location.origin;
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        var metaLanguage = $('meta[name="language"]').attr('content');
         var isClick = false;
         var countClicked = 0;
 
@@ -199,6 +201,7 @@
     <script src="/assets/cms/table/datatable/button-ext/buttons.html5.min.js"></script>
     <script src="/assets/cms/table/datatable/button-ext/buttons.print.min.js"></script>
     <script src="/assets/cms/js/datatable_custom.js"></script>
+    <script src="/assets/cms/js/api.js"></script>
     <script src="/assets/cms/js/menu-management/custom.js"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 

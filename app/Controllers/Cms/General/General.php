@@ -54,21 +54,21 @@ class General extends BaseController
             if ($menu_url == $uri->getPath()) {
                 $data['title'] = $title;
 
-                $this->_logUser('Access ' . $title, 'Access ' . $title . ' page successfully');
+                $this->logUser('Access ' . $title, 'Access ' . $title . ' page successfully');
 
                 return $this->checkIdle(view('cms' . $path, $data));
             } else {
-                $this->_logUser('Access not found', 'Page ' . $uri->getPath() . ' is not found');
+                $this->logUser('Access not found', 'Page ' . $uri->getPath() . ' is not found');
 
                 throw new \CodeIgniter\Exceptions\PageNotFoundException("Not Found");
             }
         }
-        $this->_logUser('Access menu', 'User try to access ' . $uri->getPath() . ' , but is not found, user redirected to home');
+        $this->logUser('Access menu', 'User try to access ' . $uri->getPath() . ' , but is not found, user redirected to home');
 
         return redirect()->to('/login');
     }
 
-    private function _logUser($activity, $description = '')
+    public function logUser($activity, $description = '')
     {
         $dataUser = null;
         if (session()->get('email')) {
@@ -123,9 +123,7 @@ class General extends BaseController
         $result['notification'] = $session;
         $result['token'] = $token;
 
+        $this->logUser('Delete ' . $table_name, 'Delete ' . $table_name . ' with id ' . $id . ' successfully');
         return $this->response->setJSON($result);
-
-        // session()->setFlashdata("notif", $this->sessionMessage('success', "data has been " . $message));
-        // return redirect()->back();
     }
 }

@@ -310,53 +310,34 @@ function updateCsrfToken(token) {
 
 }
 
-function deleteConfirmation(e, url, textMessage = '', method) {
-    const id = $(e).data('id');
-    const namesec = $(e).data('namesec');
-    const id_datatable = $(e).data('id_datatable');
-    csrfToken = $('meta[name="csrf-token"]').attr('content');
-    // console.log(csrfToken);
-    // const data = {
-    //     id: id
-    // }
-    // console.log(data);
-    Swal.fire({
-        title: 'Are you sure?',
-        text: textMessage ? textMessage : "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#fff',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'Cancel'
-    }).then((result) => {
-        if (result.isConfirmed) {
-
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken // use  CSRF token on request headers
-                },
-                url: url + '/' + namesec + '/' + id,
-                type: method,
-                // data: data,
-                dataType: 'json',
-                success: function (data) {
-                    // console.log(data);
-                    // window.location.reload();
-                    // Update DataTable
-                    var table = $('#' + id_datatable).DataTable(); // Ganti 'yourDataTable' dengan ID dari DataTable Anda
-                    table.ajax.reload(); // Memuat ulang data DataTable
-                    // console.log(data);
-                    updateCsrfToken(data.token);
-                    $('.sweet-alert').html(data.notification);
-                    // return data;
-                },
-                error: function (xhr, status, error) {
-                    // Handle any errors that occur during the AJAX request
-                    console.error(error);
+function getDropdown(data, link, value_name, name_selector, id_selector) {
+    $.ajax({
+        url: url + link,
+        type: 'GET',
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+            let html = '';
+            html += '<option value="">-- Choose your selection --</option>'
+            for (const [key, value] of Object.entries(data.menu)) {
+                if (value[value_name] == data[value_name]) {
+                    html += '<option value="' + value['uuid'] + '" selected>' + value[value_name] + '</option>'
+                } else {
+                    html += '<option value="' + value['uuid'] + '">' + value[value_name] + '</option>'
                 }
-            });
+            };
 
+            $("#" + id_selector + " select[name='" + name_selector + "']").html(html);
+        },
+        error: function (xhr, status, error) {
+            // Handle any errors that occur during the AJAX request
+            Swal.fire({
+                title: 'Error!',
+                text: error,
+                icon: 'error',
+                showConfirmButton: true,
+                showCancelButton: false
+            });
         }
-    })
+    });
 }
