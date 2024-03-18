@@ -234,7 +234,7 @@ navLinks.map((index, link) => {
 // Fungsi untuk menyimpan status tab ke dalam local storage
 function saveTabStatus(tabId) {
     localStorage.setItem('activeTab', tabId);
-}
+} saveTabStatus
 
 // Fungsi untuk memuat status tab dari local storage
 function loadTabStatus() {
@@ -243,11 +243,15 @@ function loadTabStatus() {
 
 // Fungsi untuk mengaktifkan tab berdasarkan status yang tersimpan
 function activateSavedTab() {
+    localStorage.removeItem('activeTab');
     var activeTabId = loadTabStatus();
     if (activeTabId) {
         var tabs = $(".menutab>.nav-link");
         tabs.map(function (index, tab) {
-            tab.classList.remove('active');
+            let tabSelector = tab.getAttribute('id').split('-')[0];
+            if (tabSelector != activeTabId) {
+                tab.classList.remove('active');
+            }
         });
         var tabContents = $('.tab-content>.tab-pane');
         tabContents.map(function (index, content) {
@@ -262,6 +266,12 @@ function activateSavedTab() {
         // Update target BS
         $("#create-btn").attr("data-bs-target", "#" + activeTabId + "CreateModal");
         $("#create-btn").attr("data-section-tab", activeTabId + "Create");
+    }
+    var tabs_active = $(".menutab>.nav-link.active");
+    if (tabs_active.length > 0) {
+        const selection_active = tabs_active.attr('id').split('-')[0];
+        $("#create-btn").attr("data-bs-target", "#" + selection_active + "CreateModal");
+        $("#create-btn").attr("data-section-tab", "#" + selection_active + "Create");
     }
 }
 
@@ -310,23 +320,28 @@ function updateCsrfToken(token) {
 
 }
 
-function getDropdown(data, link, value_name, name_selector, id_selector) {
+function getDropdown(data_values, link, value_name, value_id, name_selector, id_selector, key_name, type = '', edit_values = '') {
     $.ajax({
         url: url + link,
         type: 'GET',
-        data: data,
+        data: data_values,
         dataType: 'json',
         success: function (data) {
             let html = '';
             html += '<option value="">-- Choose your selection --</option>'
-            for (const [key, value] of Object.entries(data.menu)) {
-                if (value[value_name] == data[value_name]) {
-                    html += '<option value="' + value['uuid'] + '" selected>' + value[value_name] + '</option>'
-                } else {
-                    html += '<option value="' + value['uuid'] + '">' + value[value_name] + '</option>'
-                }
-            };
-
+            if (data[key_name]) {
+                for (const [key, value] of Object.entries(data[key_name])) {
+                    if (type == 'add') {
+                        html += '<option value="' + value[value_id] + '">' + value[value_name] + '</option>'
+                    } else {
+                        if (value[value_id] != data_values[edit_values]) {
+                            html += '<option value="' + value[value_id] + '">' + value[value_name] + '</option>'
+                        } else {
+                            html += '<option value="' + value[value_id] + '" selected>' + value[value_name] + '</option>'
+                        }
+                    }
+                };
+            }
             $("#" + id_selector + " select[name='" + name_selector + "']").html(html);
         },
         error: function (xhr, status, error) {

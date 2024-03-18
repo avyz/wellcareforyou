@@ -56,12 +56,10 @@
         </div>
     </div>
     <?= $this->include('layout/admin/tab_footer'); ?>
-
 </div>
-<?= $this->endSection(); ?>
-
-
 <!-- Modal -->
+
+<!-- Menu -->
 <div class="modal fade" id="menuCreateModal" tabindex="-1" role="dialog" aria-labelledby="menuCreateModalLabel" aria-hidden="true">
     <div class="modal-xl modal-dialog" role="document">
         <div class="modal-content bg-white">
@@ -142,6 +140,7 @@
     </div>
 </div>
 
+<!-- Submenu -->
 <div class="modal fade" id="submenuCreateModal" tabindex="-1" role="dialog" aria-labelledby="submenuCreateModalLabel" aria-hidden="true">
     <div class="modal-xl modal-dialog" role="document">
         <div class="modal-content bg-white">
@@ -160,27 +159,79 @@
                             <div class="form-group">
                                 <label for="submenu_menu_id">Menu Name :</label>
                                 <select class="form-control" name="menu_id" id="submenu_menu_id" required>
+                                    <option value="">-- Choose your selection --</option>
                                 </select>
                                 <div class="invalid-feedback" id="menu_id_validation"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="menu_icon">Menu Icon :</label>
-                                <input type="text" class="form-control" name="menu_icon" id="menu_icon" placeholder="Search icon: https://fontawesome.com/icons" required>
-                                <div class="invalid-feedback" id="menu_icon_validation"></div>
+                                <label for="menu_children_name">Submenu Name :</label>
+                                <input type="text" class="form-control" name="menu_children_name" id="menu_children_name" required>
+                                <!-- <select class="form-control" name="menu_children_id" id="menu_children_id" required>
+                                    <option value="">-- Choose your selection --</option>
+                                </select> -->
+                                <div class="invalid-feedback" id="menu_children_name_validation"></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                    <button type="button" class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="submenuEditModal" tabindex="-1" role="dialog" aria-labelledby="submenuEditModalLabel" aria-hidden="true">
+    <div class="modal-xl modal-dialog" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="submenuEditModalLabel">Edit Submenu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg> ... </svg>
+                </button>
+            </div>
+            <form action="javascript:void(0)" method="post" id="adminSubmenuEdit">
+                <div class="modal-body">
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" name="menu_children_id" id="edit_menu_children_id">
+                    <?= $this->include('layout/admin/language_form'); ?>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="edit_submenu_menu_id">Menu Name :</label>
+                                <select class="form-control" name="edit_submenu_menu_id" id="edit_submenu_menu_id" required>
+                                    <option value="">-- Choose your selection --</option>
+                                </select>
+                                <div class="invalid-feedback" id="edit_submenu_menu_id_validation"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="edit_menu_children_name">Submenu Name :</label>
+                                <input type="text" class="form-control" name="edit_menu_children_name" id="edit_menu_children_name" required>
+                                <!-- <select class="form-control" name="menu_children_id" id="menu_children_id" required>
+                                    <option value="">-- Choose your selection --</option>
+                                </select> -->
+                                <div class="invalid-feedback" id="edit_menu_children_name_validation"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Tab Menu -->
 <div class="modal fade" id="tabCreateModal" tabindex="-1" role="dialog" aria-labelledby="tabCreateModalLabel" aria-hidden="true">
     <div class="modal-xl modal-dialog" role="document">
         <div class="modal-content bg-white">
@@ -190,13 +241,96 @@
                     <svg> ... </svg>
                 </button>
             </div>
-            <div class="modal-body">
-                <p class="modal-text">Mauris mi tellus, pharetra vel mattis sed, tempus ultrices eros. Phasellus egestas sit amet velit sed luctus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ultrices sed urna ac pulvinar. Ut sit amet ullamcorper mi. </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
-                <button type="button" class="btn btn-primary">Save</button>
-            </div>
+            <form action="javascript:void(0)" method="post" id="adminTabmenuCreate">
+                <div class="modal-body">
+                    <?= $this->include('layout/admin/language_form'); ?>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tabmenu_menu_id">Menu Name :</label>
+                                <select class="form-control" name="tabmenu_menu_id" id="tabmenu_menu_id" required>
+                                    <option value="">-- Choose your selection --</option>
+                                </select>
+                                <div class="invalid-feedback" id="tabmenu_menu_id_validation"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="tabmenu_children_id">Submenu Name :</label>
+                                <select class="form-control" name="tabmenu_children_id" id="tabmenu_children_id" required>
+                                    <option value="">-- Choose your selection --</option>
+                                </select>
+                                <div class="invalid-feedback" id="tabmenu_children_id_validation"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="menu_tab_name">Tab Name :</label>
+                                <input type="text" class="form-control" name="menu_tab_name" id="menu_tab_name" required>
+                                <div class="invalid-feedback" id="menu_tab_name_validation"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="tabEditModal" tabindex="-1" role="dialog" aria-labelledby="tabEditModalLabel" aria-hidden="true">
+    <div class="modal-xl modal-dialog" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tabEditModalLabel">Edit Tab</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg> ... </svg>
+                </button>
+            </div>
+            <form action="javascript:void(0)" method="post" id="adminTabmenuEdit">
+                <input type="hidden" name="_method" value="PUT">
+                <input type="hidden" name="tab_menu_id" id="edit_tab_menu_id">
+                <div class="modal-body">
+                    <?= $this->include('layout/admin/language_form'); ?>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="edit_tabmenu_menu_id">Menu Name :</label>
+                                <select class="form-control" name="edit_tabmenu_menu_id" id="edit_tabmenu_menu_id" required>
+                                    <option value="">-- Choose your selection --</option>
+                                </select>
+                                <div class="invalid-feedback" id="edit_tabmenu_menu_id_validation"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="edit_tabmenu_children_id">Submenu Name :</label>
+                                <select class="form-control" name="edit_tabmenu_children_id" id="edit_tabmenu_children_id" required>
+                                    <option value="">-- Choose your selection --</option>
+                                </select>
+                                <div class="invalid-feedback" id="edit_tabmenu_children_id_validation"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="edit_menu_tab_name">Tab Name :</label>
+                                <input type="text" class="form-control" name="edit_menu_tab_name" id="edit_menu_tab_name" required>
+                                <div class="invalid-feedback" id="edit_menu_tab_name_validation"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?= $this->endSection(); ?>

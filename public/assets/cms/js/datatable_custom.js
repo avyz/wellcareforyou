@@ -134,6 +134,7 @@ const initialComplete = (settings, json, wrapperSelector) => {
     })
 }
 
+// Admin
 // MENU
 $('#menu-ui-table').DataTable({
     "processing": true,
@@ -300,11 +301,11 @@ $('#submenu-ui-table').DataTable({
             "data": null,
             "orderable": false,
             "render": function (data, type, row, meta) {
-                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_children_id=" + row.uuid + " id='editSubmenu' data-bs-toggle='modal' data-bs-target='#submenuEditModal'><i class='ri-pencil-line'></i></button>";
+                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_children_id=" + row.menu_children_uuid + " id='editSubmenu' data-bs-toggle='modal' data-bs-target='#submenuEditModal'><i class='ri-pencil-line'></i></button>";
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.menu_children_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.menu_children_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }
@@ -379,11 +380,11 @@ $('#tab-ui-table').DataTable({
             "orderable": false,
             "render": function (data, type, row, meta) {
 
-                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_tab_id=" + row.uuid + " id='editTabmenu' data-bs-toggle='modal' data-bs-target='#tabEditModal'><i class='ri-pencil-line'></i></button>";
+                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_tab_id=" + row.menu_tab_uuid + " id='editTabmenu' data-bs-toggle='modal' data-bs-target='#tabEditModal'><i class='ri-pencil-line'></i></button>";
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.menu_tab_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.menu_tab_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }
@@ -404,4 +405,265 @@ $('#tab-ui-table').DataTable({
     //     // console.log(settings.json)
     //     localStorage.setItem('lastPage', info.start);
     // }
+});
+
+// User
+// MENU
+$('#menuuser-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/menu-management/data-menu-user",
+        "type": "GET",
+        "data": {
+            lang_code: metaLanguage
+        }
+    },
+    "dom": dom(),
+
+    buttons: buttons(
+        {
+            columnName: "menu_id",
+            modelName: "dataMenuUser",
+            column: ['number',
+                'menu_name',
+                'menu_slug',
+                'menu_icon',
+                'menu_url',
+                'created_at'],
+            header: [
+                'No',
+                'Menu',
+                'Slug',
+                'Icon',
+                'Url',
+                'Created Date'
+            ]
+        }
+    ),
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    // "displayStart": lastPage,
+    "columns": [
+        {
+            "data": 'number',
+            "render": function (data, type, row, meta) {
+                // return meta.row + meta.settings._iDisplayStart + 1;
+                return row.number;
+            }
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return `<div><span>${row.menu_name}</span><br><small class="badge badge-info">${row.menu_slug}</small></div>`;
+            }
+        },
+        {
+            "data": "menu_icon",
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                // console.log(row.menu_icon);
+                return row.menu_icon; // Ini akan menampilkan ikon HTML
+            }
+        },
+        {
+            "data": "menu_url",
+            "orderable": false
+        },
+        {
+            "data": null,
+            "orderable": false,
+            render: function (data, type, row, meta) {
+                // console.log(row);
+                let html = "";
+                if (row.is_active == 1) {
+                    html = 'Active'
+                } else {
+                    html = 'Inactive'
+                }
+                return html;
+            }
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_id=" + row.uuid + " id='editMenuUser' data-bs-toggle='modal' data-bs-target='#menuuserEditModal'><i class='ri-pencil-line'></i></button>";
+                if (row.is_active == 1) {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menuuser-ui-table" data-namesec="menu_user" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                } else {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menuuser-ui-table" data-namesec="menu_user" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                }
+                return button;
+            }
+        }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'menu-ui-table_wrapper');
+    }
+});
+
+// SUBMENU
+$('#submenuuser-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/menu-management/submenu-user",
+        "type": "GET",
+        "data": {
+            lang_code: metaLanguage
+        }
+    },
+    "dom": dom(),
+
+    buttons: buttons(
+        {
+            columnName: "menu_children_id",
+            modelName: "dataUserSubmenu",
+            column: ['number',
+                'menu_name',
+                'menu_children_name',
+                'menu_children_url',
+                'created_at'],
+            header: [
+                'No',
+                'Menu',
+                'Submenu',
+                'Url',
+                'Created Date'
+            ]
+        }
+    ),
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    // "displayStart": lastPage,
+    "columns": [
+        {
+            "data": 'number',
+            "render": function (data, type, row, meta) {
+                // return meta.row + meta.settings._iDisplayStart + 1;
+                return row.number;
+            }
+        },
+        { "data": "menu_name", "orderable": true },
+        { "data": "menu_children_name", "orderable": false },
+        {
+            "data": "menu_children_url",
+            "orderable": false,
+        },
+        {
+            "data": null,
+            "orderable": false,
+            render: function (data, type, row, meta) {
+                // console.log(row);
+                let html = "";
+                if (row.is_active == 1) {
+                    html = 'Active'
+                } else {
+                    html = 'Inactive'
+                }
+                return html;
+            }
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_children_id=" + row.menu_children_uuid + " id='editSubmenuUser' data-bs-toggle='modal' data-bs-target='#submenuuserEditModal'><i class='ri-pencil-line'></i></button>";
+                if (row.is_active == 1) {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenuuser-ui-table" data-namesec="menu_user_children" data-id="' + row.menu_children_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                } else {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenuuser-ui-table" data-namesec="menu_user_children" data-id="' + row.menu_children_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                }
+                return button;
+            }
+        }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'submenu-ui-table_wrapper');
+    }
+});
+
+// TAB
+$('#tabuser-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/menu-management/tabmenu-user",
+        "type": "GET",
+        "data": {
+            lang_code: metaLanguage
+        }
+    },
+    "dom": dom(),
+
+    buttons: buttons({
+        columnName: "menu_tab_id",
+        modelName: "dataUserTabMenu",
+        column: ['number',
+            'menu_name',
+            'menu_children_name',
+            'menu_tab_name',
+            'created_at'],
+        header: [
+            'No',
+            'Menu',
+            'Submenu',
+            'Tabmenu',
+            'Created Date'
+        ]
+    }),
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    // "displayStart": lastPage,
+    "columns": [
+        {
+            "data": 'number',
+            "render": function (data, type, row, meta) {
+                // return meta.row + meta.settings._iDisplayStart + 1;
+                return row.number;
+            }
+        },
+        { "data": "menu_name", "orderable": true },
+        { "data": "menu_children_name", "orderable": true },
+        { "data": "menu_tab_name", "orderable": false },
+        {
+            "data": null,
+            "orderable": false,
+            render: function (data, type, row, meta) {
+                // console.log(row);
+                let html = "";
+                if (row.is_active == 1) {
+                    html = 'Active'
+                } else {
+                    html = 'Inactive'
+                }
+                return html;
+            }
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+
+                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_tab_id=" + row.menu_tab_uuid + " id='editTabmenuUser' data-bs-toggle='modal' data-bs-target='#tabuserEditModal'><i class='ri-pencil-line'></i></button>";
+                if (row.is_active == 1) {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tabuser-ui-table" data-namesec="menu_user_children_tab" data-id="' + row.menu_tab_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                } else {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tabuser-ui-table" data-namesec="menu_user_children_tab" data-id="' + row.menu_tab_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                }
+                return button;
+            }
+        }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'tab-ui-table_wrapper');
+    },
 });

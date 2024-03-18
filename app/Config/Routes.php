@@ -94,20 +94,53 @@ $routes->get('/check-activity', 'Auth\Auth::checkActivity');
 // End Dashboard User
 // Menu Management
 $routes->get('/menu-management/data-menu', 'Cms\MenuManagement\MenuManagement::dataMenu');
-$routes->post('/menu-management/data-menu', 'Cms\MenuManagement\MenuManagement::dataMenu');
+// $routes->post('/menu-management/data-menu', 'Cms\MenuManagement\MenuManagement::dataMenu');
+$routes->get('/menu-management/data-menu-user', 'Cms\MenuManagement\MenuManagement::dataMenuUser');
 $routes->get('/menu-management/data-menu-management', 'Cms\MenuManagement\MenuManagement::dataDropdownMenu');
+$routes->get('/menu-management/data-menu-management-user', 'Cms\MenuManagement\MenuManagement::dataDropdownMenuUser');
 $routes->get('/menu-management/submenu', 'Cms\MenuManagement\MenuManagement::dataSubmenu');
-$routes->post('/menu-management/submenu', 'Cms\MenuManagement\MenuManagement::dataSubmenu');
+// $routes->post('/menu-management/submenu', 'Cms\MenuManagement\MenuManagement::dataSubmenu');
+$routes->get('/menu-management/submenu-user', 'Cms\MenuManagement\MenuManagement::dataSubmenuUser');
 $routes->get('/menu-management/tabmenu', 'Cms\MenuManagement\MenuManagement::dataTabMenu');
-$routes->post('/menu-management/tabmenu', 'Cms\MenuManagement\MenuManagement::dataTabMenu');
+// $routes->post('/menu-management/tabmenu', 'Cms\MenuManagement\MenuManagement::dataTabMenu');
+$routes->get('/menu-management/tabmenu-user', 'Cms\MenuManagement\MenuManagement::dataTabMenuUser');
 $routes->get('/menu-management/action-buttons', 'Cms\MenuManagement\MenuManagement::dtActionButtons');
+
+// Menu CRUD
+// Admin
 $routes->get('/menu-management/admin/edit', 'Cms\MenuManagement\MenuManagement::editMenu');
 $routes->post('/menu-management/admin/create', 'Cms\MenuManagement\MenuManagement::createMenu');
 $routes->put('/menu-management/admin/edit', 'Cms\MenuManagement\MenuManagement::editMenu');
+// User
+$routes->get('/menu-management/user/edit', 'Cms\MenuManagement\MenuManagement::editMenuUser');
+$routes->post('/menu-management/user/create', 'Cms\MenuManagement\MenuManagement::createMenuUser');
+$routes->put('/menu-management/user/edit', 'Cms\MenuManagement\MenuManagement::editMenuUser');
+// End Menu CRUD
+
+// Submenu CRUD
+// Admin
 $routes->get('/menu-management/admin/edit-submenu', 'Cms\MenuManagement\MenuManagement::editSubmenu');
 $routes->post('/menu-management/admin/create-submenu', 'Cms\MenuManagement\MenuManagement::createSubmenu');
 $routes->put('/menu-management/admin/edit-submenu', 'Cms\MenuManagement\MenuManagement::editSubmenu');
+// User 
+$routes->get('/menu-management/user/edit-submenu', 'Cms\MenuManagement\MenuManagement::editSubmenuUser');
+$routes->post('/menu-management/user/create-submenu', 'Cms\MenuManagement\MenuManagement::createSubmenuUser');
+$routes->put('/menu-management/user/edit-submenu', 'Cms\MenuManagement\MenuManagement::editSubmenuUser');
+// End Submenu CRUD
+
+// Tabmenu CRUD
+// Admin
+$routes->get('/menu-management/admin/edit-tabmenu', 'Cms\MenuManagement\MenuManagement::editTabMenu');
+$routes->post('/menu-management/admin/create-tabmenu', 'Cms\MenuManagement\MenuManagement::createTabMenu');
+$routes->put('/menu-management/admin/edit-tabmenu', 'Cms\MenuManagement\MenuManagement::editTabMenu');
+// User
+$routes->get('/menu-management/user/edit-tabmenu', 'Cms\MenuManagement\MenuManagement::editTabMenuUser');
+$routes->post('/menu-management/user/create-tabmenu', 'Cms\MenuManagement\MenuManagement::createTabMenuUser');
+$routes->put('/menu-management/user/edit-tabmenu', 'Cms\MenuManagement\MenuManagement::editTabMenuUser');
+// End Tabmenu CRUD
+
 $routes->delete('/menu-management/admin/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
+$routes->delete('/menu-management/user/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 // $routes->get('/(:segment)/(:segment)/(:segment)/(:any)', 'Cms\General\General::index/$1/$2/$3/$4', ['filter' => 'superadmin']);
 // $routes->get('/menu-management/user', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
 // End Menu Management
