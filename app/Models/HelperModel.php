@@ -98,6 +98,76 @@ class HelperModel extends Model
         return $uuid->toString();
     }
 
+    public static function tambahUrutan($urutanBaru, $table_name, $column_name, $column_id, $lang_code, $type, $id = null)
+    {
+        $instance = new static();
+        $db = $instance->db;
+
+        if ($type == 'add') {
+            // Ambil semua menu yang memiliki urutan lebih besar atau sama dengan urutan baru
+            $menus = $db->table($table_name)
+                ->where($column_name . ' >=', $urutanBaru)
+                ->where('lang_code', $lang_code)
+                ->orderBy($column_name, 'ASC')
+                ->get()
+                ->getResultArray();
+
+            // Perbarui urutan untuk setiap menu yang terpengaruh
+            foreach ($menus as $menu) {
+                $db->table($table_name)
+                    ->where($column_id, $menu[$column_id])
+                    ->set($column_name, $menu[$column_name] + 1)
+                    ->update();
+            }
+        } else {
+            // Ambil menu yang akan diedit
+            $menu = $db->table($table_name)
+                ->where($column_id, $id)
+                ->get()
+                ->getRowArray();
+
+            if (!$menu) {
+                // Menu tidak ditemukan
+                return false;
+            }
+
+            // Perbarui urutan menu jika urutan baru lebih besar dari urutan yang lama
+            if ($urutanBaru > $menu[$column_name]) {
+                $db->table($table_name)
+                    ->where($column_name . ' >', $menu[$column_name])
+                    ->where($column_name . ' <=', $urutanBaru)
+                    ->set($column_name, $column_name . ' - 1', false)
+                    ->update();
+            }
+            // Perbarui urutan menu jika urutan baru lebih kecil dari urutan yang lama
+            elseif ($urutanBaru < $menu[$column_name]) {
+                $db->table($table_name)
+                    ->where($column_name . ' >=', $urutanBaru)
+                    ->where($column_name . ' <', $menu[$column_name])
+                    ->set($column_name, $column_name . ' + 1', false)
+                    ->update();
+            }
+        }
+        // // Ambil semua menu yang memiliki urutan lebih besar atau sama dengan urutan baru
+        // $menus = $db->table($table_name)
+        //     ->where($column_name . ' >=', $urutanBaru)
+        //     ->where('lang_code', $lang_code)
+        //     ->orderBy($column_name, 'ASC')
+        //     ->get()
+        //     ->getResultArray();
+
+        // // Perbarui urutan untuk setiap menu yang terpengaruh
+        // foreach ($menus as $menu) {
+        //     $db->table($table_name)
+        //         ->where($column_id, $menu[$column_id])
+        //         ->set($column_name, $menu[$column_name] + 1)
+        //         ->update();
+        // }
+
+        // return $db->table($table_name)->insert($data_insert);
+    }
+
+
     // GET DAY
     // public static function helperDays($datetime_column, $where, $table, $request)
     // {

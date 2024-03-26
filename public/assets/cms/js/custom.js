@@ -215,7 +215,6 @@ if (currentUrl.split("/").length > 4) {
 var navLinks = $('.menu-link-sidebar');
 navLinks.map((index, link) => {
     // // Memeriksa apakah path URL cocok dengan link URL
-    // console.log(currentUrl);
     if (!link.classList.contains('single-menu')) {
         if (currentUrl.split("?")[0] === link.children[0].href) {
             var parent = link.parentNode.parentNode;
@@ -270,8 +269,16 @@ function activateSavedTab() {
     var tabs_active = $(".menutab>.nav-link.active");
     if (tabs_active.length > 0) {
         const selection_active = tabs_active.attr('id').split('-')[0];
-        $("#create-btn").attr("data-bs-target", "#" + selection_active + "CreateModal");
-        $("#create-btn").attr("data-section-tab", "#" + selection_active + "Create");
+        const canCreate = $("#" + selection_active + "-tab").data("create");
+        if (canCreate == 1) {
+            $("#create-btn").attr("data-bs-target", "#" + selection_active + "CreateModal");
+            $("#create-btn").attr("data-section-tab", "#" + selection_active + "Create");
+            $("#create-btn").show();
+        } else {
+            $("#create-btn").attr("data-bs-target", "");
+            $("#create-btn").attr("data-section-tab", "");
+            $("#create-btn").hide();
+        }
     }
 }
 
@@ -309,10 +316,18 @@ function handleTabClick(tabId) {
     // document.getElementById(tabId + '-tab-pane').style.display = 'block';
     $("#" + tabId + '-tab-pane').addClass('active show');
     // Update target BS
-    $("#create-btn").attr("data-bs-target", "#" + tabId + "CreateModal");
-    $("#create-btn").attr("data-section-tab", tabId + "Create");
-    // Simpan status tab yang aktif ke dalam local storage
-    saveTabStatus(tabId);
+    const canCreate = $("#" + tabId + "-tab").data("create");
+    if (canCreate == 1) {
+        $("#create-btn").show();
+        $("#create-btn").attr("data-bs-target", "#" + tabId + "CreateModal");
+        $("#create-btn").attr("data-section-tab", tabId + "Create");
+        // Simpan status tab yang aktif ke dalam local storage
+        saveTabStatus(tabId);
+    } else {
+        $("#create-btn").hide();
+        $("#create-btn").attr("data-bs-target", "");
+        $("#create-btn").attr("data-section-tab", "");
+    }
 }
 
 function updateCsrfToken(token) {
@@ -355,4 +370,147 @@ function getDropdown(data_values, link, value_name, value_id, name_selector, id_
             });
         }
     });
+}
+
+// Fungsi untuk onchange tanggal
+function dateVal(e, date_end) {
+    var date_start = $(e).val();
+    if (date_start != "") {
+        $("#" + date_end).val(date_start).attr('min', date_start).attr('readonly', false);
+
+        // Tambahkan 7 hari ke tanggal start untuk mendapatkan tanggal max
+        var maxDate = new Date(date_start);
+        maxDate.setDate(maxDate.getDate() + 7);
+
+        // Format tanggal menjadi YYYY-MM-DD
+        var maxDateString = maxDate.toISOString().split('T')[0];
+
+        // Set atribut max ke input date_end
+        $("#" + date_end).attr('max', maxDateString);
+    } else {
+        $("#" + date_end).val("").attr('min', "").attr('max', "").attr('readonly', true);
+
+    }
+}
+
+function toggleClick(e, target_after, target_before) {
+    $(e).toggleClass('expand');
+
+    if ($(e).hasClass('expand')) {
+        $(e).addClass(target_after);
+        $(e).removeClass(target_before);
+    } else {
+        $(e).removeClass(target_after);
+        $(e).addClass(target_before);
+    }
+}
+
+// Expand Children in datatable
+function clickChildren(e, link, value_id, func = null, variable_datatable = null) {
+
+    var tr = $(e).closest('tr');
+    var row = variable_datatable.row(tr);
+
+    if (row.child.isShown()) {
+        // Tutup tabel anak jika sudah terbuka
+        row.child.hide();
+        tr.removeClass('shown');
+    } else {
+        // Ambil data untuk baris saat ini
+        var rowData = row.data();
+        // console.log(rowData);
+        // Kirim permintaan Ajax untuk memuat data tabel anak
+        $.ajax({
+            url: url + link,
+            type: 'GET',
+            data: { id: rowData[value_id] },
+            dataType: 'json',
+            success: function (response) {
+                // Tampilkan data tabel anak di bawah baris utama
+                row.child(func(response)).show();
+                tr.addClass('shown');
+            }
+        });
+    }
+
+}
+// Expand Children Tab in datatable
+function clickChildrenTab(e, link, value_id, func = null, parent_url = null, parent_id = null) {
+    $.ajax({
+        url: url + parent_url,
+        type: 'GET',
+        data: { id: parent_id },
+        dataType: 'json',
+        success: function (response) {
+            // Temukan baris terdekat yang mengandung elemen e
+            var tr = $(e).closest('tr');
+            if (tr.hasClass('shown')) {
+                // Sembunyikan tabel anak jika sudah terbuka
+                tr.removeClass('shown');
+                tr.next('tr.child-row').remove(); // Hapus tabel anak jika sudah ada
+            } else {
+                var rowData = response[0];
+                // Kirim permintaan Ajax untuk memuat data tabel anak
+                $.ajax({
+                    url: url + link,
+                    type: 'GET',
+                    data: { id: rowData[value_id] },
+                    dataType: 'json',
+                    success: function (response) {
+                        // Buat baris baru untuk tabel anak
+                        var childRow = $('<tr class="child-row"><td colspan="10"></td></tr>');
+                        // Masukkan tabel anak di bawah baris utama
+                        tr.after(childRow);
+                        // Tambahkan kelas 'shown' ke baris utama
+                        tr.addClass('shown');
+                        // Isi tabel anak dengan data yang diterima dari respons Ajax
+                        var childCell = childRow.find('td');
+                        childCell.append(func(response));
+                    }
+                });
+            }
+        }
+    });
+
+    // var rowData = tr.find('td').map(function () {
+    //     // Periksa apakah ada elemen input di dalam <td>
+    //     var inputElement = $(this).find('input');
+    //     if (inputElement.length > 0) {
+    //         // Jika ada elemen input, kembalikan nilai dari input tersebut
+    //         return inputElement.val();
+    //     } else {
+    //         // Jika tidak ada elemen input, kembalikan nilai teks dari <td>
+    //         return $(this).text();
+    //     }
+    // }).get();
+
+    // console.log(rowData);
+
+    // if (tr.next().hasClass('child-row')) {
+    //     // Tutup tabel anak jika sudah terbuka
+    //     tr.next().remove();
+    // } else {
+    //     // Kirim permintaan Ajax untuk memuat data tabel anak
+    //     $.ajax({
+    //         url: url + link,
+    //         type: 'GET',
+    //         data: { id: rowData[value_id] },
+    //         dataType: 'json',
+    //         success: function (response) {
+    //             // Tampilkan data tabel anak di bawah baris utama
+    //             // row.child().show();
+    //             tr.after(func(response));
+    //         }
+    //     });
+    // }
+
+}
+
+function validationButtons(e = null) {
+    var tabs_active = $(e);
+    tabs_active.data('edit') === 1 ? $(".buttons-edit").attr("disabled", false) : $(".buttons-edit").attr("disabled", true);
+    tabs_active.data('delete') === 1 ? $(".buttons-delete").show() : $(".buttons-delete").hide();
+    tabs_active.data('buttons_csv') === 1 ? $(".buttons-csv").show() : $(".buttons-csv").hide();
+    tabs_active.data('buttons_excel') === 1 ? $(".buttons-excel").show() : $(".buttons-excel").hide();
+    tabs_active.data('buttons_print') === 1 ? $(".buttons-print").show() : $(".buttons-print").hide();
 }

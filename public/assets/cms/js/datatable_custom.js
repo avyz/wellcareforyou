@@ -20,7 +20,7 @@ const buttons = (data) => {
                         },
                         success: function (response) {
 
-                            window.open("/menu-management/action-buttons?columnName=" + data.columnName + "&modelName=" + data.modelName + "&header=" + data.header.join(",") + "&column=" + data.column.join(",") + "&buttons=csv&lang_code=" + metaLanguage);
+                            window.open("/menu-management/action-buttons?columnName=" + data.columnName + "&modelName=" + data.modelName + "&header=" + data.header.join(",") + "&column=" + data.column.join(",") + "&buttons=csv&lang_code=" + metaLanguage + "&methodName=" + data.methodName);
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
@@ -42,7 +42,7 @@ const buttons = (data) => {
                             buttons: 'excel'
                         },
                         success: function (response) {
-                            window.open("/menu-management/action-buttons?columnName=" + data.columnName + "&modelName=" + data.modelName + "&header=" + data.header.join(",") + "&column=" + data.column.join(",") + "&buttons=excel&lang_code=" + metaLanguage);
+                            window.open("/menu-management/action-buttons?columnName=" + data.columnName + "&modelName=" + data.modelName + "&header=" + data.header.join(",") + "&column=" + data.column.join(",") + "&buttons=excel&lang_code=" + metaLanguage + "&methodName=" + data.methodName);
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
@@ -65,7 +65,6 @@ const buttons = (data) => {
                         dataType: "json",
                         success: function (response) {
                             // Tanggapi respons dari server
-                            console.log(response);
                             const fullData = response.data;
 
                             const dataSelected = { header: data.header, column: data.column };
@@ -127,11 +126,19 @@ const language = () => {
 
 const initialComplete = (settings, json, wrapperSelector) => {
     // console.log(json);
-    json?.buttons.map((item, index) => {
-        if (!item.isShow) {
-            $('#' + wrapperSelector + ' .' + item.name).hide();
-        }
-    })
+    // json?.buttons.map((item, index) => {
+    //     if (!item.isShow) {
+    //         $('#' + wrapperSelector + ' .' + item.name).hide();
+    //     }
+    // })
+
+    var tabs_active = $(".menutab>.nav-link.active");
+    console.log(tabs_active)
+    tabs_active[0]?.dataset?.edit === "1" ? $(".buttons-edit").attr("disabled", false) : $(".buttons-edit").attr("disabled", true);
+    tabs_active[0]?.dataset?.delete === "1" ? $(".buttons-delete").show() : $(".buttons-delete").hide();
+    tabs_active[0]?.dataset?.buttons_csv === "1" ? $(".buttons-csv").show() : $(".buttons-csv").hide();
+    tabs_active[0]?.dataset?.buttons_excel === "1" ? $(".buttons-excel").show() : $(".buttons-excel").hide();
+    tabs_active[0]?.dataset?.buttons_print === "1" ? $(".buttons-print").show() : $(".buttons-print").hide();
 }
 
 // Admin
@@ -143,7 +150,7 @@ $('#menu-ui-table').DataTable({
         "url": url + "/menu-management/data-menu",
         "type": "GET",
         "data": {
-            lang_code: metaLanguage
+            lang_code: metaLanguage,
         }
     },
     "dom": dom(),
@@ -152,6 +159,7 @@ $('#menu-ui-table').DataTable({
         {
             columnName: "menu_id",
             modelName: "dataMenu",
+            methodName: "menuManagementModel",
             column: ['number',
                 'menu_name',
                 'menu_slug',
@@ -175,10 +183,10 @@ $('#menu-ui-table').DataTable({
     // "displayStart": lastPage,
     "columns": [
         {
-            "data": 'number',
+            "data": 'menu_number',
+            "orderable": true,
             "render": function (data, type, row, meta) {
-                // return meta.row + meta.settings._iDisplayStart + 1;
-                return row.number;
+                return `<div class='text-center'>${row.menu_number}</div>`;
             }
         },
         {
@@ -218,11 +226,11 @@ $('#menu-ui-table').DataTable({
             "data": null,
             "orderable": false,
             "render": function (data, type, row, meta) {
-                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_id=" + row.uuid + " id='editMenu' data-bs-toggle='modal' data-bs-target='#menuEditModal'><i class='ri-pencil-line'></i></button>";
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-menu_id=" + row.uuid + " id='editMenu' data-bs-toggle='modal' data-bs-target='#menuEditModal'><i class='ri-pencil-line'></i></button>";
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menu-ui-table" data-namesec="menu" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menu-ui-table" data-namesec="menu" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menu-ui-table" data-namesec="menu" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menu-ui-table" data-namesec="menu" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }
@@ -250,6 +258,7 @@ $('#submenu-ui-table').DataTable({
         {
             columnName: "menu_children_id",
             modelName: "dataSubmenu",
+            methodName: "menuManagementModel",
             column: ['number',
                 'menu_name',
                 'menu_children_name',
@@ -301,11 +310,11 @@ $('#submenu-ui-table').DataTable({
             "data": null,
             "orderable": false,
             "render": function (data, type, row, meta) {
-                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_children_id=" + row.menu_children_uuid + " id='editSubmenu' data-bs-toggle='modal' data-bs-target='#submenuEditModal'><i class='ri-pencil-line'></i></button>";
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-menu_children_id=" + row.menu_children_uuid + " id='editSubmenu' data-bs-toggle='modal' data-bs-target='#submenuEditModal'><i class='ri-pencil-line'></i></button>";
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.menu_children_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.menu_children_uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.menu_children_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenu-ui-table" data-namesec="menu_children" data-id="' + row.menu_children_uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }
@@ -332,6 +341,7 @@ $('#tab-ui-table').DataTable({
     buttons: buttons({
         columnName: "menu_tab_id",
         modelName: "dataTabMenu",
+        methodName: "menuManagementModel",
         column: ['number',
             'menu_name',
             'menu_children_name',
@@ -380,11 +390,11 @@ $('#tab-ui-table').DataTable({
             "orderable": false,
             "render": function (data, type, row, meta) {
 
-                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_tab_id=" + row.menu_tab_uuid + " id='editTabmenu' data-bs-toggle='modal' data-bs-target='#tabEditModal'><i class='ri-pencil-line'></i></button>";
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-menu_tab_id=" + row.menu_tab_uuid + " id='editTabmenu' data-bs-toggle='modal' data-bs-target='#tabEditModal'><i class='ri-pencil-line'></i></button>";
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.menu_tab_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.menu_tab_uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.menu_tab_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/admin/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tab-ui-table" data-namesec="menu_children_tab" data-id="' + row.menu_tab_uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }
@@ -407,214 +417,31 @@ $('#tab-ui-table').DataTable({
     // }
 });
 
+// USER MANAGEMENT
 // User
-// MENU
-$('#menuuser-ui-table').DataTable({
+$('#users-ui-table').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
-        "url": url + "/menu-management/data-menu-user",
-        "type": "GET",
-        "data": {
-            lang_code: metaLanguage
-        }
-    },
-    "dom": dom(),
-
-    buttons: buttons(
-        {
-            columnName: "menu_id",
-            modelName: "dataMenuUser",
-            column: ['number',
-                'menu_name',
-                'menu_slug',
-                'menu_icon',
-                'menu_url',
-                'created_at'],
-            header: [
-                'No',
-                'Menu',
-                'Slug',
-                'Icon',
-                'Url',
-                'Created Date'
-            ]
-        }
-    ),
-    "oLanguage": language(),
-    "stripeClasses": [],
-    "lengthMenu": [7, 10, 20, 50],
-    "pageLength": 10,
-    // "displayStart": lastPage,
-    "columns": [
-        {
-            "data": 'number',
-            "render": function (data, type, row, meta) {
-                // return meta.row + meta.settings._iDisplayStart + 1;
-                return row.number;
-            }
-        },
-        {
-            "data": null,
-            "orderable": false,
-            "render": function (data, type, row, meta) {
-                return `<div><span>${row.menu_name}</span><br><small class="badge badge-info">${row.menu_slug}</small></div>`;
-            }
-        },
-        {
-            "data": "menu_icon",
-            "orderable": false,
-            "render": function (data, type, row, meta) {
-                // console.log(row.menu_icon);
-                return row.menu_icon; // Ini akan menampilkan ikon HTML
-            }
-        },
-        {
-            "data": "menu_url",
-            "orderable": false
-        },
-        {
-            "data": null,
-            "orderable": false,
-            render: function (data, type, row, meta) {
-                // console.log(row);
-                let html = "";
-                if (row.is_active == 1) {
-                    html = 'Active'
-                } else {
-                    html = 'Inactive'
-                }
-                return html;
-            }
-        },
-        {
-            "data": null,
-            "orderable": false,
-            "render": function (data, type, row, meta) {
-                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_id=" + row.uuid + " id='editMenuUser' data-bs-toggle='modal' data-bs-target='#menuuserEditModal'><i class='ri-pencil-line'></i></button>";
-                if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menuuser-ui-table" data-namesec="menu_user" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
-                } else {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="menuuser-ui-table" data-namesec="menu_user" data-id="' + row.uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
-                }
-                return button;
-            }
-        }
-    ],
-    initComplete: function (settings, json) {
-        initialComplete(settings, json, 'menu-ui-table_wrapper');
-    }
-});
-
-// SUBMENU
-$('#submenuuser-ui-table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "ajax": {
-        "url": url + "/menu-management/submenu-user",
-        "type": "GET",
-        "data": {
-            lang_code: metaLanguage
-        }
-    },
-    "dom": dom(),
-
-    buttons: buttons(
-        {
-            columnName: "menu_children_id",
-            modelName: "dataUserSubmenu",
-            column: ['number',
-                'menu_name',
-                'menu_children_name',
-                'menu_children_url',
-                'created_at'],
-            header: [
-                'No',
-                'Menu',
-                'Submenu',
-                'Url',
-                'Created Date'
-            ]
-        }
-    ),
-    "oLanguage": language(),
-    "stripeClasses": [],
-    "lengthMenu": [7, 10, 20, 50],
-    "pageLength": 10,
-    // "displayStart": lastPage,
-    "columns": [
-        {
-            "data": 'number',
-            "render": function (data, type, row, meta) {
-                // return meta.row + meta.settings._iDisplayStart + 1;
-                return row.number;
-            }
-        },
-        { "data": "menu_name", "orderable": true },
-        { "data": "menu_children_name", "orderable": false },
-        {
-            "data": "menu_children_url",
-            "orderable": false,
-        },
-        {
-            "data": null,
-            "orderable": false,
-            render: function (data, type, row, meta) {
-                // console.log(row);
-                let html = "";
-                if (row.is_active == 1) {
-                    html = 'Active'
-                } else {
-                    html = 'Inactive'
-                }
-                return html;
-            }
-        },
-        {
-            "data": null,
-            "orderable": false,
-            "render": function (data, type, row, meta) {
-                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_children_id=" + row.menu_children_uuid + " id='editSubmenuUser' data-bs-toggle='modal' data-bs-target='#submenuuserEditModal'><i class='ri-pencil-line'></i></button>";
-                if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenuuser-ui-table" data-namesec="menu_user_children" data-id="' + row.menu_children_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
-                } else {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_children_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="submenuuser-ui-table" data-namesec="menu_user_children" data-id="' + row.menu_children_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
-                }
-                return button;
-            }
-        }
-    ],
-    initComplete: function (settings, json) {
-        initialComplete(settings, json, 'submenu-ui-table_wrapper');
-    }
-});
-
-// TAB
-$('#tabuser-ui-table').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "ajax": {
-        "url": url + "/menu-management/tabmenu-user",
-        "type": "GET",
-        "data": {
-            lang_code: metaLanguage
-        }
+        "url": url + "/user-management/data-user",
+        "type": "GET"
     },
     "dom": dom(),
 
     buttons: buttons({
-        columnName: "menu_tab_id",
-        modelName: "dataUserTabMenu",
+        columnName: "user_id",
+        modelName: "dataUser",
+        methodName: "userManagementModel",
         column: ['number',
-            'menu_name',
-            'menu_children_name',
-            'menu_tab_name',
+            'nama_lengkap',
+            'email',
+            'role',
             'created_at'],
         header: [
             'No',
-            'Menu',
-            'Submenu',
-            'Tabmenu',
+            'Full Name',
+            'Email',
+            'Role',
             'Created Date'
         ]
     }),
@@ -631,9 +458,79 @@ $('#tabuser-ui-table').DataTable({
                 return row.number;
             }
         },
-        { "data": "menu_name", "orderable": true },
-        { "data": "menu_children_name", "orderable": true },
-        { "data": "menu_tab_name", "orderable": false },
+        { "data": "nama_lengkap", "orderable": true },
+        { "data": "email", "orderable": false },
+        { "data": "role", "orderable": false },
+        {
+            "data": null,
+            "orderable": false,
+            render: function (data, type, row, meta) {
+                // console.log(row);
+                let html = "";
+                if (row.auth_active == 1) {
+                    html = 'Active'
+                } else {
+                    html = 'Inactive'
+                }
+                return html;
+            }
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-user_id=" + row.uuid + " id='editUsers' data-bs-toggle='modal' data-bs-target='#usersEditModal'><i class='ri-pencil-line'></i></button>";
+                if (row.auth_active == 1) {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/user-management/user-management/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.nama_lengkap + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="users-ui-table" data-namesec="auth" data-id="' + row.auth_uuid + '" class="buttons-delete ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                } else {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/user-management/user-management/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.nama_lengkap + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="users-ui-table" data-namesec="auth" data-id="' + row.auth_uuid + '" class="buttons-delete ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                }
+                return button;
+            }
+        }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'users-ui-table_wrapper');
+    },
+});
+
+// Role
+$('#roles-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/user-management/data-role",
+        "type": "GET"
+    },
+    "dom": dom(),
+
+    buttons: buttons({
+        columnName: "role_id",
+        modelName: "dataRole",
+        methodName: "userManagementModel",
+        column: ['number',
+            'role',
+            'created_at'],
+        header: [
+            'No',
+            'Role Name',
+            'Created Date'
+        ]
+    }),
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    // "displayStart": lastPage,
+    "columns": [
+        {
+            "data": 'number',
+            "render": function (data, type, row, meta) {
+                // return meta.row + meta.settings._iDisplayStart + 1;
+                return row.number;
+            }
+        },
+        { "data": "role", "orderable": true },
         {
             "data": null,
             "orderable": false,
@@ -652,18 +549,235 @@ $('#tabuser-ui-table').DataTable({
             "data": null,
             "orderable": false,
             "render": function (data, type, row, meta) {
-
-                var button = "<button class='btn px-2 py-1 btn-primary' data-menu_tab_id=" + row.menu_tab_uuid + " id='editTabmenuUser' data-bs-toggle='modal' data-bs-target='#tabuserEditModal'><i class='ri-pencil-line'></i></button>";
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-role_id=" + row.uuid + " id='editRole' data-bs-toggle='modal' data-bs-target='#rolesEditModal'><i class='ri-pencil-line'></i></button>";
+                button += '<a class="buttons-edit" href="/user-management/management/roles/menu?role=' + row.role.toLowerCase() + '&role_uuid=' + row.uuid + '&lang_code=' + metaLanguage + '" target="_blank" class="buttons-edit"><button class="btn mx-1 px-2 py-1 btn-info"><i class="ri-menu-add-fill"></i></button></a>';
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tabuser-ui-table" data-namesec="menu_user_children_tab" data-id="' + row.menu_tab_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/user-management/user-management/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.role + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="roles-ui-table" data-namesec="role" data-id="' + row.uuid + '" class="buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/menu-management/user/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.menu_tab_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="tabuser-ui-table" data-namesec="menu_user_children_tab" data-id="' + row.menu_tab_uuid + '" class="ms-1"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/user-management/user-management/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.role + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="roles-ui-table" data-namesec="role" data-id="' + row.uuid + '" class="buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }
         }
     ],
     initComplete: function (settings, json) {
-        initialComplete(settings, json, 'tab-ui-table_wrapper');
+        initialComplete(settings, json, 'roles-ui-table_wrapper');
     },
+});
+
+
+// Role
+// Data role with menu management
+// $('#menu-management-ui-table').DataTable({
+//     "processing": true,
+//     "serverSide": true,
+//     "ajax": {
+//         "url": url + "/user-management/menu-management-role",
+//         "type": "GET",
+//         "data": {
+//             lang_code: metaLanguage,
+//             role_uuid: $(this).data('role_uuid')
+//         }
+//     },
+//     "dom": dom(),
+//     buttons: [],
+//     "oLanguage": language(),
+//     "stripeClasses": [],
+//     "lengthMenu": [7, 10, 20, 50],
+//     "pageLength": 10,
+//     // "displayStart": lastPage,
+//     "columns": [
+//         { "data": "number", "orderable": true },
+//         { "data": "menu_name", "orderable": true },
+//         {
+//             "data": null,
+//             "orderable": false,
+//             "render": function (data, type, row) {
+//                 if (row.view == 1) {
+//                     return '<input type="checkbox" name="view[]" value="' + row.uuid + '" checked>';
+//                 }
+//                 return '<input type="checkbox" name="view[]" value="' + row.uuid + '">';
+//             }
+//         },
+//         {
+//             "data": null,
+//             "orderable": false,
+//             "render": function (data, type, row) {
+
+//                 if (row.create == 1) {
+//                     return '<input type="checkbox" name="create[]" value="' + row.uuid + '" checked>';
+//                 }
+
+//                 return '<input type="checkbox" name="create[]" value="' + row.uuid + '">';
+//             }
+//         },
+//         {
+//             "data": null,
+//             "orderable": false,
+//             "render": function (data, type, row) {
+
+//                 if (row.edit == 1) {
+//                     return '<input type="checkbox" name="edit[]" value="' + row.uuid + '" checked>';
+//                 }
+
+//                 return '<input type="checkbox" name="edit[]" value="' + row.uuid + '">';
+//             }
+//         },
+//         {
+//             "data": null,
+//             "orderable": false,
+//             "render": function (data, type, row) {
+
+//                 if (row.delete == 1) {
+//                     return '<input type="checkbox" name="delete[]" value="' + row.uuid + '" checked>';
+//                 }
+
+//                 return '<input type="checkbox" name="delete[]" value="' + row.uuid + '">';
+//             }
+//         },
+//         {
+//             "data": null,
+//             "orderable": false,
+//             "render": function (data, type, row) {
+
+//                 if (row['buttons-csv'] == 1) {
+//                     return '<input type="checkbox" name="buttons_csv[]" value="' + row.uuid + '" checked>';
+//                 }
+
+//                 return '<input type="checkbox" name="buttons_csv[]" value="' + row.uuid + '">';
+//             }
+//         },
+//         {
+//             "data": null,
+//             "orderable": false,
+//             "render": function (data, type, row) {
+
+//                 if (row['buttons-excel'] == 1) {
+//                     return '<input type="checkbox" name="buttons_excel[]" value="' + row.uuid + '" checked>';
+//                 }
+
+//                 return '<input type="checkbox" name="buttons_excel[]" value="' + row.uuid + '">';
+//             }
+//         },
+//         {
+//             "data": null,
+//             "orderable": false,
+//             "render": function (data, type, row) {
+
+//                 if (row['buttons-print'] == 1) {
+//                     return '<input type="checkbox" name="buttons_print[]" value="' + row.uuid + '" checked>';
+//                 }
+
+//                 return '<input type="checkbox" name="buttons_print[]" value="' + row.uuid + '">';
+//             }
+//         },
+//         {
+//             "data": null,
+//             "orderable": false,
+//             "render": function (data, type, row, meta) {
+//                 var button = '';
+//                 if (row.menu_management_uuid) {
+//                     button += '<a href="/user-management/menu-management-submenu?menu_uuid=' + row.uuid + '&menu_management_uuid=' + row.menu_management_uuid + '" target="_blank"><button class="btn px-2 py-1 btn-info"><i class="ri-menu-add-fill"></i></button></a>';
+//                 } else {
+//                     button += '<button class="btn px-2 py-1 btn-info" disabled><i class="ri-menu-add-fill"></i></button>';
+//                 }
+//                 return button;
+//             }
+//         }
+//     ],
+// });
+
+
+// Log User
+const table_log = $('#loguser-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/user-management/data-log-user",
+        "type": "GET"
+    },
+    "dom": dom(),
+
+    buttons: [],
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    // "displayStart": lastPage,
+    "columns": [
+        {
+            "data": 'number',
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+                // return row.number;
+            }
+        },
+        { "data": "email", "orderable": true },
+        { "data": "role", "orderable": false },
+        { "data": "activity", "orderable": false },
+        { "data": "description", "orderable": false },
+        { "data": "created_at", "orderable": false }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'loguser-ui-table_wrapper');
+    }
+});
+
+$(document).on("click", "#filter-log", function () {
+    var date_start = $('#date_start_log').val();
+    var date_end = $('#date_end_log').val();
+
+    table_log.ajax.url(url + "/user-management/data-log-user?date_start=" + date_start + "&date_end=" + date_end).load();
+});
+
+// Log Auth
+const table_auth = $('#logauth-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/user-management/data-log-auth",
+        "type": "GET"
+    },
+    "dom": dom(),
+
+    buttons: [],
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    "columns": [
+        {
+            "data": 'number',
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        },
+        {
+            "data": "email",
+            "orderable": true,
+            "render": function (data, type, row, meta) {
+                if (row.email == null) {
+                    return "Unknown";
+                } else {
+                    return row.email;
+                }
+            }
+
+        },
+        { "data": "activity", "orderable": false },
+        { "data": "description", "orderable": false },
+        { "data": "created_at", "orderable": false }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'logauth-ui-table_wrapper');
+    }
+});
+
+$(document).on("click", "#filter-auth", function () {
+    var date_start = $('#date_start_auth').val();
+    var date_end = $('#date_end_auth').val();
+
+    table_auth.ajax.url(url + "/user-management/data-log-auth?date_start=" + date_start + "&date_end=" + date_end).load();
 });

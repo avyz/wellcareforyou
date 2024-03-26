@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="<?= csrf_hash() ?>">
     <meta name="language" content="<?= $language_row['lang_code']; ?>">
-    <!-- Links Of CSS File -->
-    <link href="/assets/cms/css/preloader.css" rel="stylesheet" type="text/css" />
+
 
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -28,6 +27,7 @@
     <link href="/assets/cms/css/waves/waves.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/cms/css/tabs.css" rel="stylesheet" type="text/css" />
     <link href="/assets/cms/css/structure.css" rel="stylesheet" type="text/css" />
+
     <!-- END GLOBAL MANDATORY STYLES -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
@@ -38,6 +38,12 @@
     <link rel="stylesheet" href="/assets/cms/table/datatable/dt-global_style.css" type="text/css">
     <link rel="stylesheet" href="/assets/cms/table/datatable/custom_dt_miscellaneous.css" type="text/css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Links Of CSS File -->
+    <link href="/assets/cms/css/preloader.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/assets/cms/filepond/filepond.min.css">
+    <link rel="stylesheet" href="/assets/cms/filepond/FilePondPluginImagePreview.min.css">
+    <!-- <link href="/assets/cms/css/scrollspyNav.css" rel="stylesheet" type="text/css" /> -->
+    <link href="/assets/cms/filepond/custom-filepond.css" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
 
     <!-- Favicon -->
@@ -45,7 +51,7 @@
 
     <!-- Title -->
     <title><?= $title; ?></title>
-
+    <script src="/assets/website/js/jquery.min.js"></script>
 </head>
 
 <body class="layout-boxed">
@@ -108,7 +114,6 @@
     <!-- End Footer User -->
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-    <script src="/assets/website/js/jquery.min.js"></script>
     <script src="/assets/cms/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -203,6 +208,18 @@
     <script src="/assets/cms/js/datatable_custom.js"></script>
     <script src="/assets/cms/js/api.js"></script>
     <script src="/assets/cms/js/menu-management/custom.js"></script>
+    <script src="/assets/cms/js/user-management/custom.js"></script>
+
+    <!-- <script src="/assets/cms/js/scrollspyNav.js"></script> -->
+    <script src="/assets/cms/filepond/filepond.min.js"></script>
+    <script src="/assets/cms/filepond/FilePondPluginFileValidateType.min.js"></script>
+    <script src="/assets/cms/filepond/FilePondPluginImageExifOrientation.min.js"></script>
+    <script src="/assets/cms/filepond/FilePondPluginImagePreview.min.js"></script>
+    <script src="/assets/cms/filepond/FilePondPluginImageCrop.min.js"></script>
+    <script src="/assets/cms/filepond/FilePondPluginImageResize.min.js"></script>
+    <script src="/assets/cms/filepond/FilePondPluginImageTransform.min.js"></script>
+    <script src="/assets/cms/filepond/filepondPluginFileValidateSize.min.js"></script>
+    <script src="/assets/cms/filepond/custom-filepond.js"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
 

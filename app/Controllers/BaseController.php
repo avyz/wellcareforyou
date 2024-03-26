@@ -136,6 +136,16 @@ abstract class BaseController extends Controller
         return Time::now()->modify($request)->format('Y-m-d H:i:s');
     }
 
+    public function dateConversionToSqlDate($date, $h, $m, $s)
+    {
+        $tanggal = date('Y-m-d ' . $h . ':' . $m . ':' . $s, strtotime($date));
+        // $tanggal = Time::createFromFormat('Y-m-d H:i:s', $date)->setTime($h, $m, $s);
+
+        // $formattedDate = $tanggal->format('Y-m-d H:i:s');
+
+        return $tanggal;
+    }
+
     // Session Notification
     public function sessionMessage($status, $description = "")
     {
@@ -250,6 +260,7 @@ abstract class BaseController extends Controller
     {
         // Check if user is logged in
         if (!session()->get('email')) {
+            dd('masuk');
             return redirect()->to('/login');
         }
 
@@ -272,5 +283,17 @@ abstract class BaseController extends Controller
         }
 
         return $view;
+    }
+
+    public function dataArrayForMethodLinks($title, $data = null)
+    {
+        $lang_code = $this->request->getVar('lang_code');
+        $data = [
+            'lang_code' => $lang_code,
+            'title' => $title,
+            'data' => $data
+        ];
+
+        return $data;
     }
 }

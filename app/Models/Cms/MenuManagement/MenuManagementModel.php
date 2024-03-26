@@ -9,7 +9,7 @@ class MenuManagementModel extends Model
 
     // Data Menu
     // Admin
-    public static function dataMenu($filter, $column, $order, $fullData, $lang_code)
+    public static function dataMenu($filter = '', $column = '', $order = '', $fullData = null, $lang_code  = '')
     {
         $instance = new static();
         $db = $instance->db;
@@ -26,7 +26,8 @@ class MenuManagementModel extends Model
             created_at,
             updated_at,
             is_active,
-            uuid
+            uuid,
+            menu_number
             FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = '$lang_code' AND (menu_name LIKE '%$filter%' OR menu_slug LIKE '%$filter%') ORDER BY $column $order;";
         } else {
             $query = "
@@ -40,7 +41,8 @@ class MenuManagementModel extends Model
             created_at,
             updated_at,
             is_active,
-            uuid
+            uuid,
+            menu_number
             FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = '$lang_code' AND is_active = 1 AND (menu_name LIKE '%$filter%' OR menu_slug LIKE '%$filter%') ORDER BY $column $order;";
         }
 
@@ -116,7 +118,9 @@ class MenuManagementModel extends Model
         created_at,
         updated_at,
         is_active,
-        uuid
+        uuid,
+        lang_code,
+        menu_number
         FROM `menu_table`, (SELECT @no:= 0) AS no WHERE menu_id=(SELECT a.menu_id FROM menu_table a WHERE a.uuid = '$uuid') ORDER BY menu_id;";
 
         $result = $db->query($query)->getRowArray();
@@ -176,7 +180,7 @@ class MenuManagementModel extends Model
         updated_at,
         is_active,
         uuid
-        FROM `menu_table`, (SELECT @no:= 0) AS no WHERE menu_id=(SELECT a.menu_id FROM menu_table a WHERE a.uuid = '$uuid') AND lang_code = '$lang_code' ORDER BY menu_id;";
+        FROM `menu_table`, (SELECT @no:= 0) AS no WHERE is_active = 1 AND menu_id=(SELECT a.menu_id FROM menu_table a WHERE a.uuid = '$uuid') AND lang_code = '$lang_code' ORDER BY menu_id;";
 
         $result = $db->query($query)->getResultArray();
 
@@ -236,8 +240,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_children_table` T0
-        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T1.lang_code = '$lang_code' AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+        FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = '$lang_code' AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
         } else {
             $query = "SELECT 
         @no:=@no+1 AS number,
@@ -251,8 +255,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_children_table` T0
-        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T1.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+        FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
         }
 
         $result = $db->query($query)->getResultArray();
@@ -283,8 +287,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_user_children_table` T0
-        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T1.lang_code = '$lang_code' AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+        FROM (SELECT @no:= 0) AS no, `menu_user_children_table` T0
+        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = '$lang_code' AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
         } else {
             $query = "SELECT 
         @no:=@no+1 AS number,
@@ -298,8 +302,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_user_children_table` T0
-        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T1.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+        FROM (SELECT @no:= 0) AS no, `menu_user_children_table` T0
+        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
         }
 
         $result = $db->query($query)->getResultArray();
@@ -331,8 +335,37 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_children_table` T0
-        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T0.menu_id = (SELECT a.menu_id FROM menu_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
+        FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T0.is_active = 1 AND T0.menu_id = (SELECT a.menu_id FROM menu_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
+
+        $result = $db->query($query)->getResultArray();
+
+        if (isset($result)) {
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
+    public static function dataResultSubmenuByMenuUuid($filter, $column, $order, $fullData, $menu_uuid)
+    {
+        $instance = new static();
+        $db = $instance->db;
+
+        $query = "SELECT 
+        @no:=@no+1 AS number,
+        T0.menu_children_id,
+        T0.menu_id,
+        T0.menu_children_name,
+        T0.menu_children_icon,
+        T0.menu_children_url,
+        T0.created_at,
+        T0.is_active,
+        T0.uuid as 'menu_children_uuid',
+        T1.menu_name,
+        T1.uuid as 'menu_uuid'
+        FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T0.is_active = 1 AND T0.menu_id = (SELECT a.menu_id FROM menu_table a WHERE a.uuid = '$menu_uuid') AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
 
         $result = $db->query($query)->getResultArray();
 
@@ -361,8 +394,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_user_children_table` T0
-        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T0.menu_id = (SELECT a.menu_id FROM menu_user_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
+        FROM (SELECT @no:= 0) AS no, `menu_user_children_table` T0
+        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id WHERE T0.menu_id = (SELECT a.menu_id FROM menu_user_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
 
         $result = $db->query($query)->getResultArray();
 
@@ -391,8 +424,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_children_table` T0
-        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T1.uuid = '$uuid' ORDER BY T0.menu_children_id;";
+        FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.uuid = '$uuid' ORDER BY T0.menu_children_id;";
 
         $result = $db->query($query)->getRowArray();
 
@@ -421,8 +454,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_user_children_table` T0
-        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T1.uuid = '$uuid' ORDER BY T0.menu_children_id;";
+        FROM (SELECT @no:= 0) AS no, `menu_user_children_table` T0
+        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id WHERE T1.uuid = '$uuid' ORDER BY T0.menu_children_id;";
 
         $result = $db->query($query)->getRowArray();
 
@@ -452,8 +485,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_children_table` T0
-        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T0.menu_children_id=(SELECT a.menu_children_id FROM menu_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
+        FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T0.is_active = 1 AND T0.menu_children_id=(SELECT a.menu_children_id FROM menu_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
 
         $result = $db->query($query)->getResultArray();
 
@@ -482,8 +515,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_user_children_table` T0
-        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T0.menu_children_id=(SELECT a.menu_children_id FROM menu_user_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
+        FROM (SELECT @no:= 0) AS no, `menu_user_children_table` T0
+        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id WHERE T0.menu_children_id=(SELECT a.menu_children_id FROM menu_user_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
 
         $result = $db->query($query)->getResultArray();
 
@@ -513,8 +546,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_children_table` T0
-        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T0.menu_children_id=(SELECT a.menu_children_id FROM menu_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
+        FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T0.menu_children_id=(SELECT a.menu_children_id FROM menu_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
 
         $result = $db->query($query)->getRowArray();
 
@@ -543,8 +576,8 @@ class MenuManagementModel extends Model
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
         T1.uuid as 'menu_uuid'
-        FROM `menu_user_children_table` T0
-        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id, (SELECT @no:= 0) AS no WHERE T0.menu_children_id=(SELECT a.menu_children_id FROM menu_user_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
+        FROM (SELECT @no:= 0) AS no, `menu_user_children_table` T0
+        LEFT JOIN menu_user_table T1 ON T1.menu_id = T0.menu_id WHERE T0.menu_children_id=(SELECT a.menu_children_id FROM menu_user_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
 
         $result = $db->query($query)->getRowArray();
 
@@ -576,9 +609,9 @@ class MenuManagementModel extends Model
         T1.menu_id,
         T2.menu_name,
         T2.uuid as 'menu_uuid'
-        FROM `menu_children_tab_table` T0
+        FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
         LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
-        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id, (SELECT @no:= 0) AS no WHERE T2.lang_code = '$lang_code' AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = '$lang_code' AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
         } else {
             $query = "SELECT
         @no:=@no+1 AS number,
@@ -593,9 +626,9 @@ class MenuManagementModel extends Model
         T1.menu_id,
         T2.menu_name,
         T2.uuid as 'menu_uuid'
-        FROM `menu_children_tab_table` T0
+        FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
         LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
-        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id, (SELECT @no:= 0) AS no WHERE T2.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
         }
         $result = $db->query($query)->getResultArray();
 
@@ -626,9 +659,9 @@ class MenuManagementModel extends Model
         T1.menu_id,
         T2.menu_name,
         T2.uuid as 'menu_uuid'
-        FROM `menu_user_children_tab_table` T0
+        FROM (SELECT @no:= 0) AS no, `menu_user_children_tab_table` T0
         LEFT JOIN menu_user_children_table T1 ON T1.menu_children_id = T0.menu_children_id
-        LEFT JOIN menu_user_table T2 ON T2.menu_id = T1.menu_id, (SELECT @no:= 0) AS no WHERE T2.lang_code = '$lang_code' AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+        LEFT JOIN menu_user_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = '$lang_code' AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
         } else {
             $query = "SELECT
         @no:=@no+1 AS number,
@@ -643,9 +676,9 @@ class MenuManagementModel extends Model
         T1.menu_id,
         T2.menu_name,
         T2.uuid as 'menu_uuid'
-        FROM `menu_user_children_tab_table` T0
+        FROM (SELECT @no:= 0) AS no, `menu_user_children_tab_table` T0
         LEFT JOIN menu_user_children_table T1 ON T1.menu_children_id = T0.menu_children_id
-        LEFT JOIN menu_user_table T2 ON T2.menu_id = T1.menu_id, (SELECT @no:= 0) AS no WHERE T2.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+        LEFT JOIN menu_user_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
         }
         $result = $db->query($query)->getResultArray();
 
@@ -659,6 +692,36 @@ class MenuManagementModel extends Model
     // Data tab by menu children id
 
     // Admin
+    public static function dataResultTabMenuByMenuChildrenUuid($filter, $column, $order, $fullData, $uuid)
+    {
+        $instance = new static();
+        $db = $instance->db;
+
+        $query = "SELECT
+        @no:=@no+1 AS number,
+        T0.menu_tab_id,
+        T0.menu_children_id,
+        T0.menu_tab_name,
+        T0.created_at,
+        T0.is_active,
+        T0.uuid as 'menu_tab_uuid',
+        T1.menu_children_name,
+        T1.uuid as 'menu_children_uuid',
+        T1.menu_id,
+        T2.menu_name,
+        T2.uuid as 'menu_uuid'
+        FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
+        LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
+        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T0.is_active = 1 AND T0.menu_children_id = (SELECT a.menu_children_id FROM menu_children_table a WHERE a.uuid = '$uuid') AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+
+        $result = $db->query($query)->getResultArray();
+
+        if (isset($result)) {
+            return $result;
+        } else {
+            return null;
+        }
+    }
     public static function dataResultTabMenuByMenuChildrenId($uuid)
     {
         $instance = new static();
@@ -677,9 +740,9 @@ class MenuManagementModel extends Model
         T1.menu_id,
         T2.menu_name,
         T2.uuid as 'menu_uuid'
-        FROM `menu_children_tab_table` T0
+        FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
         LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
-        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id, (SELECT @no:= 0) AS no WHERE T0.menu_children_id = (SELECT a.menu_children_id FROM menu_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_tab_id;";
+        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T0.is_active = 1 AND T0.menu_children_id = (SELECT a.menu_children_id FROM menu_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_tab_id;";
 
         $result = $db->query($query)->getResultArray();
 
@@ -709,9 +772,9 @@ class MenuManagementModel extends Model
         T1.menu_id,
         T2.menu_name,
         T2.uuid as 'menu_uuid'
-        FROM `menu_user_children_tab_table` T0
+        FROM (SELECT @no:= 0) AS no, `menu_user_children_tab_table` T0
         LEFT JOIN menu_user_children_table T1 ON T1.menu_children_id = T0.menu_children_id
-        LEFT JOIN menu_user_table T2 ON T2.menu_id = T1.menu_id, (SELECT @no:= 0) AS no WHERE T0.menu_children_id = (SELECT a.menu_children_id FROM menu_user_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_tab_id;";
+        LEFT JOIN menu_user_table T2 ON T2.menu_id = T1.menu_id WHERE T0.menu_children_id = (SELECT a.menu_children_id FROM menu_user_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_tab_id;";
 
         $result = $db->query($query)->getResultArray();
 
@@ -743,9 +806,9 @@ class MenuManagementModel extends Model
         T2.menu_name,
         T2.uuid as 'menu_uuid',
         T2.lang_code
-        FROM `menu_children_tab_table` T0
+        FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
         LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
-        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id, (SELECT @no:= 0) AS no WHERE T0.menu_tab_id=(SELECT a.menu_tab_id FROM menu_children_tab_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_tab_id;";
+        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T0.menu_tab_id=(SELECT a.menu_tab_id FROM menu_children_tab_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_tab_id;";
 
         $result = $db->query($query)->getRowArray();
 
@@ -776,9 +839,9 @@ class MenuManagementModel extends Model
         T2.menu_name,
         T2.uuid as 'menu_uuid',
         T2.lang_code
-        FROM `menu_user_children_tab_table` T0
+        FROM (SELECT @no:= 0) AS no, `menu_user_children_tab_table` T0
         LEFT JOIN menu_user_children_table T1 ON T1.menu_children_id = T0.menu_children_id
-        LEFT JOIN menu_user_table T2 ON T2.menu_id = T1.menu_id, (SELECT @no:= 0) AS no WHERE T0.menu_tab_id=(SELECT a.menu_tab_id FROM menu_user_children_tab_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_tab_id;";
+        LEFT JOIN menu_user_table T2 ON T2.menu_id = T1.menu_id WHERE T0.menu_tab_id=(SELECT a.menu_tab_id FROM menu_user_children_tab_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_tab_id;";
 
         $result = $db->query($query)->getRowArray();
 
@@ -789,12 +852,22 @@ class MenuManagementModel extends Model
         }
     }
 
-    public static function sidebar()
+    public static function sidebar($role_id, $lang_code)
     {
         $instance = new static();
         $db = $instance->db;
 
-        $query = "SELECT 
+        if ($lang_code) {
+            $query = "SELECT 
+        A.menu_management_id,
+        A.role_uuid,
+        A.view,
+        A.create,
+        A.edit,
+        A.delete,
+        A.buttons_csv,
+        A.buttons_excel,
+        A.buttons_print,
         T0.menu_id,
         T0.menu_slug,
         T0.menu_name,
@@ -803,17 +876,82 @@ class MenuManagementModel extends Model
         T0.created_at,
         T0.updated_at,
         T0.is_active,
+        A.menu_uuid,
+        T0.uuid AS 'menu_uuid_parent',
+        B.menu_children_uuid,
+        T1.uuid AS 'menu_children_uuid_parent',
         T1.menu_children_id,
         T1.menu_id as 'menu_id_children',
         T1.menu_children_name,
         T1.menu_children_icon,
         T1.menu_children_url,
         T1.created_at as 'created_at_children_menu',
-        T1.is_active as 'is_active_children_menu'
-        FROM `menu_table` T0
+        T1.is_active as 'is_active_children_menu',
+        B.view AS 'view_submenu',
+        B.create AS 'create_submenu',
+        B.edit AS 'edit_submenu',
+        B.delete AS 'delete_submenu',
+        B.buttons_csv AS 'buttons_csv_submenu',
+        B.buttons_excel AS 'buttons_excel_submenu',
+        B.buttons_print AS 'buttons_print_submenu',
+        B.uuid AS 'menu_management_children_uuid',
+        A.uuid AS 'menu_management_uuid'
+        FROM menu_management_table A
+        LEFT JOIN menu_table T0
+        ON T0.uuid = A.menu_uuid
+        LEFT JOIN menu_management_children_table B
+        ON B.menu_management_uuid = A.uuid
         LEFT JOIN menu_children_table T1
-        ON T1.menu_id = T0.menu_id
-        WHERE T0.is_active = 1 ORDER BY T0.menu_id ASC;";
+        ON T1.uuid = B.menu_children_uuid
+        WHERE T0.is_active = 1 AND A.role_uuid = (SELECT C.uuid FROM role_table C WHERE C.role_id = '$role_id') AND A.view = 1 AND T0.lang_code = '$lang_code' GROUP BY T1.menu_children_id ORDER BY T0.menu_number ASC;";
+        } else {
+            $query = "SELECT 
+        A.menu_management_id,
+        A.role_uuid,
+        A.view,
+        A.create,
+        A.edit,
+        A.delete,
+        A.buttons_csv,
+        A.buttons_excel,
+        A.buttons_print,
+        T0.menu_id,
+        T0.menu_slug,
+        T0.menu_name,
+        T0.menu_icon,
+        T0.menu_url,
+        T0.created_at,
+        T0.updated_at,
+        T0.is_active,
+        A.menu_uuid,
+        T0.uuid AS 'menu_uuid_parent',
+        B.menu_children_uuid,
+        T1.uuid AS 'menu_children_uuid_parent',
+        T1.menu_children_id,
+        T1.menu_id as 'menu_id_children',
+        T1.menu_children_name,
+        T1.menu_children_icon,
+        T1.menu_children_url,
+        T1.created_at as 'created_at_children_menu',
+        T1.is_active as 'is_active_children_menu',
+        B.view AS 'view_submenu',
+        B.create AS 'create_submenu',
+        B.edit AS 'edit_submenu',
+        B.delete AS 'delete_submenu',
+        B.buttons_csv AS 'buttons_csv_submenu',
+        B.buttons_excel AS 'buttons_excel_submenu',
+        B.buttons_print AS 'buttons_print_submenu',
+        B.uuid AS 'menu_management_children_uuid',
+        A.uuid AS 'menu_management_uuid'
+        FROM menu_management_table A
+        LEFT JOIN menu_table T0
+        ON T0.uuid = A.menu_uuid
+        LEFT JOIN menu_management_children_table B
+        ON B.menu_management_uuid = A.uuid
+        LEFT JOIN menu_children_table T1
+        ON T1.uuid = B.menu_children_uuid
+        WHERE T0.is_active = 1 AND A.role_uuid = (SELECT C.uuid FROM role_table C WHERE C.role_id = '$role_id') AND A.view = 1 AND T0.lang_code = (SELECT a.lang_code FROM lang_table a WHERE a.is_lang_default = 1) GROUP BY T1.menu_children_id ORDER BY T0.menu_number ASC;";
+        }
 
         $result = $db->query($query)->getResultArray();
 
@@ -823,6 +961,13 @@ class MenuManagementModel extends Model
                 // Inisialisasi data menu jika belum ada
                 $menu_management[$r['menu_id']] = [
                     'menu_id' => $r['menu_id'],
+                    'view' => $r['view'],
+                    'create' => $r['create'],
+                    'edit' => $r['edit'],
+                    'delete' => $r['delete'],
+                    'buttons_csv' => $r['buttons_csv'],
+                    'buttons_excel' => $r['buttons_excel'],
+                    'buttons_print' => $r['buttons_print'],
                     'menu_name' => $r['menu_name'],
                     'menu_slug' => $r['menu_slug'],
                     'menu_icon' => $r['menu_icon'],
@@ -836,15 +981,22 @@ class MenuManagementModel extends Model
             }
 
             // Tambahkan children sidebar atau tab
-            if ($r['menu_children_id'] && $r['is_active_children_menu'] == 1) {
+            if ($r['menu_children_id'] && $r['is_active_children_menu'] == 1 && $r['view_submenu'] == 1) {
                 $menu_management[$r['menu_id']]['sidebar'][] = [
                     'menu_children_id' => $r['menu_children_id'],
+                    'view' => $r['view_submenu'],
+                    'create' => $r['create_submenu'],
+                    'edit' => $r['edit_submenu'],
+                    'delete' => $r['delete_submenu'],
+                    'buttons_csv' => $r['buttons_csv_submenu'],
+                    'buttons_excel' => $r['buttons_excel_submenu'],
+                    'buttons_print' => $r['buttons_print_submenu'],
                     'menu_id' => $r['menu_id'],
                     'menu_children_name' => $r['menu_children_name'],
                     'menu_children_icon' => $r['menu_children_icon'],
                     'menu_children_url' => $r['menu_children_url'],
                     'created_at_children_menu' => $r['created_at_children_menu'],
-                    'tab' => self::menuTabByChildrenId($r['menu_children_id'])
+                    'tab' => self::menuTabByChildrenId($r['menu_children_id'], $r['menu_management_children_uuid'])
                 ];
             }
         }
@@ -853,13 +1005,14 @@ class MenuManagementModel extends Model
         return $menu_management;
     }
 
-    public static function menuTabByChildrenId($children_id)
+    public static function menuTabByChildrenId($children_id, $menu_management_children_uuid)
     {
         $instance = new static();
         $db = $instance->db;
 
         if ($children_id) {
             $query = "SELECT
+            T0.uuid AS 'menu_tab_uuid',
             T0.menu_tab_id,
             T0.menu_children_id as 'children_id',
             T0.menu_tab_name,
@@ -870,11 +1023,23 @@ class MenuManagementModel extends Model
             T1.menu_children_name,
             T1.menu_children_icon,
             T1.menu_children_url,
-            T1.created_at as 'created_at_children_menu'
+            T1.created_at as 'created_at_children_menu',
+            B.uuid AS 'menu_management_children_uuid',
+            C.view AS 'view_tab',
+            C.create AS 'create_tab',
+            C.edit AS 'edit_tab',
+            C.delete AS 'delete_tab',
+            C.buttons_csv AS 'buttons_csv_tab',
+            C.buttons_excel AS 'buttons_excel_tab',
+            C.buttons_print AS 'buttons_print_tab'
             FROM `menu_children_tab_table` T0
             LEFT JOIN menu_children_table T1
-            ON T1.menu_children_id = T0.menu_children_id 
-            WHERE T0.is_active = 1 AND T0.menu_children_id = $children_id ORDER BY T0.menu_tab_id ASC;";
+            ON T1.menu_children_id = T0.menu_children_id
+            LEFT JOIN menu_management_children_table B
+            ON B.menu_children_uuid = T1.uuid
+            LEFT JOIN menu_management_children_tab_table C
+            ON C.menu_management_uuid = B.menu_management_uuid AND C.menu_tab_uuid = T0.uuid
+            WHERE T0.is_active = 1 AND T0.menu_children_id = $children_id AND B.uuid = '$menu_management_children_uuid' GROUP BY T0.menu_tab_id ORDER BY T0.menu_tab_id ASC;";
 
             $tabs = $db->query($query)->getResultArray();
 
@@ -882,9 +1047,17 @@ class MenuManagementModel extends Model
             $tab = [];
             if ($tabs) {
                 foreach ($tabs as $t) {
-                    if (!isset($tab[$t['children_id']]) && $t['is_active'] == 1) {
+                    if (!isset($tab[$t['children_id']]) && $t['is_active'] == 1 && $t['view_tab'] == 1) {
                         $tab[] = [
                             'menu_tab_id' => $t['menu_tab_id'],
+                            'menu_tab_uuid' => $t['menu_tab_uuid'],
+                            'view' => $t['view_tab'],
+                            'create' => $t['create_tab'],
+                            'edit' => $t['edit_tab'],
+                            'delete' => $t['delete_tab'],
+                            'buttons_csv' => $t['buttons_csv_tab'],
+                            'buttons_excel' => $t['buttons_excel_tab'],
+                            'buttons_print' => $t['buttons_print_tab'],
                             'menu_children_id' => $t['children_id'],
                             'menu_tab_name' => $t['menu_tab_name'],
                             'created_at_tab_menu' => $t['created_at_tab_menu']
@@ -899,51 +1072,128 @@ class MenuManagementModel extends Model
         }
     }
 
-    public static function menuAksesBySlug($slug, $lang_code)
+    public static function menuAksesBySlug($slug, $lang_code, $role_id)
     {
         $instance = new static();
         $db = $instance->db;
 
         if ($lang_code) {
+
             $query = "SELECT 
-        T0.menu_id,
-        T0.menu_slug,
-        T0.menu_name,
-        T0.menu_icon,
-        T0.menu_url,
-        T0.created_at,
-        T0.updated_at,
-        T0.is_active,
-        T0.lang_code,
-        T1.menu_children_id,
-        T1.menu_id as 'menu_id_children',
-        T1.menu_children_name,
-        T1.menu_children_icon,
-        T1.menu_children_url,
-        T1.created_at
-        FROM `menu_table` T0
-        LEFT JOIN menu_children_table T1
-        ON T1.menu_id = T0.menu_id WHERE T0.is_active = 1 AND T0.menu_slug = '$slug' AND T0.lang_code = '$lang_code' ORDER BY T0.menu_id ASC;";
+            A.menu_management_id,
+            A.role_uuid,
+            A.view,
+            A.create,
+            A.edit,
+            A.delete,
+            A.buttons_csv,
+            A.buttons_excel,
+            A.buttons_print,
+            T0.menu_id,
+            T0.menu_slug,
+            T0.menu_name,
+            T0.menu_icon,
+            T0.menu_url,
+            T0.created_at,
+            T0.updated_at,
+            T0.is_active,
+            T0.lang_code,
+            A.menu_uuid,
+            T0.uuid AS 'menu_uuid_parent',
+            B.menu_children_uuid,
+            T1.uuid AS 'menu_children_uuid_parent',
+            T1.menu_children_id,
+            T1.menu_id as 'menu_id_children',
+            T1.menu_children_name,
+            T1.menu_children_icon,
+            T1.menu_children_url,
+            T1.created_at as 'created_at_children_menu',
+            T1.is_active as 'is_active_children_menu',
+            B.view AS 'view_submenu',
+            B.create AS 'create_submenu',
+            B.edit AS 'edit_submenu',
+            B.delete AS 'delete_submenu',
+            B.buttons_csv AS 'buttons_csv_submenu',
+            B.buttons_excel AS 'buttons_excel_submenu',
+            B.buttons_print AS 'buttons_print_submenu',
+            B.uuid AS 'menu_management_children_uuid',
+            A.uuid AS 'menu_management_uuid'
+            FROM menu_management_table A
+            LEFT JOIN menu_table T0
+            ON T0.uuid = A.menu_uuid
+            LEFT JOIN menu_management_children_table B
+            ON B.menu_management_uuid = A.uuid
+            LEFT JOIN menu_children_table T1
+            ON T1.uuid = B.menu_children_uuid
+            WHERE T0.is_active = 1 AND A.role_uuid = (SELECT C.uuid FROM role_table C WHERE C.role_id = '$role_id') AND A.view = 1 AND T0.menu_slug = '$slug' AND T0.lang_code = '$lang_code' GROUP BY T1.menu_children_id ORDER BY T0.menu_number ASC;";
+
+            //     $query = "SELECT 
+            // T0.menu_id,
+            // T0.menu_slug,
+            // T0.menu_name,
+            // T0.menu_icon,
+            // T0.menu_url,
+            // T0.created_at,
+            // T0.updated_at,
+            // T0.is_active,
+            // T0.lang_code,
+            // T1.menu_children_id,
+            // T1.menu_id as 'menu_id_children',
+            // T1.menu_children_name,
+            // T1.menu_children_icon,
+            // T1.menu_children_url,
+            // T1.created_at
+            // FROM `menu_table` T0
+            // LEFT JOIN menu_children_table T1
+            // ON T1.menu_id = T0.menu_id WHERE T0.is_active = 1 AND T0.menu_slug = '$slug' AND T0.lang_code = '$lang_code' ORDER BY T0.menu_id ASC;";
         } else {
             $query = "SELECT 
-        T0.menu_id,
-        T0.menu_slug,
-        T0.menu_name,
-        T0.menu_icon,
-        T0.menu_url,
-        T0.created_at,
-        T0.updated_at,
-        T0.is_active,
-        T0.lang_code,
-        T1.menu_children_id,
-        T1.menu_id as 'menu_id_children',
-        T1.menu_children_name,
-        T1.menu_children_icon,
-        T1.menu_children_url,
-        T1.created_at
-        FROM `menu_table` T0
-        LEFT JOIN menu_children_table T1
-        ON T1.menu_id = T0.menu_id WHERE T0.is_active = 1 AND T0.menu_slug = '$slug' AND T0.lang_code = (SELECT a.lang_code FROM lang_table a WHERE a.is_lang_default = 1) ORDER BY T0.menu_id ASC;";
+            A.menu_management_id,
+            A.role_uuid,
+            A.view,
+            A.create,
+            A.edit,
+            A.delete,
+            A.buttons_csv,
+            A.buttons_excel,
+            A.buttons_print,
+            T0.menu_id,
+            T0.menu_slug,
+            T0.menu_name,
+            T0.menu_icon,
+            T0.menu_url,
+            T0.created_at,
+            T0.updated_at,
+            T0.is_active,
+            T0.lang_code,
+            A.menu_uuid,
+            T0.uuid AS 'menu_uuid_parent',
+            B.menu_children_uuid,
+            T1.uuid AS 'menu_children_uuid_parent',
+            T1.menu_children_id,
+            T1.menu_id as 'menu_id_children',
+            T1.menu_children_name,
+            T1.menu_children_icon,
+            T1.menu_children_url,
+            T1.created_at as 'created_at_children_menu',
+            T1.is_active as 'is_active_children_menu',
+            B.view AS 'view_submenu',
+            B.create AS 'create_submenu',
+            B.edit AS 'edit_submenu',
+            B.delete AS 'delete_submenu',
+            B.buttons_csv AS 'buttons_csv_submenu',
+            B.buttons_excel AS 'buttons_excel_submenu',
+            B.buttons_print AS 'buttons_print_submenu',
+            B.uuid AS 'menu_management_children_uuid',
+            A.uuid AS 'menu_management_uuid'
+            FROM menu_management_table A
+            LEFT JOIN menu_table T0
+            ON T0.uuid = A.menu_uuid
+            LEFT JOIN menu_management_children_table B
+            ON B.menu_management_uuid = A.uuid
+            LEFT JOIN menu_children_table T1
+            ON T1.uuid = B.menu_children_uuid
+            WHERE T0.is_active = 1 AND A.role_uuid = (SELECT C.uuid FROM role_table C WHERE C.role_id = '$role_id') AND A.view = 1 AND T0.menu_slug = '$slug' AND T0.lang_code = (SELECT a.lang_code FROM lang_table a WHERE a.is_lang_default = 1) GROUP BY T1.menu_children_id ORDER BY T0.menu_number ASC;";
         }
 
         $query_lang = "SELECT 
@@ -996,13 +1246,21 @@ class MenuManagementModel extends Model
                     if (!isset($sidebar[$s['menu_children_id']])) {
                         if ($url == $s['menu_children_url']) {
                             $sidebar[] = [
+                                'view' => $s['view_submenu'],
+                                'create' => $s['create_submenu'],
+                                'edit' => $s['edit_submenu'],
+                                'delete' => $s['delete_submenu'],
+                                'buttons_csv' => $s['buttons_csv_submenu'],
+                                'buttons_excel' => $s['buttons_excel_submenu'],
+                                'buttons_print' => $s['buttons_print_submenu'],
                                 'menu_children_id' => $s['menu_children_id'],
                                 'menu_id' => $s['menu_id'],
+                                'menu_children_uuid' => $result['menu_children_uuid'],
                                 'menu_children_name' => $s['menu_children_name'],
                                 'menu_children_icon' => $s['menu_children_icon'],
                                 'menu_children_url' => $s['menu_children_url'],
                                 'created_at' => $s['created_at'],
-                                'tab' => self::menuTabByChildrenId($s['menu_children_id'])
+                                'tab' => self::menuTabByChildrenId($s['menu_children_id'], $s['menu_management_children_uuid'])
                             ];
                         }
                     }
@@ -1013,6 +1271,14 @@ class MenuManagementModel extends Model
                 $menu_management[$result['menu_id']]['language'] = $language;
                 $menu_management[$result['menu_id']]['menu'] = [
                     'menu_id' => $result['menu_id'],
+                    'menu_uuid' => $result['menu_uuid'],
+                    'view' => $result['view'],
+                    'create' => $result['create'],
+                    'edit' => $result['edit'],
+                    'delete' => $result['delete'],
+                    'buttons_csv' => $result['buttons_csv'],
+                    'buttons_excel' => $result['buttons_excel'],
+                    'buttons_print' => $result['buttons_print'],
                     'menu_name' => $result['menu_name'],
                     'menu_slug' => $result['menu_slug'],
                     'menu_icon' => $result['menu_icon'],
@@ -1036,7 +1302,7 @@ class MenuManagementModel extends Model
     }
 
     // Breadcrumbs
-    public static function breadCrumbsBySlug($lang_code)
+    public static function breadCrumbsBySlug()
     {
         $breadcrumbs = service('uri');
 

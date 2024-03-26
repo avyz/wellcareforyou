@@ -4,24 +4,24 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class MenusManagement extends Migration
+class MenusManagementChildren extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'menu_management_id' => [
+            'menu_management_children_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'menu_slug' => [
+            'menu_management_uuid' => [
                 'type' => 'VARCHAR',
                 'constraint' => '50',
             ],
-            'role_uuid' => [
-                'type' => 'INT',
-                'constraint' => 11,
+            'menu_uuid' => [
+                'type' => 'VARCHAR',
+                'constraint' => '50',
             ],
             'view' => [
                 'type' => 'INT',
@@ -60,18 +60,14 @@ class MenusManagement extends Migration
             'uuid' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
-            ],
-            'lang_code' => [
-                'type' => 'VARCHAR',
-                'constraint' => 25,
-            ],
+            ]
         ]);
-        $this->forge->addKey('menu_management_id', true);
-        $this->forge->createTable('menu_management_table');
+        $this->forge->addKey('menu_management_children_id', true);
+        $this->forge->createTable('menu_management_children_table');
     }
 
     public function down()
     {
-        $this->forge->dropTable('menu_management_table');
+        $this->forge->dropTable('menu_management_children_table');
     }
 }

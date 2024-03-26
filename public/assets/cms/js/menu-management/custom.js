@@ -19,6 +19,7 @@ $(document).ready(function () {
                 $('#edit_menu_id').val(data.uuid);
                 $('#edit_menu_name').val(data.menu_name);
                 $('#edit_menu_icon').val(data.menu_icon);
+                $('#edit_menu_number').val(data.menu_number);
             },
             error: function (xhr, status, error) {
                 // Handle any errors that occur during the AJAX request
@@ -462,13 +463,17 @@ $(document).ready(function () {
                 $('#edit_tabmenu_children_id').val(data.menu_children_uuid);
                 $('#edit_menu_tab_name').val(data.menu_tab_name);
 
-                const data_values_submenu = {
-                    menu_id: data.menu_uuid,
-                    menu_children_id: data.menu_children_uuid,
-                    lang_code: lang_code,
-                    method: 'onchange_data'
-                };
-                getDropdown(data_values_submenu, '/menu-management/data-menu-management', 'menu_children_name', 'menu_children_uuid', 'edit_tabmenu_children_id', 'adminTabmenuEdit', 'submenu_arr', 'edit', 'menu_children_id');
+                if (lang_code == data.lang_code) {
+                    const data_values_submenu = {
+                        menu_id: data.menu_uuid,
+                        menu_children_id: data.menu_children_uuid,
+                        lang_code: lang_code,
+                        method: 'onchange_data'
+                    };
+                    getDropdown(data_values_submenu, '/menu-management/data-menu-management', 'menu_children_name', 'menu_children_uuid', 'edit_tabmenu_children_id', 'adminTabmenuEdit', 'submenu_arr', 'edit', 'menu_children_id');
+                } else {
+                    $('#edit_tabmenu_children_id').html('<option value="">-- Choose your selection --</option>');
+                }
             },
             error: function (xhr, status, error) {
                 // Handle any errors that occur during the AJAX request
@@ -498,13 +503,6 @@ $(document).ready(function () {
                 data = data.data;
                 // Access the data returned from the AJAX request here
                 let lang_code = $("#userTabmenuEdit select[name='lang_code']").val();
-
-                // for (const [key, value] of Object.entries(lang_code)) {
-                //     console.log(value);
-                //     // lang_code.append(`<option value="${key}">${value}</option>`);
-                // }
-
-                // $("#userTabmenuEdit select[name='lang_code']").val(data.lang_code).trigger('change');
 
                 const data_values_menu = {
                     menu_id: data.menu_uuid,

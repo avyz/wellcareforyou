@@ -53,6 +53,10 @@ class Auth extends Migration
                 'type' => 'INT',
                 'constraint' => '1'
             ],
+            'uuid' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
         ]);
         $this->forge->addKey('auth_id', true);
         $this->forge->createTable('auth_table');

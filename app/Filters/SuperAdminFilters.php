@@ -12,7 +12,7 @@ class SuperAdminFilters implements FilterInterface
     {
         // Periksa apakah pengguna adalah admin, jika tidak, redirect atau tampilkan pesan error
         if (session()->get('is_master') != 1) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException("Page is not found");
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Page is session end / not found");
         }
     }
 

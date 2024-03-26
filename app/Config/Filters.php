@@ -3,6 +3,7 @@
 namespace Config;
 
 use App\Filters\AdminFilters;
+use App\Filters\CanViewFilters;
 use App\Filters\SuperAdminFilters;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
@@ -28,7 +29,8 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'admin' => AdminFilters::class,
-        'superadmin' => SuperAdminFilters::class
+        'superadmin' => SuperAdminFilters::class,
+        'canView' => CanViewFilters::class,
     ];
 
     /**

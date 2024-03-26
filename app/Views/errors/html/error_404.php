@@ -52,10 +52,16 @@
                     <?php endif; ?>
                 </p>
                 <div class="d-block">
-                    <a href="javascript:void(0)" class="default-btn" onclick="return window.history.go(-1);">
-                        <!-- <a href="/" class="default-btn"> -->
-                        Go Back
-                    </a>
+                    <?php if (session()->get('email')) : ?>
+                        <a href="javascript:void(0)" class="default-btn" onclick="return window.history.go(-1);">
+                            <!-- <a href="/" class="default-btn"> -->
+                            Go Back
+                        </a>
+                    <?php else : ?>
+                        <a href="/login" class="default-btn">
+                            Back To Login
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

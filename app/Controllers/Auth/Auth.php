@@ -116,6 +116,7 @@ class Auth extends BaseController
                             $sessUser = [
                                 'email' => $dataUsersByEmail['email'],
                                 'role' => $dataUsersByEmail['role'],
+                                'role_id' => $dataUsersByEmail['role_id'],
                                 'nama_lengkap' => $dataUsersByEmail['nama_lengkap'],
                                 'nama_depan' => $dataUsersByEmail['nama_depan'],
                                 'nama_belakang' => $dataUsersByEmail['nama_belakang'],
@@ -258,6 +259,7 @@ class Auth extends BaseController
                     $sessUser = [
                         'email' => $this->getOauthEmail($user),
                         'role' => $dataUsersByEmail['role'],
+                        'role_id' => $dataUsersByEmail['role_id'],
                         'nama_lengkap' => $this->getOauthName($user),
                         'nama_depan' => $this->getOauthFirstName($user),
                         'nama_belakang' => $this->getOauthLastName($user),
@@ -382,6 +384,7 @@ class Auth extends BaseController
                 $sessUser = [
                     'email' => $this->getOauthEmail($user),
                     'role' => $dataUsersByEmail['role'],
+                    'role_id' => $dataUsersByEmail['role_id'],
                     'nama_lengkap' => $this->getOauthName($user),
                     'nama_depan' => $this->getOauthFirstName($user),
                     'nama_belakang' => $this->getOauthLastName($user),
@@ -512,6 +515,7 @@ class Auth extends BaseController
                     $sessUser = [
                         'email' => $this->getOauthEmail($user),
                         'role' => $dataUsersByEmail['role'],
+                        'role_id' => $dataUsersByEmail['role_id'],
                         'nama_lengkap' => $this->getOauthName($user),
                         'nama_depan' => $this->getOauthFirstName($user),
                         'nama_belakang' => $this->getOauthLastName($user),
@@ -635,6 +639,7 @@ class Auth extends BaseController
                 $sessUser = [
                     'email' => $this->getOauthEmail($user),
                     'role' => $dataUsersByEmail['role'],
+                    'role_id' => $dataUsersByEmail['role_id'],
                     'nama_lengkap' => $this->getOauthName($user),
                     'nama_depan' => $this->getOauthFirstName($user),
                     'nama_belakang' => $this->getOauthLastName($user),
@@ -939,6 +944,7 @@ class Auth extends BaseController
                                 $sessUser = [
                                     'email' => $dataUsersByEmail['email'],
                                     'role' => $dataUsersByEmail['role'],
+                                    'role_id' => $dataUsersByEmail['role_id'],
                                     'nama_lengkap' => $dataUsersByEmail['nama_lengkap'],
                                     'nama_depan' => $dataUsersByEmail['nama_depan'],
                                     'nama_belakang' => $dataUsersByEmail['nama_belakang'],

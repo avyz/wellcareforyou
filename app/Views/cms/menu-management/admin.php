@@ -82,10 +82,21 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="menu_icon">Menu Icon :</label>
-                                <input type="text" class="form-control" name="menu_icon" id="menu_icon" placeholder="Search icon: https://fontawesome.com/icons" required>
-                                <div class="invalid-feedback" id="menu_icon_validation"></div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="menu_icon">Menu Icon :</label>
+                                        <input type="text" class="form-control" name="menu_icon" id="menu_icon" placeholder="Search icon: https://fontawesome.com/icons" required>
+                                        <div class="invalid-feedback" id="menu_icon_validation"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="menu_number">Number Menu :</label>
+                                        <input min="1" type="number" class="form-control" name="menu_number" id="menu_number" required>
+                                        <div class="invalid-feedback" id="menu_number_validation"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -123,10 +134,21 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="edit_menu_icon">Menu Icon :</label>
-                                <input type="text" class="form-control" name="edit_menu_icon" id="edit_menu_icon" placeholder="Search icon: https://fontawesome.com/icons" required>
-                                <div class="invalid-feedback" id="edit_menu_icon_validation"></div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="edit_menu_icon">Menu Icon :</label>
+                                        <input type="text" class="form-control" name="edit_menu_icon" id="edit_menu_icon" placeholder="Search icon: https://fontawesome.com/icons" required>
+                                        <div class="invalid-feedback" id="edit_menu_icon_validation"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="edit_menu_number">Number Menu :</label>
+                                        <input min="1" type="number" class="form-control" name="edit_menu_number" id="edit_menu_number" required>
+                                        <div class="invalid-feedback" id="edit_menu_number_validation"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

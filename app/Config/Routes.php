@@ -87,7 +87,7 @@ $routes->get('/check-activity', 'Auth\Auth::checkActivity');
 
 // CMS SECTION
 
-// USER
+// ADMIN
 
 // $routes->get('/dashboard', 'Cms\General\General::index');
 // $routes->get('/user-management', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
@@ -95,16 +95,16 @@ $routes->get('/check-activity', 'Auth\Auth::checkActivity');
 // Menu Management
 $routes->get('/menu-management/data-menu', 'Cms\MenuManagement\MenuManagement::dataMenu');
 // $routes->post('/menu-management/data-menu', 'Cms\MenuManagement\MenuManagement::dataMenu');
-$routes->get('/menu-management/data-menu-user', 'Cms\MenuManagement\MenuManagement::dataMenuUser');
+// $routes->get('/menu-management/data-menu-user', 'Cms\MenuManagement\MenuManagement::dataMenuUser');
 $routes->get('/menu-management/data-menu-management', 'Cms\MenuManagement\MenuManagement::dataDropdownMenu');
-$routes->get('/menu-management/data-menu-management-user', 'Cms\MenuManagement\MenuManagement::dataDropdownMenuUser');
+// $routes->get('/menu-management/data-menu-management-user', 'Cms\MenuManagement\MenuManagement::dataDropdownMenuUser');
 $routes->get('/menu-management/submenu', 'Cms\MenuManagement\MenuManagement::dataSubmenu');
 // $routes->post('/menu-management/submenu', 'Cms\MenuManagement\MenuManagement::dataSubmenu');
-$routes->get('/menu-management/submenu-user', 'Cms\MenuManagement\MenuManagement::dataSubmenuUser');
+// $routes->get('/menu-management/submenu-user', 'Cms\MenuManagement\MenuManagement::dataSubmenuUser');
 $routes->get('/menu-management/tabmenu', 'Cms\MenuManagement\MenuManagement::dataTabMenu');
 // $routes->post('/menu-management/tabmenu', 'Cms\MenuManagement\MenuManagement::dataTabMenu');
-$routes->get('/menu-management/tabmenu-user', 'Cms\MenuManagement\MenuManagement::dataTabMenuUser');
-$routes->get('/menu-management/action-buttons', 'Cms\MenuManagement\MenuManagement::dtActionButtons');
+// $routes->get('/menu-management/tabmenu-user', 'Cms\MenuManagement\MenuManagement::dataTabMenuUser');
+$routes->get('/menu-management/action-buttons', 'Cms\General\General::dtActionButtons');
 
 // Menu CRUD
 // Admin
@@ -112,9 +112,9 @@ $routes->get('/menu-management/admin/edit', 'Cms\MenuManagement\MenuManagement::
 $routes->post('/menu-management/admin/create', 'Cms\MenuManagement\MenuManagement::createMenu');
 $routes->put('/menu-management/admin/edit', 'Cms\MenuManagement\MenuManagement::editMenu');
 // User
-$routes->get('/menu-management/user/edit', 'Cms\MenuManagement\MenuManagement::editMenuUser');
-$routes->post('/menu-management/user/create', 'Cms\MenuManagement\MenuManagement::createMenuUser');
-$routes->put('/menu-management/user/edit', 'Cms\MenuManagement\MenuManagement::editMenuUser');
+// $routes->get('/menu-management/user/edit', 'Cms\MenuManagement\MenuManagement::editMenuUser');
+// $routes->post('/menu-management/user/create', 'Cms\MenuManagement\MenuManagement::createMenuUser');
+// $routes->put('/menu-management/user/edit', 'Cms\MenuManagement\MenuManagement::editMenuUser');
 // End Menu CRUD
 
 // Submenu CRUD
@@ -123,9 +123,9 @@ $routes->get('/menu-management/admin/edit-submenu', 'Cms\MenuManagement\MenuMana
 $routes->post('/menu-management/admin/create-submenu', 'Cms\MenuManagement\MenuManagement::createSubmenu');
 $routes->put('/menu-management/admin/edit-submenu', 'Cms\MenuManagement\MenuManagement::editSubmenu');
 // User 
-$routes->get('/menu-management/user/edit-submenu', 'Cms\MenuManagement\MenuManagement::editSubmenuUser');
-$routes->post('/menu-management/user/create-submenu', 'Cms\MenuManagement\MenuManagement::createSubmenuUser');
-$routes->put('/menu-management/user/edit-submenu', 'Cms\MenuManagement\MenuManagement::editSubmenuUser');
+// $routes->get('/menu-management/user/edit-submenu', 'Cms\MenuManagement\MenuManagement::editSubmenuUser');
+// $routes->post('/menu-management/user/create-submenu', 'Cms\MenuManagement\MenuManagement::createSubmenuUser');
+// $routes->put('/menu-management/user/edit-submenu', 'Cms\MenuManagement\MenuManagement::editSubmenuUser');
 // End Submenu CRUD
 
 // Tabmenu CRUD
@@ -134,29 +134,61 @@ $routes->get('/menu-management/admin/edit-tabmenu', 'Cms\MenuManagement\MenuMana
 $routes->post('/menu-management/admin/create-tabmenu', 'Cms\MenuManagement\MenuManagement::createTabMenu');
 $routes->put('/menu-management/admin/edit-tabmenu', 'Cms\MenuManagement\MenuManagement::editTabMenu');
 // User
-$routes->get('/menu-management/user/edit-tabmenu', 'Cms\MenuManagement\MenuManagement::editTabMenuUser');
-$routes->post('/menu-management/user/create-tabmenu', 'Cms\MenuManagement\MenuManagement::createTabMenuUser');
-$routes->put('/menu-management/user/edit-tabmenu', 'Cms\MenuManagement\MenuManagement::editTabMenuUser');
+// $routes->get('/menu-management/user/edit-tabmenu', 'Cms\MenuManagement\MenuManagement::editTabMenuUser');
+// $routes->post('/menu-management/user/create-tabmenu', 'Cms\MenuManagement\MenuManagement::createTabMenuUser');
+// $routes->put('/menu-management/user/edit-tabmenu', 'Cms\MenuManagement\MenuManagement::editTabMenuUser');
 // End Tabmenu CRUD
 
 $routes->delete('/menu-management/admin/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
-$routes->delete('/menu-management/user/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
+// $routes->delete('/menu-management/user/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 // $routes->get('/(:segment)/(:segment)/(:segment)/(:any)', 'Cms\General\General::index/$1/$2/$3/$4', ['filter' => 'superadmin']);
 // $routes->get('/menu-management/user', 'Cms\MenuManagement\MenuManagement::index', ['filter' => 'superadmin']);
 // End Menu Management
 
-// GENERAL VIEW
-$routes->get('/(:segment)', 'Cms\General\General::index/$1', ['filter' => 'superadmin']);
-$routes->get('/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2', ['filter' => 'superadmin']);
-$routes->get('/(:segment)/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2/$3', ['filter' => 'superadmin']);
+// User Management
+// User
+$routes->get('/user-management/data-user', 'Cms\UserManagement\UserManagement::dataUser');
+$routes->post('/user-management/users/create-user', 'Cms\UserManagement\UserManagement::createUser');
+$routes->get('/user-management/users/edit-user', 'Cms\UserManagement\UserManagement::editUser');
+$routes->put('/user-management/users/edit-user', 'Cms\UserManagement\UserManagement::editUser');
 
-// END USER
+// Role
+$routes->get('/user-management/data-role', 'Cms\UserManagement\UserManagement::dataRole');
+$routes->get('/user-management/management/roles/menu', 'Cms\UserManagement\UserManagement::viewMenuManagementRole');
+$routes->get('/user-management/management/roles/submenu', 'Cms\UserManagement\UserManagement::viewMenuManagementRoleChild');
+$routes->get('/user-management/management/roles/tabmenu', 'Cms\UserManagement\UserManagement::viewMenuManagementRoleChildTab');
+$routes->post('/user-management/roles/create-role', 'Cms\UserManagement\UserManagement::createRole');
+$routes->post('/user-management/create-menu-management-role', 'Cms\UserManagement\UserManagement::createMenuManagementRole');
+$routes->post('/user-management/create-menu-management-role-child', 'Cms\UserManagement\UserManagement::createMenuManagementRoleChild');
+$routes->post('/user-management/create-menu-management-role-child-tab', 'Cms\UserManagement\UserManagement::createMenuManagementRoleChildTab');
+$routes->get('/user-management/roles/edit-role', 'Cms\UserManagement\UserManagement::editRole');
+$routes->put('/user-management/roles/edit-role', 'Cms\UserManagement\UserManagement::editRole');
+$routes->post('/user-management/roles/edit-menu-management-role', 'Cms\UserManagement\UserManagement::editMenuManagementRole');
+$routes->post('/user-management/roles/edit-menu-management-role-child', 'Cms\UserManagement\UserManagement::editMenuManagementChildRole');
+$routes->post('/user-management/roles/edit-menu-management-role-child-tab', 'Cms\UserManagement\UserManagement::editMenuManagementChildTabRole');
+$routes->put('/user-management/roles/edit-menu-management-role', 'Cms\UserManagement\UserManagement::editMenuManagementRole');
+$routes->put('/user-management/roles/edit-menu-management-child-role', 'Cms\UserManagement\UserManagement::editMenuManagementChildRole');
+$routes->put('/user-management/roles/edit-menu-management-child-tab-role', 'Cms\UserManagement\UserManagement::editMenuManagementChildTabRole');
+// Dropdown Role
+$routes->get('/user-management/data-dropdown-role', 'Cms\UserManagement\UserManagement::dataDropdownRole');
 
-// ADMIN
+// Log User
+$routes->get('/user-management/data-log-user', 'Cms\UserManagement\UserManagement::dataLogUser');
 
+// Log Auth
+$routes->get('/user-management/data-log-auth', 'Cms\UserManagement\UserManagement::dataLogAuth');
 
+// Delete
+$routes->delete('/user-management/user-management/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
+// End User Management
 
 // END ADMIN
+
+// GENERAL VIEW
+$routes->get('/(:segment)', 'Cms\General\General::index/$1', ['filter' => 'canView']);
+$routes->get('/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2', ['filter' => 'canView']);
+$routes->get('/(:segment)/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2/$3', ['filter' => 'canView']);
+// END GENERAL VIEW
 
 // End CMS SECTION
 

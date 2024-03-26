@@ -6,10 +6,6 @@ use App\Controllers\BaseController;
 use App\Controllers\Cms\General\General;
 use App\Models\Cms\MenuManagement\MenuManagementModel;
 use App\Models\HelperModel;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Writer\Csv;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class MenuManagement extends BaseController
 {
@@ -123,6 +119,7 @@ class MenuManagement extends BaseController
     public function createMenu()
     {
         $menu_name = $this->request->getVar('menu_name');
+        $menu_number = $this->request->getVar('menu_number');
         $menu_icon = $this->request->getVar('menu_icon');
         $lang_code = $this->request->getVar('lang_code');
 
@@ -145,6 +142,15 @@ class MenuManagement extends BaseController
                     'trim' => 'Character has space in first or end letter',
                 ]
             ],
+            'menu_number' => [
+                'label' => 'Menu Number',
+                'rules' => 'trim|required|regex_match[/^[0-9]+$/]',
+                'regex_match' => 'Character number only and no space in first or end letter',
+                'errors' => [
+                    'required' => 'The Menu Number is required',
+                    'trim' => 'Character has space in first or end letter',
+                ]
+            ],
         ];
         $session = null;
         $validation = null;
@@ -155,6 +161,9 @@ class MenuManagement extends BaseController
             // session()->setFlashdata("notif", $this->sessionMessage('error', "Oops, something went wrong when create " . $menu_name . " please check your input again"));
             // return redirect()->back()->withInput();
         } else {
+
+            $this->helperModel::tambahUrutan($menu_number, 'menu_table', 'menu_number', 'menu_id', $lang_code, 'add');
+
             $data = [
                 'uuid' => $this->helperModel::generateUuid(),
                 'menu_slug' => url_title($menu_name, '-', true),
@@ -164,7 +173,8 @@ class MenuManagement extends BaseController
                 'lang_code' => $lang_code,
                 'created_at' => $this->dateTime(),
                 'updated_at' => $this->dateTime(),
-                'is_active' => 1
+                'is_active' => 1,
+                'menu_number' => $menu_number,
             ];
             $this->helperModel::insertData($data, false, 'menu_table');
             $session = $this->sessionMessage('success', 'Menu ' . $menu_name . ' has been created');
@@ -252,6 +262,7 @@ class MenuManagement extends BaseController
         $edit_menu_name = $this->request->getVar('edit_menu_name');
         $edit_menu_icon = $this->request->getVar('edit_menu_icon');
         $lang_code = $this->request->getVar('lang_code');
+        $edit_menu_number = $this->request->getVar('edit_menu_number');
         $data = $this->menuManagementModel::dataMenuByMenuId($menu_id);
         if ($type != 'view') {
             $requestData = $this->request->getJSON();
@@ -259,6 +270,7 @@ class MenuManagement extends BaseController
             $type = $requestData->type;
             $edit_menu_name = $requestData->edit_menu_name;
             $edit_menu_icon = $requestData->edit_menu_icon;
+            $edit_menu_number = $requestData->edit_menu_number;
             $lang_code = $requestData->lang_code;
 
             $token = csrf_hash();
@@ -288,6 +300,15 @@ class MenuManagement extends BaseController
                         'trim' => 'Character has space in first or end letter',
                     ]
                 ],
+                'edit_menu_number' => [
+                    'label' => 'Menu Number',
+                    'rules' => 'trim|required|regex_match[/^[0-9]+$/]',
+                    'regex_match' => 'Character number only and no space in first or end letter',
+                    'errors' => [
+                        'required' => 'The Menu Number is required',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
             ];
             $session = null;
             $validation = null;
@@ -296,6 +317,7 @@ class MenuManagement extends BaseController
                 $validation = validation_errors();
                 $this->generalController->logUser('Edit Menu', 'Fail to update because field invalid');
             } else {
+                $this->helperModel::tambahUrutan($edit_menu_number, 'menu_table', 'menu_number', 'menu_id', $lang_code, 'edit', $data['menu_id']);
                 $data_update = [
                     'menu_slug' => url_title($edit_menu_name, '-', true),
                     'menu_name' => ucwords($edit_menu_name),
@@ -303,6 +325,7 @@ class MenuManagement extends BaseController
                     'menu_url' => '/' . url_title($edit_menu_name, '-', true),
                     'lang_code' => $lang_code,
                     'updated_at' => $this->dateTime(),
+                    'menu_number' => $edit_menu_number,
                 ];
 
                 $where = [
@@ -538,7 +561,7 @@ class MenuManagement extends BaseController
                 'menu_id' => $data_menu['menu_id'],
                 'menu_children_name' => ucwords($menu_children_name),
                 'menu_children_icon' => '<i class="ri-bubble-chart-line"></i>',
-                'menu_children_url' => '/' . url_title($menu_children_name, '-', true),
+                'menu_children_url' => '/' . $data_menu['menu_slug'] . '/' . url_title($menu_children_name, '-', true),
                 'created_at' => $this->dateTime(),
                 'updated_at' => $this->dateTime(),
                 'is_active' => 1
@@ -596,7 +619,7 @@ class MenuManagement extends BaseController
                 'menu_id' => $data_menu['menu_id'],
                 'menu_children_name' => ucwords($menu_children_name),
                 'menu_children_icon' => '<i class="ri-bubble-chart-line"></i>',
-                'menu_children_url' => '/' . url_title($menu_children_name, '-', true),
+                'menu_children_url' => '/' . $data_menu['menu_slug'] . '/' . url_title($menu_children_name, '-', true),
                 'created_at' => $this->dateTime(),
                 'updated_at' => $this->dateTime(),
                 'is_active' => 1
@@ -675,7 +698,7 @@ class MenuManagement extends BaseController
                 $data_update = [
                     'menu_id' => $data_menu['menu_id'],
                     'menu_children_name' => ucwords($edit_menu_children_name),
-                    'menu_children_url' => '/' . url_title($edit_menu_children_name, '-', true),
+                    'menu_children_url' => '/' . $data_menu['menu_slug'] . '/' . url_title($edit_menu_children_name, '-', true),
                     'updated_at' => $this->dateTime(),
                 ];
 
@@ -755,7 +778,7 @@ class MenuManagement extends BaseController
                 $data_update = [
                     'menu_id' => $data_menu['menu_id'],
                     'menu_children_name' => ucwords($edit_menu_children_name),
-                    'menu_children_url' => '/' . url_title($edit_menu_children_name, '-', true),
+                    'menu_children_url' => '/' . $data_menu['menu_slug'] . '/' . url_title($edit_menu_children_name, '-', true),
                     'updated_at' => $this->dateTime(),
                 ];
 
@@ -1160,145 +1183,6 @@ class MenuManagement extends BaseController
 
         $result['data'] = $data;
         return $this->response->setJSON($result);
-    }
-
-    public function dtActionButtons()
-    {
-        $columnName = $this->request->getVar('columnName');
-        $modelName = $this->request->getVar('modelName');
-        $buttons = $this->request->getVar('buttons');
-        $draw = $this->request->getVar('draw');
-        $header = $this->request->getVar('header');
-        $lang_code = $this->request->getVar('lang_code');
-        if (is_string($header)) {
-            $arr_header = explode(",", $header);
-        } else {
-            $arr_header = $header;
-        }
-        $column = $this->request->getVar('column');
-        if (is_string($header)) {
-            $arr_column = explode(",", $column);
-        } else {
-            $arr_column = $column;
-        }
-        // dd($column);
-        $dataSelected = ['header' => $arr_header, 'column' => $arr_column];
-
-        $fullData = false;
-        $data = $this->menuManagementModel::$modelName('', $columnName, 'asc', $fullData, $lang_code);
-
-        switch ($buttons) {
-            case 'print':
-
-                $totalData = count($data);
-
-                $response = [
-                    'draw' => $draw,
-                    'recordsTotal' => $totalData,
-                    'recordsFiltered' => $totalData,
-                    'data' => $data
-
-                ];
-                $this->generalController->logUser('Print', 'Print data ' . $modelName);
-                return $this->response->setJSON($response);
-            case 'excel':
-                // Inisialisasi objek Spreadsheet
-                $spreadsheet = new Spreadsheet();
-
-                // Set aktivitas kerja ke objek Spreadsheet
-                $sheet = $spreadsheet->getActiveSheet();
-
-                // Tambahkan header
-                $headerRow = 1; // Baris header
-                $col = 1;
-
-                foreach ($dataSelected['header'] as $key => $value) {
-                    $coordinate = Coordinate::stringFromColumnIndex($col++) . $headerRow;
-                    $sheet->setCellValue($coordinate, $value);
-                }
-
-                // Mengatur data
-                $dataRow = 2; // Baris data
-                foreach ($data as $row) {
-                    // if()
-                    $col = 1; // Kolom awal
-                    foreach ($dataSelected['column'] as $key => $value) {
-                        $coordinate = Coordinate::stringFromColumnIndex($col++) . $dataRow;
-                        $spreadsheet->getActiveSheet()->setCellValue($coordinate, $row[$value]);
-                    }
-                    $dataRow++; // Pindah ke baris data berikutnya
-                }
-
-                // Konfigurasi nama file
-                $filename = time() . '-' . date('m') . date('Y') . '.xlsx';
-
-                // Buat objek Writer untuk format Xlsx
-                $writer = new Xlsx($spreadsheet);
-
-                // Membuat response dengan file Excel
-                $response = service('response');
-                $response->setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                $response->setHeader('Content-Disposition', 'attachment;filename="' . $filename . '"');
-                $response->setHeader('Cache-Control', 'max-age=0');
-                $writer->save('php://output');
-                $this->generalController->logUser('Export Excel', 'Export data ' . $modelName);
-                return $response;
-                // break;
-            case 'csv':
-                // Inisialisasi objek Spreadsheet
-                $spreadsheet = new Spreadsheet();
-
-                // Set aktivitas kerja ke objek Spreadsheet
-                $sheet = $spreadsheet->getActiveSheet();
-
-                // Tambahkan header
-                $headerRow = 1; // Baris header
-                $col = 1;
-                foreach ($dataSelected['header'] as $key => $value) {
-                    $coordinate = Coordinate::stringFromColumnIndex($col++) . $headerRow;
-                    $sheet->setCellValue($coordinate, $value);
-                }
-
-                // Mengatur data
-                $dataRow = 2; // Baris data
-                foreach ($data as $row) {
-                    // if()
-                    $col = 1; // Kolom awal
-                    foreach ($dataSelected['column'] as $key => $value) {
-                        $coordinate = Coordinate::stringFromColumnIndex($col++) . $dataRow;
-                        $spreadsheet->getActiveSheet()->setCellValue($coordinate, $row[$value]);
-                    }
-                    $dataRow++; // Pindah ke baris data berikutnya
-                }
-
-                // Konfigurasi nama file
-                $filename = time() . '-' . date('m') . date('Y') . '.csv';
-
-                // Buat objek Writer untuk format Xlsx
-                $writer = new Csv($spreadsheet);
-
-                // Membuat response dengan file Excel
-                header('Content-Type: text/csv');
-                header('Content-Disposition: attachment; filename="' . $filename . '"');
-                header('Cache-Control: max-age=0');
-                $writer->save('php://output');
-                $this->generalController->logUser('Export CSV', 'Export data ' . $modelName);
-                break;
-            default:
-                // $data = $this->menuManagementModel::$modelName('', $columnName, 'asc', $fullData, $lang_code);
-
-                $totalData = count($data);
-
-                $response = [
-                    'draw' => $draw,
-                    'recordsTotal' => $totalData,
-                    'recordsFiltered' => $totalData,
-                    'data' => $data
-
-                ];
-                $this->generalController->logUser('Print', 'Print data ' . $modelName);
-                return $this->response->setJSON($response);
-        }
     }
 
     // GET MENU
