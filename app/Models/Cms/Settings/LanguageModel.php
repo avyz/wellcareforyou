@@ -13,22 +13,24 @@ class LanguageModel extends Model
         $db = $instance->db;
 
         if ($fullData == true) {
-            $query = "SELECT `language`,
+            $query = "SELECT @no:=@no+1 AS number, `language`,
             `lang_code`,
             lang_icon,
             is_active,
             is_lang_default,
             uuid,
-            lang_id FROM lang_table 
+            created_at,
+            lang_id FROM lang_table, (SELECT @no:= 0) AS no 
             WHERE `language` LIKE '%$filter%' ORDER BY $column $order";
         } else {
-            $query = "SELECT `language`,
+            $query = "SELECT @no:=@no+1 AS number, `language`,
             `lang_code`,
             lang_icon,
             is_active,
             is_lang_default,
             uuid,
-            lang_id FROM lang_table 
+            created_at,
+            lang_id FROM lang_table, (SELECT @no:= 0) AS no 
             WHERE is_active = 1 AND `language` LIKE '%$filter%' ORDER BY $column $order";
         }
 
@@ -52,6 +54,7 @@ class LanguageModel extends Model
         is_active,
         is_lang_default,
         uuid,
+        created_at,
         lang_id FROM lang_table 
         WHERE `uuid` = '$uuid'";
 

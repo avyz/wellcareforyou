@@ -5,6 +5,7 @@ namespace App\Controllers\Cms\General;
 use App\Controllers\BaseController;
 use App\Models\Cms\MenuManagement\MenuManagementModel;
 use App\Models\Cms\UserManagement\UserManagementModel;
+use App\Models\Cms\Settings\LanguageModel;
 use App\Models\Cms\Users\UsersModel;
 use App\Models\HelperModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -19,12 +20,14 @@ class General extends BaseController
     protected $menuManagementModel;
     protected $userManagementModel;
     protected $userModel;
+    protected $languageModel;
     public function __construct()
     {
         $this->helperModel = new HelperModel();
         $this->menuManagementModel = new MenuManagementModel();
         $this->userManagementModel = new UserManagementModel();
         $this->userModel = new UsersModel();
+        $this->languageModel = new LanguageModel();
     }
 
     public function index()

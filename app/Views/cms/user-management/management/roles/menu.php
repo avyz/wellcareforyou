@@ -97,7 +97,7 @@
             <input type="hidden" name="role" value="<?= $data['role'] ?>">
             <input type="hidden" name="lang_code" value="<?= $data['lang_code'] ?>">
             <button type="button" class="btn btn-light-dark w-auto d-block d-lg-inline" onclick="window.close()">Cancel</button>
-            <button type="submit" class="btn btn-primary mt-2 mt-lg-0 w-auto">Save</button>
+            <button id="submit-data" type="submit" class="btn btn-primary mt-2 mt-lg-0 w-auto">Save</button>
         </div>
     </form>
 </div>

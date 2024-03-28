@@ -54,8 +54,8 @@ class Language extends BaseController
     {
         $language = $this->request->getVar('language');
         $lang_code = $this->request->getVar('lang_code');
-        $lang_icon = $this->request->getFile('lang_icon');
-        $lang_icon_name = url_title($language, '-', true) . '.' . $lang_icon->getClientExtension();
+        $data_lang_icon = $this->request->getFile('data_lang_icon');
+        $data_lang_icon_name = url_title($language, '-', true) . '.' . $data_lang_icon->getClientExtension();
 
         $rules = [
             'language' => [
@@ -67,9 +67,9 @@ class Language extends BaseController
                     'trim' => 'Character has space in first or end letter',
                 ]
             ],
-            'lang_icon' => [
+            'data_lang_icon' => [
                 'label' => 'Lang Icon',
-                'rules' => 'max_size[lang_icon,1024]|mime_in[lang_icon,image/jpg,image/jpeg,image/png, image/webp]|is_image[lang_icon]',
+                'rules' => 'trim|max_size[data_lang_icon,1024]|mime_in[data_lang_icon,image/jpg,image/jpeg,image/png, image/webp]|is_image[data_lang_icon]',
                 'errors' => [
                     'uploaded' => 'No file on Lang Icon',
                     'max_size' => 'Image must less than 1mb',
@@ -99,7 +99,7 @@ class Language extends BaseController
                 'uuid' => $this->helperModel::generateUuid(),
                 'lang_code' => strtolower($lang_code),
                 'language' => ucwords($language),
-                'lang_icon' => $lang_icon_name,
+                'lang_icon' => $data_lang_icon_name,
                 'created_at' => $this->dateTime(),
                 'updated_at' => $this->dateTime(),
                 'is_active' => 1
@@ -107,7 +107,7 @@ class Language extends BaseController
             $this->helperModel::insertData($data_lang, false, 'lang_table');
 
             // Move Image
-            $lang_icon->move('assets/website/images/lang', $lang_icon_name);
+            $data_lang_icon->move('assets/website/images/lang', $data_lang_icon_name);
             $session = $this->sessionMessage('success', 'Language ' . $language . ' has been created');
             $validation = null;
             $this->generalController->logUser('Create Language', 'Language ' . $language . ' has been created');
@@ -126,15 +126,27 @@ class Language extends BaseController
     {
         $edit_language = $this->request->getVar('edit_language');
         $type = $this->request->getVar('type');
-        $edit_lang_id = $this->request->getVar('edit_lang_id');
+        $lang_id = $this->request->getVar('lang_id');
         $edit_lang_code = $this->request->getVar('edit_lang_code');
-        $edit_lang_icon = $this->request->getFile('edit_lang_icon');
+        $edit_data_lang_icon = $this->request->getFile('edit_data_lang_icon');
+        // $match_value_lang_icon = $this->request->getVar('match_value_lang_icon');
+
         $edit_old_lang_icon = $this->request->getVar('edit_old_lang_icon');
-        $edit_lang_icon_name = url_title($edit_language, '-', true) . '.' . $edit_lang_icon->getClientExtension();
-        $data_lang = $this->languageModel::dataLanguageByLangUuid($edit_lang_id);
+        // if (!$edit_data_lang_icon) {
+        //     $edit_data_lang_icon = $edit_old_lang_icon;
+        // }
+        $data_lang = $this->languageModel::dataLanguageByLangUuid($lang_id);
+
+        $edit_data_lang_icon_name = null;
 
         if ($type != 'view') {
             $token = csrf_hash();
+            $edit_data_lang_icon_name = url_title($edit_language, '-', true) . '.' . $edit_data_lang_icon->getClientExtension();
+            // if (isset($match_value_lang_icon) != isset($edit_old_lang_icon)) {
+            // } else {
+            //     $edit_data_lang_icon_name = $edit_old_lang_icon;
+            // };
+            // dd($edit_data_lang_icon_name);
             $value_language = "";
             if ($data_lang['language'] == $edit_language) {
                 $value_language = 'trim|required|min_length[4]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]';
@@ -143,7 +155,7 @@ class Language extends BaseController
             }
 
             $value_lang_code = "";
-            if ($data_lang['lang_code'] == $edit_language) {
+            if ($data_lang['lang_code'] == $edit_lang_code) {
                 $value_lang_code = 'trim|required|min_length[2]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]';
             } else {
                 $value_lang_code = 'trim|required|is_unique[lang_table.lang_code]|min_length[2]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]';
@@ -159,9 +171,9 @@ class Language extends BaseController
                         'trim' => 'Character has space in first or end letter',
                     ]
                 ],
-                'edit_lang_icon' => [
+                'edit_data_lang_icon' => [
                     'label' => 'Lang Icon',
-                    'rules' => 'max_size[edit_lang_icon,1024]|mime_in[edit_lang_icon,image/jpg,image/jpeg,image/png, image/webp]|is_image[edit_lang_icon]',
+                    'rules' => 'trim|max_size[edit_data_lang_icon,1024]|mime_in[edit_data_lang_icon,image/jpg,image/jpeg,image/png, image/webp]|is_image[edit_data_lang_icon]',
                     'errors' => [
                         'uploaded' => 'No file on Lang Icon',
                         'max_size' => 'Image must less than 1mb',
@@ -186,31 +198,37 @@ class Language extends BaseController
                 $session = $this->sessionMessage('error', "Oops, something went wrong when update " . $edit_language . " please check your input again");
                 $validation = validation_errors();
                 $this->generalController->logUser('Edit Language', 'Fail to update because field invalid');
+                // session()->setFlashdata('notif', $session);
+                // return redirect()->back()->withInput();
             } else {
                 $data_role_input = [
                     'lang_code' => $edit_lang_code,
                     'language' => $edit_language,
-                    'lang_icon' => $edit_lang_icon_name,
+                    'lang_icon' => $edit_data_lang_icon_name,
                     'updated_at' => $this->dateTime(),
                 ];
 
                 $where = [
-                    'uuid' => $edit_lang_id,
+                    'uuid' => $lang_id,
                 ];
                 $this->helperModel::updateData($where, $data_role_input, 'lang_table');
 
-                if ($edit_lang_icon->getError() == 4) {
+                if ($edit_data_lang_icon->getError() == 4) {
                     // Jika nama file gambar sebelum dan sesudah sama, masukkan file lama
-                    $edit_lang_icon_name = $edit_old_lang_icon;
+                    $edit_data_lang_icon_name = $edit_old_lang_icon;
                 } else {
                     // Random Name
-                    $this->unlinkImage('assets/website/images/lang' . $edit_old_lang_icon);
+                    $this->unlinkImage('assets/website/images/lang/' . $edit_old_lang_icon);
                     // Move Image
-                    $edit_lang_icon->move('assets/website/images/lang', $edit_lang_icon_name);
+                    $edit_data_lang_icon->move('assets/website/images/lang', $edit_data_lang_icon_name);
                 }
+
                 $session = $this->sessionMessage('success', 'Language ' . $data_lang['language'] . ' has been updated');
                 $validation = null;
                 $this->generalController->logUser('Edit Language', 'Language ' . $data_lang['language'] . ' has been updated');
+                // session()->setFlashdata('notif', $session);
+                // dd("masuk");
+                // return redirect()->back();
             }
             $result['notification'] = $session;
             $result['validation'] = $validation;

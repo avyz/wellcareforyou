@@ -122,7 +122,7 @@ class UserManagement extends BaseController
             $data_auth = [
                 'uuid' => $this->helperModel::generateUuid(),
                 'email' => $email,
-                'password' => password_hash('wellcare123', PASSWORD_DEFAULT),
+                'password' => password_hash('wellcare1234$#@!', PASSWORD_DEFAULT),
                 'role_id' => $data_role['role_id'],
                 'created_at' => $this->dateTime(),
                 'updated_at' => $this->dateTime(),

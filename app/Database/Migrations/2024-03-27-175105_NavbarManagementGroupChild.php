@@ -4,12 +4,12 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class NavbarManagementGroup extends Migration
+class NavbarManagementGroupChild extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'navbar_management_group_id' => [
+            'navbar_management_group_child_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
@@ -19,13 +19,13 @@ class NavbarManagementGroup extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'lang_code' => [
+            'navbar_management_group_uuid' => [
                 'type' => 'VARCHAR',
-                'constraint' => 15,
+                'constraint' => 50,
             ],
-            'navbar_management_group_name' => [
+            'navbar_management_uuid' => [
                 'type' => 'VARCHAR',
-                'constraint' => '50',
+                'constraint' => 50,
             ],
             'created_at' => [
                 'type' => 'datetime'
@@ -38,12 +38,12 @@ class NavbarManagementGroup extends Migration
                 'constraint' => 1,
             ]
         ]);
-        $this->forge->addKey('navbar_management_group_id', true);
-        $this->forge->createTable('page_navbar_group_table');
+        $this->forge->addKey('navbar_management_group_child_id', true);
+        $this->forge->createTable('page_navbar_group_child_table');
     }
 
     public function down()
     {
-        $this->forge->dropTable('page_navbar_group_table');
+        $this->forge->dropTable('page_navbar_group_child_table');
     }
 }

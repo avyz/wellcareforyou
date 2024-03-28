@@ -56,9 +56,9 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mt-2 mt-md-0">
-                                <label for="lang_icon" class="form-label">Icon :</label>
-                                <input class="form-control" type="file" name="lang_icon" id="lang_icon" accept="image/jpg, image/jpeg, image/png" required>
-                                <div class="invalid-feedback" id="lang_icon_validation"></div>
+                                <label for="data_lang_icon" class="form-label">Icon :</label>
+                                <input class="form-control" type="file" name="data_lang_icon" id="data_lang_icon" accept="image/jpg, image/jpeg, image/png" required>
+                                <div class="invalid-feedback" id="data_lang_icon_validation"></div>
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,6 @@
             </div>
             <form action="javascript:void(0)" method="post" id="languageEdit" enctype="multipart/form-data">
                 <div class="modal-body">
-                    <input type="hidden" name="_method" value="PUT">
                     <input type="hidden" name="lang_id" id="edit_lang_id">
                     <div class="row">
                         <div class="col-md-3">
@@ -95,7 +94,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-2">
+                    <div class="row align-items-center mt-2">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="edit_language">edit_Language :</label>
@@ -105,10 +104,10 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mt-2 mt-md-0">
-                                <label for="edit_lang_icon" class="form-label">Icon :</label>
                                 <input type="hidden" class="form-control" name="edit_old_lang_icon" id="edit_old_lang_icon">
-                                <input class="form-control" type="file" name="edit_lang_icon" id="edit_lang_icon" accept="image/jpg, image/jpeg, image/png" required>
-                                <div class="invalid-feedback" id="edit_lang_icon_validation"></div>
+                                <label for="edit_data_lang_icon" class="form-label">Icon :</label>
+                                <input class="form-control" type="file" name="edit_data_lang_icon" id="edit_data_lang_icon" accept="image/jpg, image/jpeg, image/png" required>
+                                <div class="invalid-feedback" id="edit_data_lang_icon_validation"></div>
                             </div>
                         </div>
                     </div>
@@ -121,7 +120,4 @@
         </div>
     </div>
 </div>
-<script>
-    $("#create-btn").attr("data-bs-target", "#languageCreateModal");
-</script>
 <?= $this->endSection(); ?>

@@ -182,6 +182,31 @@ $routes->get('/user-management/data-log-auth', 'Cms\UserManagement\UserManagemen
 $routes->delete('/user-management/user-management/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 // End User Management
 
+// Settings
+// Language
+$routes->get('/setting/data-language', 'Cms\Settings\Language::dataLanguage');
+$routes->post('/setting/create-language', 'Cms\Settings\Language::createLanguage');
+$routes->get('/setting/edit-language', 'Cms\Settings\Language::editLanguage');
+$routes->post('/setting/edit-language', 'Cms\Settings\Language::editLanguage');
+$routes->delete('/setting/language/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
+// End Settings
+
+// Pages
+$routes->get('/pages/data-navbar', 'Cms\Pages\Pages::dataPages');
+$routes->post('/pages/create-navbar', 'Cms\Pages\Pages::createPages');
+$routes->get('/pages/edit-navbar', 'Cms\Pages\Pages::editPages');
+$routes->post('/pages/edit-navbar', 'Cms\Pages\Pages::editPages');
+$routes->delete('/pages/pages/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
+// End Pages
+
+// Group Pages
+$routes->get('/group-pages/data-navbar', 'Cms\Pages\GroupPages::dataGroupPages');
+$routes->post('/group-pages/create-navbar', 'Cms\Pages\GroupPages::createGroupPages');
+$routes->get('/group-pages/edit-navbar', 'Cms\Pages\GroupPages::editGroupPages');
+$routes->post('/group-pages/edit-navbar', 'Cms\Pages\GroupPages::editGroupPages');
+$routes->delete('/pages/group-pages/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
+// End Group Pages
+
 // END ADMIN
 
 // GENERAL VIEW

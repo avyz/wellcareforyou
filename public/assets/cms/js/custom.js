@@ -514,3 +514,18 @@ function validationButtons(e = null) {
     tabs_active.data('buttons_excel') === 1 ? $(".buttons-excel").show() : $(".buttons-excel").hide();
     tabs_active.data('buttons_print') === 1 ? $(".buttons-print").show() : $(".buttons-print").hide();
 }
+
+// function changeFileInput(e, label, name, match_value_file_name) {
+//     $("#" + label).text(e.files[0].name);
+//     $(e).attr("name", name);
+//     // Untuk conditional di server side
+//     $("#" + match_value_file_name).val(e.files[0].name);
+// }
+
+// $(document).on("click", "#submit-data", function (e) {
+//     $(e).attr('disabled', true);
+//     setTimeout(() => {
+//         $(e).attr('disabled', false);
+//     }, 3000);
+//     $(e).submit();
+// });

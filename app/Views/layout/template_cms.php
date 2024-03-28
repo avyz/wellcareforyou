@@ -205,11 +205,6 @@
     <script src="/assets/cms/table/datatable/button-ext/jszip.min.js"></script>
     <script src="/assets/cms/table/datatable/button-ext/buttons.html5.min.js"></script>
     <script src="/assets/cms/table/datatable/button-ext/buttons.print.min.js"></script>
-    <script src="/assets/cms/js/datatable_custom.js"></script>
-    <script src="/assets/cms/js/api.js"></script>
-    <script src="/assets/cms/js/menu-management/custom.js"></script>
-    <script src="/assets/cms/js/user-management/custom.js"></script>
-
     <!-- <script src="/assets/cms/js/scrollspyNav.js"></script> -->
     <script src="/assets/cms/filepond/filepond.min.js"></script>
     <script src="/assets/cms/filepond/FilePondPluginFileValidateType.min.js"></script>
@@ -221,6 +216,12 @@
     <script src="/assets/cms/filepond/filepondPluginFileValidateSize.min.js"></script>
     <script src="/assets/cms/filepond/custom-filepond.js"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="/assets/cms/js/datatable_custom.js"></script>
+    <script src="/assets/cms/js/api.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+    <script src="/assets/cms/js/menu-management/custom.js"></script>
+    <script src="/assets/cms/js/user-management/custom.js"></script>
+    <script src="/assets/cms/js/setting/custom.js"></script>
 
 
 </body>

@@ -133,12 +133,21 @@ const initialComplete = (settings, json, wrapperSelector) => {
     // })
 
     var tabs_active = $(".menutab>.nav-link.active");
-    console.log(tabs_active)
-    tabs_active[0]?.dataset?.edit === "1" ? $(".buttons-edit").attr("disabled", false) : $(".buttons-edit").attr("disabled", true);
-    tabs_active[0]?.dataset?.delete === "1" ? $(".buttons-delete").show() : $(".buttons-delete").hide();
-    tabs_active[0]?.dataset?.buttons_csv === "1" ? $(".buttons-csv").show() : $(".buttons-csv").hide();
-    tabs_active[0]?.dataset?.buttons_excel === "1" ? $(".buttons-excel").show() : $(".buttons-excel").hide();
-    tabs_active[0]?.dataset?.buttons_print === "1" ? $(".buttons-print").show() : $(".buttons-print").hide();
+    var table_active = $('#' + wrapperSelector);
+    if (tabs_active.length > 0) {
+        tabs_active[0]?.dataset?.edit === "1" ? $(".buttons-edit").attr("disabled", false) : $(".buttons-edit").attr("disabled", true);
+        tabs_active[0]?.dataset?.delete === "1" ? $(".buttons-delete").show() : $(".buttons-delete").hide();
+        tabs_active[0]?.dataset?.buttons_csv === "1" ? $(".buttons-csv").show() : $(".buttons-csv").hide();
+        tabs_active[0]?.dataset?.buttons_excel === "1" ? $(".buttons-excel").show() : $(".buttons-excel").hide();
+        tabs_active[0]?.dataset?.buttons_print === "1" ? $(".buttons-print").show() : $(".buttons-print").hide();
+    } else {
+        table_active[0]?.dataset?.create === "1" ? ($("#create-btn").attr("data-bs-target", "#languageCreateModal"), $("#create-btn").show()) : ($("#create-btn").attr("data-bs-target", ""), $("#create-btn").hide());
+        table_active[0]?.dataset?.edit === "1" ? $(".buttons-edit").attr("disabled", false) : $(".buttons-edit").attr("disabled", true);
+        table_active[0]?.dataset?.delete === "1" ? $(".buttons-delete").show() : $(".buttons-delete").hide();
+        table_active[0]?.dataset?.buttons_csv === "1" ? $(".buttons-csv").show() : $(".buttons-csv").hide();
+        table_active[0]?.dataset?.buttons_excel === "1" ? $(".buttons-excel").show() : $(".buttons-excel").hide();
+        table_active[0]?.dataset?.buttons_print === "1" ? $(".buttons-print").show() : $(".buttons-print").hide();
+    }
 }
 
 // Admin
@@ -780,4 +789,244 @@ $(document).on("click", "#filter-auth", function () {
     var date_end = $('#date_end_auth').val();
 
     table_auth.ajax.url(url + "/user-management/data-log-auth?date_start=" + date_start + "&date_end=" + date_end).load();
+});
+
+// Setting Language
+$('#language-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/setting/data-language",
+        "type": "GET"
+    },
+    "dom": dom(),
+
+    buttons: buttons(
+        {
+            columnName: "lang_id",
+            modelName: "dataLanguage",
+            methodName: "languageModel",
+            column: ['number',
+                'language',
+                'lang_code',
+                'lang_icon',
+                'created_at'],
+            header: [
+                'No',
+                'Language',
+                'Code',
+                'Icon',
+                'Created Date'
+            ]
+        }
+    ),
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    "columns": [
+        {
+            "data": 'number',
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return row.number;
+            }
+        },
+        {
+            "data": "language",
+            "orderable": true
+
+        },
+        { "data": "lang_code", "orderable": false },
+        { "data": "lang_icon", "orderable": false },
+        {
+            "data": null,
+            "orderable": false,
+            render: function (data, type, row, meta) {
+                // console.log(row);
+                let html = "";
+                if (row.is_active == 1) {
+                    html = 'Active'
+                } else {
+                    html = 'Inactive'
+                }
+                return html;
+            }
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-lang_id=" + row.uuid + " id='editLanguage' data-bs-toggle='modal' data-bs-target='#languageEditModal'><i class='ri-pencil-line'></i></button>";
+                if (row.is_active == 1) {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/setting/language/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.language + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="language-ui-table" data-namesec="lang" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                } else {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/setting/language/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.language + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="language-ui-table" data-namesec="lang" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                }
+                return button;
+            }
+        }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'language-ui-table');
+    }
+});
+
+// Pages
+// Navbar
+$('#pages-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/pages/data-navbar",
+        "type": "GET"
+    },
+    "dom": dom(),
+
+    buttons: buttons(
+        {
+            columnName: "navbar_management_id",
+            modelName: "dataPages",
+            methodName: "pagesModel",
+            column: ['number',
+                'lang_code',
+                'navbar_management_name',
+                'navbar_management_url',
+                'created_at'],
+            header: [
+                'No',
+                'Lang Code',
+                'Page Name',
+                'Page Url',
+                'Created Date'
+            ]
+        }
+    ),
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    "columns": [
+        {
+            "data": 'number',
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return row.number;
+            }
+        },
+        {
+            "data": "navbar_management_name",
+            "orderable": true
+
+        },
+        { "data": "navbar_management_url", "orderable": false },
+        {
+            "data": null,
+            "orderable": false,
+            render: function (data, type, row, meta) {
+                // console.log(row);
+                let html = "";
+                if (row.is_active == 1) {
+                    html = 'Active'
+                } else {
+                    html = 'Inactive'
+                }
+                return html;
+            }
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-navbar_management_id=" + row.uuid + " id='editPages' data-bs-toggle='modal' data-bs-target='#pagesEditModal'><i class='ri-pencil-line'></i></button>";
+                if (row.is_active == 1) {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/pages/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.navbar_management_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="pages-ui-table" data-namesec="page_navbar" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                } else {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/pages/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.navbar_management_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="pages-ui-table" data-namesec="page_navbar" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                }
+                return button;
+            }
+        }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'pages-ui-table');
+    }
+});
+
+// Group Navbar
+$('#group-pages-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/group-pages/data-group-navbar",
+        "type": "GET"
+    },
+    "dom": dom(),
+
+    buttons: buttons(
+        {
+            columnName: "navbar_management_group_id",
+            modelName: "dataGroup",
+            methodName: "groupModel",
+            column: ['number',
+                'lang_code',
+                'navbar_management_group_name',
+                'created_at'],
+            header: [
+                'No',
+                'Lang Code',
+                'Group Page Name',
+                'Created Date'
+            ]
+        }
+    ),
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    "columns": [
+        {
+            "data": 'number',
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return row.number;
+            }
+        },
+        {
+            "data": "navbar_management_group_name",
+            "orderable": true
+
+        },
+        {
+            "data": null,
+            "orderable": false,
+            render: function (data, type, row, meta) {
+                // console.log(row);
+                let html = "";
+                if (row.is_active == 1) {
+                    html = 'Active'
+                } else {
+                    html = 'Inactive'
+                }
+                return html;
+            }
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-navbar_management_group_id=" + row.uuid + " id='editGroupPages' data-bs-toggle='modal' data-bs-target='#groupPagesEditModal'><i class='ri-pencil-line'></i></button>";
+                button += '<a class="buttons-edit" href="/pages/group-pages/page-list/page=' + row.navbar_management_name.toLowerCase() + '&navbar_management_group_uuid=' + row.uuid + '&lang_code=' + metaLanguage + '" target="_blank" class="buttons-edit"><button class="btn mx-1 px-2 py-1 btn-info"><i class="ri-pages-line"></i></button></a>';
+                if (row.is_active == 1) {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="gruop-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                } else {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="gruop-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                }
+                return button;
+            }
+        }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'group-pages-ui-table');
+    }
 });
