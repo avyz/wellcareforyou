@@ -119,6 +119,7 @@
     <script>
         var runTimeOut;
         const url = window.location.origin;
+        console.log(url);
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
         var metaLanguage = $('meta[name="language"]').attr('content');
         var isClick = false;
@@ -214,7 +215,7 @@
     <script src="/assets/cms/filepond/FilePondPluginImageResize.min.js"></script>
     <script src="/assets/cms/filepond/FilePondPluginImageTransform.min.js"></script>
     <script src="/assets/cms/filepond/filepondPluginFileValidateSize.min.js"></script>
-    <script src="/assets/cms/filepond/custom-filepond.js"></script>
+    <!-- <script src="/assets/cms/filepond/custom-filepond.js"></script> -->
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
     <script src="/assets/cms/js/datatable_custom.js"></script>
     <script src="/assets/cms/js/api.js"></script>
@@ -222,6 +223,7 @@
     <script src="/assets/cms/js/menu-management/custom.js"></script>
     <script src="/assets/cms/js/user-management/custom.js"></script>
     <script src="/assets/cms/js/setting/custom.js"></script>
+    <script src="/assets/cms/js/pages/custom.js"></script>
 
 
 </body>

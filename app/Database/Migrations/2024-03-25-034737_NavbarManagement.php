@@ -40,6 +40,9 @@ class NavbarManagement extends Migration
             'is_active' => [
                 'type' => 'INT',
                 'constraint' => 1,
+            ],
+            'page_number' => [
+                'type' => 'INT',
             ]
         ]);
         $this->forge->addKey('navbar_management_id', true);

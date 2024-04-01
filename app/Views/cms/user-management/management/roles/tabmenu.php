@@ -13,7 +13,7 @@
     <form action="/user-management/create-menu-management-role-child-tab" method="POST" enctype="multipart/form-data">
         <?= csrf_field(); ?>
         <div class="table-responsive">
-            <table class="table dt-table-hover my-3" style="width:100%">
+            <table class="table dt-table-hover table-bordered my-3" style="width:100%">
                 <thead>
                     <tr>
                         <th>No</th>

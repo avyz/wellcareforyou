@@ -5,12 +5,12 @@
         <?= session()->getFlashdata('notif') ?>
     <?php endif; ?>
     <h4>
-        Menu Role <?= ucwords($data['role']); ?>
+        Group List <?= ucwords($data['page']); ?>
     </h4>
     <form action="/pages/create-group-pages-list" method="POST" enctype="multipart/form-data">
         <?= csrf_field(); ?>
         <div class="table-responsive">
-            <table class="table dt-table-hover my-3" style="width:100%">
+            <table class="table dt-table-hover table-bordered my-3" style="width:100%">
                 <thead>
                     <tr>
                         <th></th>
@@ -20,13 +20,13 @@
                 </thead>
                 <tbody>
                     <?php $no = 1; ?>
-                    <?php foreach ($data['pages'] as $page) : ?>
+                    <?php foreach ($data['group'] as $page) : ?>
                         <tr>
                             <td>
-                                <?php if ($page['is_active'] == 1) : ?>
-                                    <input type="checkbox" name="is_active[]" value="<?= $page['navbar_management_uuid'] ?>" checked>
+                                <?php if ($page['is_active_group_child'] == 1) : ?>
+                                    <input type="checkbox" name="is_active[]" value="<?= $page['uuid'] ?>" checked>
                                 <?php else : ?>
-                                    <input type="checkbox" name="is_active[]" value="<?= $page['navbar_management_uuid'] ?>">
+                                    <input type="checkbox" name="is_active[]" value="<?= $page['uuid'] ?>">
                                 <?php endif; ?>
                             </td>
                             <td><?= $no++; ?></td>

@@ -1396,4 +1396,20 @@ class MenuManagementModel extends Model
             return null;
         }
     }
+
+    public static function getLastNumberPages()
+    {
+        $instance = new static();
+        $db = $instance->db;
+
+        $query = "SELECT COUNT(menu_number) as last_number FROM menu_table WHERE is_active = 1";
+
+        $result = $db->query($query)->getRowArray();
+
+        if (isset($result)) {
+            return $result['last_number'];
+        } else {
+            return null;
+        }
+    }
 }

@@ -145,8 +145,8 @@ class MenuManagement extends BaseController
             'menu_number' => [
                 'label' => 'Menu Number',
                 'rules' => 'trim|required|regex_match[/^[0-9]+$/]',
-                'regex_match' => 'Character number only and no space in first or end letter',
                 'errors' => [
+                    'regex_match' => 'Character number only and no space in first or end letter',
                     'required' => 'The Menu Number is required',
                     'trim' => 'Character has space in first or end letter',
                 ]
@@ -154,12 +154,25 @@ class MenuManagement extends BaseController
         ];
         $session = null;
         $validation = null;
+
+        // Ambil data terakhir dari database
+        $lastNumber = $this->menuManagementModel->getLastNumberPages();
+
+        // Jika tidak ada data di database, atur angka awal sebagai 0
+        if (!$lastNumber) {
+            $lastNumber = 1;
+        }
+
         if (!$this->validate($rules)) {
             $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $menu_name . " please check your input again");
             $validation = validation_errors();
             $this->generalController->logUser('Create Menu', 'Fail to insert data because field invalid');
             // session()->setFlashdata("notif", $this->sessionMessage('error', "Oops, something went wrong when create " . $menu_name . " please check your input again"));
             // return redirect()->back()->withInput();
+        } else if ($menu_number > $lastNumber + 1) {
+            $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $menu_name . " please check your input again");
+            $validation = ['menu_number' => 'Num must be ' . ($lastNumber + 1)];
+            $this->generalController->logUser('Create Pages', 'Fail to insert data because page number invalid');
         } else {
 
             $this->helperModel::tambahUrutan($menu_number, 'menu_table', 'menu_number', 'menu_id', $lang_code, 'add');
@@ -303,8 +316,8 @@ class MenuManagement extends BaseController
                 'edit_menu_number' => [
                     'label' => 'Menu Number',
                     'rules' => 'trim|required|regex_match[/^[0-9]+$/]',
-                    'regex_match' => 'Character number only and no space in first or end letter',
                     'errors' => [
+                        'regex_match' => 'Character number only and no space in first or end letter',
                         'required' => 'The Menu Number is required',
                         'trim' => 'Character has space in first or end letter',
                     ]
@@ -312,10 +325,23 @@ class MenuManagement extends BaseController
             ];
             $session = null;
             $validation = null;
+
+            // Ambil data terakhir dari database
+            $lastNumber = $this->menuManagementModel->getLastNumberPages();
+
+            // Jika tidak ada data di database, atur angka awal sebagai 0
+            if (!$lastNumber) {
+                $lastNumber = 1;
+            }
+
             if (!$this->validate($rules)) {
                 $session = $this->sessionMessage('error', "Oops, something went wrong when update " . $edit_menu_name . " please check your input again");
                 $validation = validation_errors();
                 $this->generalController->logUser('Edit Menu', 'Fail to update because field invalid');
+            } else if ($edit_menu_number > $lastNumber) {
+                $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $edit_menu_name . " please check your input again");
+                $validation = ['edit_menu_number' => 'Num must be ' . ($lastNumber)];
+                $this->generalController->logUser('Create Pages', 'Fail to insert data because page number invalid');
             } else {
                 $this->helperModel::tambahUrutan($edit_menu_number, 'menu_table', 'menu_number', 'menu_id', $lang_code, 'edit', $data['menu_id']);
                 $data_update = [

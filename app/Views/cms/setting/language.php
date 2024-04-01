@@ -89,7 +89,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="edit_lang_code">Code :</label>
-                                <input type="text" class="form-control" name="edit_lang_code" id="edit_lang_code" required>
+                                <input type="text" class="form-control" name="edit_lang_code" id="edit_lang_code" readonly>
                                 <div class="invalid-feedback" id="edit_lang_code_validation"></div>
                             </div>
                         </div>

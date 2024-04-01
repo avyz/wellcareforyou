@@ -3,15 +3,9 @@
      <header class="header navbar navbar-expand-sm expand-header container-xxl px-xxl-5">
          <ul class="navbar-item theme-brand flex-row  text-center">
              <li class="nav-item theme-logo">
-                 <?php if (session()->get('is_master') == 0 && session()->get('is_admin') == 0) : ?>
-                     <a href="/">
-                         <img src="/assets/website/images/logo_white.png" class="navbar-logo" alt="logo">
-                     </a>
-                 <?php else : ?>
-                     <a href="/wc-admin/dashboard">
-                         <img src="/assets/website/images/logo_white.png" class="navbar-logo" alt="logo">
-                     </a>
-                 <?php endif; ?>
+                 <a href="/dashboard">
+                     <img src="/assets/website/images/logo_white.png" class="navbar-logo" alt="logo">
+                 </a>
              </li>
          </ul>
 

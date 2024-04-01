@@ -195,17 +195,24 @@ $routes->delete('/setting/language/(:segment)/(:segment)/(:any)', 'Cms\General\G
 $routes->get('/pages/data-navbar', 'Cms\Pages\Pages::dataPages');
 $routes->post('/pages/create-navbar', 'Cms\Pages\Pages::createPages');
 $routes->get('/pages/edit-navbar', 'Cms\Pages\Pages::editPages');
-$routes->post('/pages/edit-navbar', 'Cms\Pages\Pages::editPages');
+$routes->put('/pages/edit-navbar', 'Cms\Pages\Pages::editPages');
 $routes->delete('/pages/pages/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 // End Pages
 
 // Group Pages
 $routes->get('/group-pages/data-navbar', 'Cms\Pages\GroupPages::dataGroupPages');
+$routes->get('/pages/group-pages/page-list', 'Cms\Pages\GroupPages::viewGroupPagesList');
+$routes->post('/pages/create-group-pages-list', 'Cms\Pages\GroupPages::createGroupPagesList');
 $routes->post('/group-pages/create-navbar', 'Cms\Pages\GroupPages::createGroupPages');
 $routes->get('/group-pages/edit-navbar', 'Cms\Pages\GroupPages::editGroupPages');
-$routes->post('/group-pages/edit-navbar', 'Cms\Pages\GroupPages::editGroupPages');
+$routes->put('/group-pages/edit-navbar', 'Cms\Pages\GroupPages::editGroupPages');
 $routes->delete('/pages/group-pages/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 // End Group Pages
+
+// MISC
+$routes->get('/setting/misc', 'Cms\Settings\Misc::viewDataMisc');
+$routes->post('/setting/misc/save-misc', 'Cms\Settings\Misc::createMisc');
+// END MISC
 
 // END ADMIN
 

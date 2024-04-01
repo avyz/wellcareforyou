@@ -14,7 +14,6 @@
                         <tr>
                             <th>No</th>
                             <th>Group Name</th>
-                            <th>Pages</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -38,13 +37,6 @@
                 <div class="modal-body">
                     <?= $this->include('layout/admin/language_form'); ?>
                     <hr>
-                    <div class="form-group">
-                        <label for="navbar_management_uuid">Page :</label>
-                        <select name="navbar_management_uuid" id="navbar_management_uuid" required>
-                            <option value="">--Select Page--</option>
-                        </select>
-                        <div class="invalid-feedback" id="navbar_management_uuid_validation"></div>
-                    </div>
                     <div class="form-group">
                         <label for="navbar_management_group_name">Group Name :</label>
                         <input type="text" class="form-control" name="navbar_management_group_name" id="navbar_management_group_name" required>
@@ -76,13 +68,6 @@
                     <input type="hidden" name="navbar_management_group_id" id="edit_navbar_management_group_id">
                     <?= $this->include('layout/admin/language_form'); ?>
                     <hr>
-                    <div class="form-group">
-                        <label for="edit_navbar_management_uuid">Page :</label>
-                        <select name="edit_navbar_management_uuid" id="edit_navbar_management_uuid" required>
-                            <option value="">--Select Page--</option>
-                        </select>
-                        <div class="invalid-feedback" id="edit_navbar_management_uuid_validation"></div>
-                    </div>
                     <div class="form-group">
                         <label for="edit_navbar_management_group_name">Group Name :</label>
                         <input type="text" class="form-control" name="edit_navbar_management_group_name" id="edit_navbar_management_group_name" required>

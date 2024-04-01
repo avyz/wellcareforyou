@@ -124,7 +124,7 @@ const language = () => {
     }
 }
 
-const initialComplete = (settings, json, wrapperSelector) => {
+const initialComplete = (settings, json, wrapperSelector, modalName = "") => {
     // console.log(json);
     // json?.buttons.map((item, index) => {
     //     if (!item.isShow) {
@@ -141,7 +141,7 @@ const initialComplete = (settings, json, wrapperSelector) => {
         tabs_active[0]?.dataset?.buttons_excel === "1" ? $(".buttons-excel").show() : $(".buttons-excel").hide();
         tabs_active[0]?.dataset?.buttons_print === "1" ? $(".buttons-print").show() : $(".buttons-print").hide();
     } else {
-        table_active[0]?.dataset?.create === "1" ? ($("#create-btn").attr("data-bs-target", "#languageCreateModal"), $("#create-btn").show()) : ($("#create-btn").attr("data-bs-target", ""), $("#create-btn").hide());
+        table_active[0]?.dataset?.create === "1" ? ($("#create-btn").attr("data-bs-target", "#" + modalName), $("#create-btn").show()) : ($("#create-btn").attr("data-bs-target", ""), $("#create-btn").hide());
         table_active[0]?.dataset?.edit === "1" ? $(".buttons-edit").attr("disabled", false) : $(".buttons-edit").attr("disabled", true);
         table_active[0]?.dataset?.delete === "1" ? $(".buttons-delete").show() : $(".buttons-delete").hide();
         table_active[0]?.dataset?.buttons_csv === "1" ? $(".buttons-csv").show() : $(".buttons-csv").hide();
@@ -868,7 +868,7 @@ $('#language-ui-table').DataTable({
         }
     ],
     initComplete: function (settings, json) {
-        initialComplete(settings, json, 'language-ui-table');
+        initialComplete(settings, json, 'language-ui-table', 'languageCreateModal');
     }
 });
 
@@ -908,10 +908,10 @@ $('#pages-ui-table').DataTable({
     "pageLength": 10,
     "columns": [
         {
-            "data": 'number',
-            "orderable": false,
+            "data": 'page_number',
+            "orderable": true,
             "render": function (data, type, row, meta) {
-                return row.number;
+                return row.page_number;
             }
         },
         {
@@ -949,7 +949,7 @@ $('#pages-ui-table').DataTable({
         }
     ],
     initComplete: function (settings, json) {
-        initialComplete(settings, json, 'pages-ui-table');
+        initialComplete(settings, json, 'pages-ui-table', 'pagesCreateModal');
     }
 });
 
@@ -958,7 +958,7 @@ $('#group-pages-ui-table').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
-        "url": url + "/group-pages/data-group-navbar",
+        "url": url + "/group-pages/data-navbar",
         "type": "GET"
     },
     "dom": dom(),
@@ -966,8 +966,8 @@ $('#group-pages-ui-table').DataTable({
     buttons: buttons(
         {
             columnName: "navbar_management_group_id",
-            modelName: "dataGroup",
-            methodName: "groupModel",
+            modelName: "dataGroupPages",
+            methodName: "groupPagesModel",
             column: ['number',
                 'lang_code',
                 'navbar_management_group_name',
@@ -1016,17 +1016,17 @@ $('#group-pages-ui-table').DataTable({
             "orderable": false,
             "render": function (data, type, row, meta) {
                 var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-navbar_management_group_id=" + row.uuid + " id='editGroupPages' data-bs-toggle='modal' data-bs-target='#groupPagesEditModal'><i class='ri-pencil-line'></i></button>";
-                button += '<a class="buttons-edit" href="/pages/group-pages/page-list/page=' + row.navbar_management_name.toLowerCase() + '&navbar_management_group_uuid=' + row.uuid + '&lang_code=' + metaLanguage + '" target="_blank" class="buttons-edit"><button class="btn mx-1 px-2 py-1 btn-info"><i class="ri-pages-line"></i></button></a>';
+                button += '<a class="buttons-edit" href="/pages/group-pages/page-list?&navbar_management_group_uuid=' + row.uuid + '&lang_code=' + metaLanguage + '&page=' + row.navbar_management_group_name.toLowerCase() + '" target="_blank" class="buttons-edit"><button class="btn mx-1 px-2 py-1 btn-info"><i class="ri-pages-line"></i></button></a>';
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="gruop-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="group-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="gruop-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="group-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }
         }
     ],
     initComplete: function (settings, json) {
-        initialComplete(settings, json, 'group-pages-ui-table');
+        initialComplete(settings, json, 'group-pages-ui-table', 'groupPagesCreateModal');
     }
 });

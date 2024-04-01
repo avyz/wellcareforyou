@@ -39,11 +39,18 @@
                     <?= $this->include('layout/admin/language_form'); ?>
                     <hr>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-9">
                             <div class="form-group">
                                 <label for="navbar_management_name">Page Name :</label>
                                 <input type="text" class="form-control" name="navbar_management_name" id="navbar_management_name" required>
                                 <div class="invalid-feedback" id="navbar_management_name_validation"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="navbar_management_number">Page Number :</label>
+                                <input type="number" min="1" class="form-control" name="navbar_management_number" id="navbar_management_number" required>
+                                <div class="invalid-feedback" id="navbar_management_number_validation"></div>
                             </div>
                         </div>
                     </div>
@@ -74,11 +81,18 @@
                     <?= $this->include('layout/admin/language_form'); ?>
                     <hr>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-9">
                             <div class="form-group">
                                 <label for="edit_navbar_management_name">Page Name :</label>
                                 <input type="text" class="form-control" name="edit_navbar_management_name" id="edit_navbar_management_name" required>
                                 <div class="invalid-feedback" id="edit_navbar_management_name_validation"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="edit_navbar_management_number">Page Number :</label>
+                                <input type="number" min="1" class="form-control" name="edit_navbar_management_number" id="edit_navbar_management_number" required>
+                                <div class="invalid-feedback" id="edit_navbar_management_number_validation"></div>
                             </div>
                         </div>
                     </div>

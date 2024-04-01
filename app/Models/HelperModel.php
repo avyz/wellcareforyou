@@ -105,12 +105,20 @@ class HelperModel extends Model
 
         if ($type == 'add') {
             // Ambil semua menu yang memiliki urutan lebih besar atau sama dengan urutan baru
-            $menus = $db->table($table_name)
-                ->where($column_name . ' >=', $urutanBaru)
-                ->where('lang_code', $lang_code)
-                ->orderBy($column_name, 'ASC')
-                ->get()
-                ->getResultArray();
+            if ($lang_code) {
+                $menus = $db->table($table_name)
+                    ->where($column_name . ' >=', $urutanBaru)
+                    ->where('lang_code', $lang_code)
+                    ->orderBy($column_name, 'ASC')
+                    ->get()
+                    ->getResultArray();
+            } else {
+                $menus = $db->table($table_name)
+                    ->where($column_name . ' >=', $urutanBaru)
+                    ->orderBy($column_name, 'ASC')
+                    ->get()
+                    ->getResultArray();
+            }
 
             // Perbarui urutan untuk setiap menu yang terpengaruh
             foreach ($menus as $menu) {

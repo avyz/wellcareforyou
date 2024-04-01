@@ -72,6 +72,10 @@ class Misc extends Migration
             ],
             'updated_at' => [
                 'type' => 'datetime'
+            ],
+            'lang_code' => [
+                'type' => 'VARCHAR',
+                'constraint' => '15',
             ]
         ]);
         $this->forge->addKey('misc_id', true);

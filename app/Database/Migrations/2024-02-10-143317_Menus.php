@@ -49,6 +49,9 @@ class Menus extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '25'
             ],
+            'menu_number' => [
+                'type' => 'INT',
+            ]
         ]);
         $this->forge->addKey('menu_id', true);
         $this->forge->createTable('menu_table');

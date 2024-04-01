@@ -1,4 +1,4 @@
-function previewImg() {
+function previewImg(selector, previewImgClass) {
     const fileName = document.querySelector("#cover");
     const previewImg = document.querySelector(".preview-img");
 

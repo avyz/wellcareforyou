@@ -6,6 +6,8 @@ use App\Controllers\BaseController;
 use App\Models\Cms\MenuManagement\MenuManagementModel;
 use App\Models\Cms\UserManagement\UserManagementModel;
 use App\Models\Cms\Settings\LanguageModel;
+use App\Models\Cms\Pages\PagesModel;
+use App\Models\Cms\Pages\GroupPagesModel;
 use App\Models\Cms\Users\UsersModel;
 use App\Models\HelperModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -21,6 +23,8 @@ class General extends BaseController
     protected $userManagementModel;
     protected $userModel;
     protected $languageModel;
+    protected $pagesModel;
+    protected $groupPagesModel;
     public function __construct()
     {
         $this->helperModel = new HelperModel();
@@ -28,6 +32,8 @@ class General extends BaseController
         $this->userManagementModel = new UserManagementModel();
         $this->userModel = new UsersModel();
         $this->languageModel = new LanguageModel();
+        $this->pagesModel = new PagesModel();
+        $this->groupPagesModel = new GroupPagesModel();
     }
 
     public function index()
@@ -104,7 +110,12 @@ class General extends BaseController
             if (count($data['dataMenu']['sidebar']) == 0) {
                 $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $dataParams['title'];
             } else {
-                $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'] . ' | ' . $dataParams['title'];
+                // dd($dataParams);
+                if ($dataParams['title'] != '') {
+                    $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'] . ' | ' . $dataParams['title'];
+                } else {
+                    $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'];
+                }
             }
 
             $data['title'] = $title;
