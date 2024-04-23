@@ -203,7 +203,7 @@ class Language extends BaseController
             } else {
                 $data_role_input = [
                     'lang_code' => $edit_lang_code,
-                    'language' => $edit_language,
+                    'language' => ucwords($edit_language),
                     'lang_icon' => $edit_data_lang_icon_name,
                     'updated_at' => $this->dateTime(),
                 ];

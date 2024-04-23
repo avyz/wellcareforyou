@@ -119,7 +119,6 @@
     <script>
         var runTimeOut;
         const url = window.location.origin;
-        console.log(url);
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
         var metaLanguage = $('meta[name="language"]').attr('content');
         var isClick = false;
@@ -224,6 +223,7 @@
     <script src="/assets/cms/js/user-management/custom.js"></script>
     <script src="/assets/cms/js/setting/custom.js"></script>
     <script src="/assets/cms/js/pages/custom.js"></script>
+    <script src="/assets/cms/js/hospital/custom.js"></script>
 
 
 </body>

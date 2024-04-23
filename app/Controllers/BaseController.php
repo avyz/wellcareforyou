@@ -241,7 +241,6 @@ abstract class BaseController extends Controller
     // Fungsi untuk menghasilkan 4 angka acak unik
     public function generateUniqueRandomNumbers()
     {
-
         // Menggabungkan angka menjadi satu string
         $uniqueId = substr(uniqid(), -4);
 
@@ -254,13 +253,26 @@ abstract class BaseController extends Controller
         return $result;
     }
 
+    public function generateUniqueCharacter($character)
+    {
+        // Menggabungkan angka menjadi satu string
+        $randomLetters = substr(str_shuffle(preg_replace('/\s+/', '', $character)), 0, 3);
+
+        // $timestamp = time();
+        $md5 = substr(md5($character), 0, 12);
+
+        $result = strtoupper($randomLetters) . '-' . strtoupper($md5);
+
+        return $result;
+    }
+
     protected $timeIdle = 3600;
 
     public function checkIdle($view = "")
     {
         // Check if user is logged in
         if (!session()->get('email')) {
-            dd('masuk');
+            // dd('masuk');
             return redirect()->to('/login');
         }
 

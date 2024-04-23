@@ -214,6 +214,17 @@ $routes->get('/setting/misc', 'Cms\Settings\Misc::viewDataMisc');
 $routes->post('/setting/misc/save-misc', 'Cms\Settings\Misc::createMisc');
 // END MISC
 
+// HOSPITAL
+$routes->get('/hospital/data-hospital-location', 'Cms\Hospital\Hospital::dataLocationByLangUuid');
+$routes->post('/hospital/create-hospital-location', 'Cms\Hospital\Hospital::createHospitalLocation');
+$routes->get('/hospital/edit-hospital-location', 'Cms\Hospital\Hospital::editHospitalLocation');
+$routes->post('/hospital/edit-hospital-location', 'Cms\Hospital\Hospital::editHospitalLocation');
+$routes->get('/hospital/data-hospital', 'Cms\Hospital\Hospital::dataHospital');
+$routes->post('/hospital/create-hospital', 'Cms\Hospital\Hospital::createHospital');
+$routes->delete('/hospital/hospital-location/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
+$routes->delete('/hospital/hospital/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
+// END HOSPITAL
+
 // END ADMIN
 
 // GENERAL VIEW

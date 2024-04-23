@@ -4,12 +4,12 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class HospitalLocation extends Migration
+class DoctorWorkTime extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'hospital_location_id' => [
+            'doctor_worktime_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
@@ -19,17 +19,21 @@ class HospitalLocation extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'lang_uuid' => [
+            'doctor_uuid' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'hospital_location_code' => [
+            'worktime_day' => [
                 'type' => 'VARCHAR',
-                'constraint' => 20,
+                'constraint' => 50,
             ],
-            'hospital_location_name' => [
+            'worktime_start_time' => [
                 'type' => 'VARCHAR',
-                'constraint' => 128,
+                'constraint' => 10,
+            ],
+            'worktime_end_time' => [
+                'type' => 'VARCHAR',
+                'constraint' => 10,
             ],
             'created_at' => [
                 'type' => 'datetime'
@@ -37,17 +41,17 @@ class HospitalLocation extends Migration
             'updated_at' => [
                 'type' => 'datetime'
             ],
-            'is_deleted' => [
+            'is_closed' => [
                 'type' => 'INT',
                 'constraint' => 1,
             ]
         ]);
-        $this->forge->addKey('hospital_location_id', true);
-        $this->forge->createTable('hospital_location_table');
+        $this->forge->addKey('doctor_worktime_id', true);
+        $this->forge->createTable('doctor_worktime_table');
     }
 
     public function down()
     {
-        $this->forge->dropTable('hospital_location_table');
+        $this->forge->dropTable('doctor_worktime_table');
     }
 }

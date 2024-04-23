@@ -4,12 +4,12 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class HospitalLocation extends Migration
+class DoctorRating extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'hospital_location_id' => [
+            'doctor_rating_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
@@ -19,35 +19,35 @@ class HospitalLocation extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'lang_uuid' => [
+            'doctor_uuid' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'hospital_location_code' => [
+            'user_uuid' => [
                 'type' => 'VARCHAR',
-                'constraint' => 20,
+                'constraint' => 50,
             ],
-            'hospital_location_name' => [
+            'rating' => [
+                'type' => 'DECIMAL',
+                'constraint' => '10,2',
+            ],
+            'description' => [
                 'type' => 'VARCHAR',
-                'constraint' => 128,
+                'constraint' => 256,
             ],
             'created_at' => [
                 'type' => 'datetime'
             ],
             'updated_at' => [
                 'type' => 'datetime'
-            ],
-            'is_deleted' => [
-                'type' => 'INT',
-                'constraint' => 1,
             ]
         ]);
-        $this->forge->addKey('hospital_location_id', true);
-        $this->forge->createTable('hospital_location_table');
+        $this->forge->addKey('doctor_rating_id', true);
+        $this->forge->createTable('doctor_rating_table');
     }
 
     public function down()
     {
-        $this->forge->dropTable('hospital_location_table');
+        $this->forge->dropTable('doctor_rating_table');
     }
 }

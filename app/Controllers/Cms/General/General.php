@@ -9,6 +9,7 @@ use App\Models\Cms\Settings\LanguageModel;
 use App\Models\Cms\Pages\PagesModel;
 use App\Models\Cms\Pages\GroupPagesModel;
 use App\Models\Cms\Users\UsersModel;
+use App\Models\Cms\Hospital\HospitalModel;
 use App\Models\HelperModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -25,6 +26,7 @@ class General extends BaseController
     protected $languageModel;
     protected $pagesModel;
     protected $groupPagesModel;
+    protected $hospitalModel;
     public function __construct()
     {
         $this->helperModel = new HelperModel();
@@ -34,6 +36,7 @@ class General extends BaseController
         $this->languageModel = new LanguageModel();
         $this->pagesModel = new PagesModel();
         $this->groupPagesModel = new GroupPagesModel();
+        $this->hospitalModel = new HospitalModel();
     }
 
     public function index()
@@ -63,7 +66,11 @@ class General extends BaseController
             } else {
                 $menu_url = $data['dataMenu']['sidebar'][0]['menu_children_url'];
                 $path = $menu_url;
-                $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'];
+                if ($data['dataMenu']['sidebar'][0]['menu_children_name'] != $data['dataMenu']['menu']['menu_name']) {
+                    $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'];
+                } else {
+                    $title = $data['dataMenu']['menu']['menu_name'];
+                }
             }
 
             if ($menu_url == $uri->getPath()) {
@@ -112,9 +119,17 @@ class General extends BaseController
             } else {
                 // dd($dataParams);
                 if ($dataParams['title'] != '') {
-                    $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'] . ' | ' . $dataParams['title'];
+                    if ($data['dataMenu']['sidebar'][0]['menu_children_name'] != $data['dataMenu']['menu']['menu_name']) {
+                        $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'] . ' | ' . $dataParams['title'];
+                    } else {
+                        $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $dataParams['title'];
+                    }
                 } else {
-                    $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'];
+                    if ($data['dataMenu']['sidebar'][0]['menu_children_name'] != $data['dataMenu']['menu']['menu_name']) {
+                        $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'];
+                    } else {
+                        $title = $data['dataMenu']['menu']['menu_name'];
+                    }
                 }
             }
 
@@ -166,14 +181,21 @@ class General extends BaseController
             $is_active = 1;
             $message = "activated";
         } else {
-            $is_active = 0;
+            $is_active = 1;
             $message = "deleted";
         }
 
+        // if ($message == 'deleted') {
+        //     $data_update = [
+        //         'is_deleted' => $is_active,
+        //         'updated_at' => $this->dateTime(),
+        //     ];
+        // } else {
         $data_update = [
-            'is_active' => $is_active,
+            $message == 'deleted' ? 'is_deleted' : 'is_active' => $is_active,
             'updated_at' => $this->dateTime(),
         ];
+        // }
 
         $columns_id = 'uuid';
         $this->helperModel::deleteData($columns_id, $id, $data_update, $table_name . '_table', false);

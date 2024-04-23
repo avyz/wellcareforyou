@@ -1203,7 +1203,8 @@ class MenuManagementModel extends Model
         T0.lang_icon, 
         T0.created_at, 
         T0.is_active, 
-        T0.is_lang_default
+        T0.is_lang_default,
+        T0.uuid AS 'lang_uuid'
         FROM `lang_table` T0
         WHERE T0.is_active = 1 
         AND EXISTS (SELECT a.lang_code FROM menu_table a WHERE a.lang_code = T0.lang_code GROUP BY a.lang_code) 
@@ -1237,6 +1238,7 @@ class MenuManagementModel extends Model
                             'created_at' => $l['created_at'],
                             'is_active' => $l['is_active'],
                             'is_lang_default' => $l['is_lang_default'],
+                            'lang_uuid' => $l['lang_uuid'],
                         ];
                     }
                 }
@@ -1345,7 +1347,8 @@ class MenuManagementModel extends Model
         lang_icon, 
         created_at, 
         is_active, 
-        is_lang_default
+        is_lang_default,
+        uuid
         FROM `lang_table` 
         WHERE is_active = 1
         ORDER BY lang_id ASC;";

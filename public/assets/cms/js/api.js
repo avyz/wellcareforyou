@@ -1,4 +1,4 @@
-function post(url, id_datatable, id_form, data_values) {
+function post(url, id_datatable, id_form, data_values, tableOnModal = null) {
     csrfToken = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         headers: {
@@ -21,7 +21,14 @@ function post(url, id_datatable, id_form, data_values) {
                     $('input[name="' + key + '"]').addClass('is-invalid');
                     $('select[name="' + key + '"]').addClass('is-invalid');
                     $('textarea[name="' + key + '"]').addClass('is-invalid');
-                    $('#' + key + '_validation').text(value);
+                    let keys
+                    if (tableOnModal) {
+                        keys = key.replaceAll(".", "_validation_");
+                        $('#' + keys).text(value);
+                        $(".invalid-feedback").css("display", "block");
+                    } else {
+                        $('#' + key + '_validation').text(value);
+                    }
                 }
             } else {
                 // Nofitications
@@ -33,6 +40,10 @@ function post(url, id_datatable, id_form, data_values) {
                 $('#' + id_form).trigger("reset");
                 $(".modal").modal("hide");
                 $('input').removeClass('is-invalid');
+                if (tableOnModal) {
+                    $('#' + tableOnModal).html('');
+                    $(".invalid-feedback").css("display", "none");
+                }
             }
         },
         complete: function () {
@@ -51,7 +62,7 @@ function post(url, id_datatable, id_form, data_values) {
     });
 }
 
-function put(url, id_datatable, id_form, data_values) {
+function put(url, id_datatable, id_form, data_values, tableOnModal = null) {
     csrfToken = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         headers: {
@@ -75,7 +86,14 @@ function put(url, id_datatable, id_form, data_values) {
                     $('input[name="' + key + '"]').addClass('is-invalid');
                     $('select[name="' + key + '"]').addClass('is-invalid');
                     $('textarea[name="' + key + '"]').addClass('is-invalid');
-                    $('#' + key + '_validation').text(value);
+                    let keys
+                    if (tableOnModal) {
+                        keys = key.replaceAll(".", "_validation_");
+                        $('#' + keys).text(value);
+                        $(".invalid-feedback").css("display", "block");
+                    } else {
+                        $('#' + key + '_validation').text(value);
+                    }
                 }
             } else {
                 // Nofitications
@@ -85,6 +103,9 @@ function put(url, id_datatable, id_form, data_values) {
                 table.ajax.reload(null, false);
                 $(".modal").modal("hide");
                 $('input').removeClass('is-invalid');
+                if (tableOnModal) {
+                    $(".invalid-feedback").css("display", "none");
+                }
             }
         },
         complete: function () {
@@ -103,7 +124,7 @@ function put(url, id_datatable, id_form, data_values) {
     });
 }
 
-function postWithImage(url, id_datatable, id_form, formData) {
+function postWithImage(url, id_datatable, id_form, formData, tableOnModal = null) {
     csrfToken = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         headers: {
@@ -128,7 +149,13 @@ function postWithImage(url, id_datatable, id_form, formData) {
                     $('input[name="' + key + '"]').addClass('is-invalid');
                     $('select[name="' + key + '"]').addClass('is-invalid');
                     $('textarea[name="' + key + '"]').addClass('is-invalid');
-                    $('#' + key + '_validation').text(value);
+                    let keys
+                    if (tableOnModal) {
+                        keys = key.replaceAll(".", "_validation_");
+                        $('#' + keys).text(value);
+                    } else {
+                        $('#' + key + '_validation').text(value);
+                    }
                 }
             } else {
                 // Nofitications
@@ -140,6 +167,9 @@ function postWithImage(url, id_datatable, id_form, formData) {
                 $('#' + id_form).trigger("reset");
                 $(".modal").modal("hide");
                 $('input').removeClass('is-invalid');
+                if (tableOnModal) {
+                    $('#' + tableOnModal).html('');
+                }
             }
         },
         complete: function () {
@@ -158,7 +188,7 @@ function postWithImage(url, id_datatable, id_form, formData) {
     });
 }
 
-function putWithImage(url, id_datatable, id_form, data_values) {
+function putWithImage(url, id_datatable, id_form, data_values, tableOnModal = null) {
     csrfToken = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         headers: {
@@ -184,7 +214,14 @@ function putWithImage(url, id_datatable, id_form, data_values) {
                     $('input[name="' + key + '"]').addClass('is-invalid');
                     $('select[name="' + key + '"]').addClass('is-invalid');
                     $('textarea[name="' + key + '"]').addClass('is-invalid');
-                    $('#' + key + '_validation').text(value);
+                    let keys
+                    if (tableOnModal) {
+                        keys = key.replaceAll(".", "_validation_");
+                        $('#' + keys).text(value);
+                        $(".invalid-feedback").css("display", "block");
+                    } else {
+                        $('#' + key + '_validation').text(value);
+                    }
                 }
             } else {
                 // Nofitications
@@ -195,6 +232,9 @@ function putWithImage(url, id_datatable, id_form, data_values) {
                 $(".modal").modal("hide");
                 $('input').removeClass('is-invalid');
                 $('#' + id_form).trigger("reset");
+                if (tableOnModal) {
+                    $('#' + tableOnModal).html('');
+                }
             }
         },
         complete: function () {

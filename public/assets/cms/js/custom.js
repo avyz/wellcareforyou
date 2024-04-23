@@ -343,9 +343,15 @@ function getDropdown(data_values, link, value_name, value_id, name_selector, id_
         dataType: 'json',
         success: function (data) {
             let html = '';
-            html += '<option value="">-- Choose your selection --</option>'
-            if (data[key_name]) {
-                for (const [key, value] of Object.entries(data[key_name])) {
+            html += '<option value="">-- Choose your selection --</option>';
+            var data_key = null;
+            if (key_name) {
+                data_key = data[key_name];
+            } else {
+                data_key = data;
+            }
+            if (data_key) {
+                for (const [key, value] of Object.entries(data_key)) {
                     if (type == 'add') {
                         html += '<option value="' + value[value_id] + '">' + value[value_name] + '</option>'
                     } else {

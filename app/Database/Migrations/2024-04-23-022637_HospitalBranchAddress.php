@@ -4,12 +4,12 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class HospitalLocation extends Migration
+class HospitalBranchAddress extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'hospital_location_id' => [
+            'hospital_branch_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
@@ -19,15 +19,23 @@ class HospitalLocation extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'lang_uuid' => [
+            'hospital_uuid' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'hospital_location_code' => [
+            'hospital_location_uuid' => [
                 'type' => 'VARCHAR',
-                'constraint' => 20,
+                'constraint' => 50,
             ],
-            'hospital_location_name' => [
+            'hospital_address' => [
+                'type' => 'VARCHAR',
+                'constraint' => 128,
+            ],
+            'hospital_phone' => [
+                'type' => 'VARCHAR',
+                'constraint' => 128,
+            ],
+            'hospital_map_location' => [
                 'type' => 'VARCHAR',
                 'constraint' => 128,
             ],
@@ -42,12 +50,12 @@ class HospitalLocation extends Migration
                 'constraint' => 1,
             ]
         ]);
-        $this->forge->addKey('hospital_location_id', true);
-        $this->forge->createTable('hospital_location_table');
+        $this->forge->addKey('hospital_branch_id', true);
+        $this->forge->createTable('hospital_branch_address_table');
     }
 
     public function down()
     {
-        $this->forge->dropTable('hospital_location_table');
+        $this->forge->dropTable('hospital_branch_address_table');
     }
 }
