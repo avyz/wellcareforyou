@@ -49,6 +49,7 @@ class General extends BaseController
         $lang_code = $this->request->getVar('lang');
         // dd($lang_code);
         $role_id = session()->get('role_id');
+
         $data = [
             'layout' => $this->dirLayoutCms,
             'section' => $this->dirSectionCms,

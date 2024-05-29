@@ -55,8 +55,16 @@ class Language extends BaseController
         $search = $this->request->getVar('search');
         $data = null;
         if ($search) {
-            $data = $data = $this->languageModel::dataLanguage($search, 'lang_id', 'asc', false);
+            $data = $this->languageModel::dataLanguage($search, 'lang_id', 'asc', false);
         }
+        $result['data'] = $data;
+        $result['token'] = csrf_hash();
+        return $this->response->setJSON($result);
+    }
+
+    public function getDataLanguageForTags()
+    {
+        $data = $this->languageModel::dataLanguage('', 'lang_id', 'asc', false);
         $result['data'] = $data;
         $result['token'] = csrf_hash();
         return $this->response->setJSON($result);

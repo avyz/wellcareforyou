@@ -55,8 +55,16 @@ class Hospital extends BaseController
         $search = $this->request->getVar('search');
         $data = null;
         if ($search) {
-            $data = $data = $this->hospitalModel::dataHospital($search, 'hospital_id', 'asc');
+            $data = $this->hospitalModel::dataHospital($search, 'hospital_id', 'asc');
         }
+        $result['data'] = $data;
+        $result['token'] = csrf_hash();
+        return $this->response->setJSON($result);
+    }
+
+    public function getDataHospitalForTags()
+    {
+        $data = $this->hospitalModel::dataHospital('', 'hospital_id', 'asc', false);
         $result['data'] = $data;
         $result['token'] = csrf_hash();
         return $this->response->setJSON($result);

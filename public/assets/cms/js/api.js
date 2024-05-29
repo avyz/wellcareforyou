@@ -308,9 +308,9 @@ function putWithImage(url, id_datatable, id_form, data_values, tableOnModal = nu
                 // const table = $('#' + id_datatable).DataTable();
                 // table.ajax.reload(null, false);
                 // $(".modal").modal("hide");
-                // $('input').removeClass('is-invalid');
-                // $('select').removeClass('is-invalid');
-                // $('textarea').removeClass('is-invalid');
+                $('input').removeClass('is-invalid');
+                $('select').removeClass('is-invalid');
+                $('textarea').removeClass('is-invalid');
                 // if (tableOnModal) {
                 //     $('#' + tableOnModal).html('');
                 //     $(".invalid-feedback").css("display", "none");
@@ -441,6 +441,7 @@ function makeTags(selector, name_attr, placeholderText = "Type to search...", ma
             skipInvalid: true,
             tagTextProp: tagText,
             enforceWhitelist: true,
+            whitelist: [{ "value": "Indonesia", "id": "id"}],
             dropdown: {
                 enabled: 1,            // show suggestion after 1 typed character
                 fuzzySearch: true,    // match only suggestions that starts with the typed characters
@@ -501,10 +502,46 @@ function makeTags(selector, name_attr, placeholderText = "Type to search...", ma
     });
 }
 
+// Make whitelist tagify
+function makeTagifyWhiteListFromAjax(api, name_attr, initObject){
+    csrfToken = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: url + api,  // Ganti 'URL_TO_YOUR_API' dengan endpoint API Anda
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+        },
+        dataType: 'json',
+        success: function (data) {
+            updateCsrfToken(data.token);
+            // Asumsikan server mengembalikan array objek dengan id dan name
+            var whitelist = data.data.map(initObject);
+            tagify_value[name_attr].settings.whitelist = whitelist;
+        },
+        error: function (error) {
+            console.error('Error fetching tags:', error);
+        }
+    });
+}
+
 // Function to get Tagify value
 function getTagifyValue(name_attr) {
     if (tagify_value[name_attr]) {
         return tagify_value[name_attr].getCleanValue(); // Use getCleanValue() to get an array of tag data
+    } else {
+        console.error('No Tagify found for:', name_attr);
+        return [];
+    }
+}
+
+// Function to add Tagify value
+function addTagifyValue(name_attr, value) {
+    if (tagify_value[name_attr]) {
+       tagify_value[name_attr].removeAllTags();
+       setTimeout(() => {
+        tagify_value[name_attr].addTags(value);
+       }, 2500);
+    //    tagify_value[name_attr].addTags(value)
     } else {
         console.error('No Tagify found for:', name_attr);
         return [];

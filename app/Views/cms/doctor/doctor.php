@@ -60,7 +60,7 @@
                             <div class="form-group my-3">
                                 <label for="doctor_gender">Gender<small class="text-danger">*</small> : </label>
                                 <select class="form-control" name="doctor_gender" id="doctor_gender" required>
-                                    <option value="">-- Select doctor gender --</option>
+                                    <option value="">-- Select gender --</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                 </select>
@@ -98,6 +98,35 @@
                             <div class="invalid-feedback" id="doctor_biography_<?= $d['lang_code'] ?>_validation"></div>
                         </div>
                     <?php endforeach; ?>
+                    <?php $doctor_worktime = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']; ?>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h4>Worktime</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <?php foreach ($doctor_worktime as $day) : ?>
+                                <h5><?= $day ?></h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="doctor_worktime_start_<?= $day ?>">Start : </label>
+                                            <input onchange="timeVal(this, 'doctor_worktime_end_<?= $day ?>')" type="time" class="form-control" name="doctor_worktime_start_<?= $day ?>" id="doctor_worktime_start_<?= $day ?>">
+                                            <div class="invalid-feedback" id="doctor_worktime_start_<?= $day ?>_validation"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="doctor_worktime_end_<?= $day ?>">End : </label>
+                                            <input type="time" class="form-control" name="doctor_worktime_end_<?= $day ?>" id="doctor_worktime_end_<?= $day ?>" readonly>
+                                            <div class="invalid-feedback" id="doctor_worktime_end_<?= $day ?>_validation"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                        </div>
+                    </div>
                     <div class="card my-3">
                         <div class="card-header">
                             <div class="card-title">
@@ -108,17 +137,17 @@
                             <div class="form-group">
                                 <label for="doctor_education">Education : </label>
                                 <input type="text" class="form-control" id="doctor_education">
-                                <div class="invalid-feedback" id="doctor_education_validation"></div>
+                                <!-- <div class="invalid-feedback" id="doctor_education_validation"></div> -->
                             </div>
                             <div class="form-group my-3">
                                 <label for="doctor_education_location">Location : </label>
                                 <input class="form-control" id="doctor_education_location" />
-                                <div class="invalid-feedback" id="doctor_education_location_validation"></div>
+                                <!-- <div class="invalid-feedback" id="doctor_education_location_validation"></div> -->
                             </div>
                             <div class="form-group">
                                 <label for="doctor_education_year">Year : </label>
                                 <input class="form-control" id="doctor_education_year" maxlength="4" />
-                                <div class="invalid-feedback" id="doctor_education_year_validation"></div>
+                                <!-- <div class="invalid-feedback" id="doctor_education_year_validation"></div> -->
                             </div>
                             <div class="d-flex justify-content-end my-3">
                                 <button type="button" class="btn btn-info" id="insert-data-doctor-education">Insert</button>
@@ -148,21 +177,21 @@
                             <div class="form-group">
                                 <label for="doctor_employment">Employment : </label>
                                 <input type="text" class="form-control" id="doctor_employment">
-                                <div class="invalid-feedback" id="doctor_employment_validation"></div>
+                                <!-- <div class="invalid-feedback" id="doctor_employment_validation"></div> -->
                             </div>
                             <div class="row my-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="doctor_employment_start_year">Start Year : </label>
                                         <input class="form-control" id="doctor_employment_start_year" maxlength="4" />
-                                        <div class="invalid-feedback" id="doctor_employment_start_year_validation"></div>
+                                        <!-- <div class="invalid-feedback" id="doctor_employment_start_year_validation"></div> -->
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="doctor_employment_end_year">End Year : </label>
                                         <input class="form-control" id="doctor_employment_end_year" maxlength="4" />
-                                        <div class="invalid-feedback" id="doctor_employment_end_year_validation"></div>
+                                        <!-- <div class="invalid-feedback" id="doctor_employment_end_year_validation"></div> -->
                                     </div>
                                 </div>
                             </div>
@@ -212,8 +241,7 @@
                 <div class="modal-body">
                     <input type="hidden" name="doctor_id" id="edit_doctor_id">
                     <div class="form-group">
-                        <label for="doctor_image">Doctor Photo<small class="text-danger">*</small> : </label>
-
+                        <label>Doctor Photo<small class="text-danger">*</small> : </label>
                         <div class="row align-items-center" id="edit-show-doctor-image">
                             <div class="col-lg-2">
                                 <img class="edit-preview-img-doctor-image mb-2 mb-lg-0" style="width:120px" alt="img">
@@ -237,7 +265,7 @@
                             <div class="form-group my-3">
                                 <label for="edit_doctor_gender">Gender<small class="text-danger">*</small> : </label>
                                 <select class="form-control" name="edit_doctor_gender" id="edit_doctor_gender" required>
-                                    <option value="">-- Select doctor gender --</option>
+                                    <option value="">-- Select gender --</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                 </select>
@@ -271,10 +299,38 @@
                     <?php foreach ($language_list as $key => $d) : ?>
                         <div class="form-group mb-3">
                             <label>Biography <?= $d['language'] ?> :</label>
-                            <textarea name="edit_doctor_biography_<?= $d['lang_code'] ?>" class="form-control" rows="3"></textarea>
+                            <textarea name="edit_doctor_biography_<?= $d['lang_code'] ?>" id="edit_doctor_biography_<?= $d['lang_code'] ?>" class="form-control" rows="3"></textarea>
                             <div class="invalid-feedback" id="edit_doctor_biography_<?= $d['lang_code'] ?>_validation"></div>
                         </div>
                     <?php endforeach; ?>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h4>Worktime</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <?php foreach ($doctor_worktime as $day) : ?>
+                                <h5><?= $day ?></h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="edit_doctor_worktime_start_<?= $day ?>">Start : </label>
+                                            <input onchange="timeVal(this, 'edit_doctor_worktime_end_<?= $day ?>')" type="time" class="form-control" name="edit_doctor_worktime_start_<?= $day ?>" id="edit_doctor_worktime_start_<?= $day ?>">
+                                            <div class="invalid-feedback" id="edit_doctor_worktime_start_<?= $day ?>_validation"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="edit_doctor_worktime_end_<?= $day ?>">End : </label>
+                                            <input type="time" class="form-control" name="edit_doctor_worktime_end_<?= $day ?>" id="edit_doctor_worktime_end_<?= $day ?>" readonly>
+                                            <div class="invalid-feedback" id="edit_doctor_worktime_end_<?= $day ?>_validation"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                        </div>
+                    </div>
                     <div class="card my-3">
                         <div class="card-header">
                             <div class="card-title">
@@ -285,17 +341,17 @@
                             <div class="form-group">
                                 <label for="edit_doctor_education">Education : </label>
                                 <input type="text" class="form-control" id="edit_doctor_education">
-                                <div class="invalid-feedback" id="edit_doctor_education_validation"></div>
+                                <!-- <div class="invalid-feedback" id="edit_doctor_education_validation"></div> -->
                             </div>
                             <div class="form-group my-3">
                                 <label for="edit_doctor_education_location">Location : </label>
                                 <input class="form-control" id="edit_doctor_education_location" />
-                                <div class="invalid-feedback" id="edit_doctor_education_location_validation"></div>
+                                <!-- <div class="invalid-feedback" id="edit_doctor_education_location_validation"></div> -->
                             </div>
                             <div class="form-group">
                                 <label for="edit_doctor_education_year">Year : </label>
                                 <input class="form-control" id="edit_doctor_education_year" maxlength="4" />
-                                <div class="invalid-feedback" id="edit_doctor_education_year_validation"></div>
+                                <!-- <div class="invalid-feedback" id="edit_doctor_education_year_validation"></div> -->
                             </div>
                             <div class="d-flex justify-content-end my-3">
                                 <button type="button" class="btn btn-info" id="edit-insert-data-doctor-education">Insert</button>
@@ -325,21 +381,21 @@
                             <div class="form-group">
                                 <label for="edit_doctor_employment">Employment : </label>
                                 <input type="text" class="form-control" id="edit_doctor_employment">
-                                <div class="invalid-feedback" id="edit_doctor_employment_validation"></div>
+                                <!-- <div class="invalid-feedback" id="edit_doctor_employment_validation"></div> -->
                             </div>
                             <div class="row my-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="edit_doctor_employment_start_year">Start Year : </label>
                                         <input class="form-control" id="edit_doctor_employment_start_year" maxlength="4" />
-                                        <div class="invalid-feedback" id="edit_doctor_employment_start_year_validation"></div>
+                                        <!-- <div class="invalid-feedback" id="edit_doctor_employment_start_year_validation"></div> -->
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="edit_doctor_employment_end_year">End Year : </label>
                                         <input class="form-control" id="edit_doctor_employment_end_year" maxlength="4" />
-                                        <div class="invalid-feedback" id="edit_doctor_employment_end_year_validation"></div>
+                                        <!-- <div class="invalid-feedback" id="edit_doctor_employment_end_year_validation"></div> -->
                                     </div>
                                 </div>
                             </div>

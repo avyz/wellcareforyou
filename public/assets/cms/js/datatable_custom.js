@@ -1371,25 +1371,21 @@ const doctor_ui_table = $('#doctors-ui-table').DataTable({
             modelName: "dataDoctorComplete",
             methodName: "doctorModel",
             column: ['number',
-                'lang_code',
                 'doctor_name',
-                'doctor_email',
                 'doctor_phone',
-                'doctor_specialist_name',
-                'doctor_hospital_name',
+                'doctor_language',
+                'doctor_specialist',
+                'doctor_hospital',
                 'doctor_address',
-                'doctor_map_location',
                 'created_at'],
             header: [
                 'No',
-                'Lang Code',
                 'Doctor Name',
-                'Email',
                 'Phone',
+                'Lang Code',
                 'Specialist',
                 'Hospital',
                 'Address',
-                'Map Location',
                 'Created Date'
             ]
         }
@@ -1408,7 +1404,10 @@ const doctor_ui_table = $('#doctors-ui-table').DataTable({
         },
         {
             "data": "doctor_image",
-            "orderable": false
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return '<img src="' + url + '/assets/website/images/doctor/' + row.doctor_image + '" alt="' + row.doctor_name + '" class="img-thumbnail" style="width: 120px;">';
+            }
 
         },
         {

@@ -89,6 +89,8 @@ class Doctor extends BaseController
 
         $language_list = $this->menuManagementModel::languageList();
 
+        $day = $this->dayArray();
+
         $rules = [
             'doctor_name' => [
                 'label' => 'Doctor Name',
@@ -233,6 +235,25 @@ class Doctor extends BaseController
             ];
         }
 
+        foreach ($day as $d) {
+            $rules['doctor_worktime_start_' . $d] = [
+                'label' => 'Worktime Start ' . $d,
+                'rules' => 'trim',
+                'errors' => [
+                    // 'required' => 'The Worktime ' . $d . ' is required',
+                    'trim' => 'Character has space in first or end letter',
+                ]
+            ];
+            $rules['doctor_worktime_end_' . $d] = [
+                'label' => 'Worktime End ' . $d,
+                'rules' => 'trim',
+                'errors' => [
+                    // 'required' => 'The Worktime ' . $d . ' is required',
+                    'trim' => 'Character has space in first or end letter',
+                ]
+            ];
+        }
+
         $session = null;
         $validation = null;
 
@@ -263,6 +284,7 @@ class Doctor extends BaseController
                         'uuid' => $this->helperModel::generateUuid(),
                         'doctor_uuid' => $data_doctor_insert['uuid'],
                         'doctor_biography' => $doctor_biography,
+                        'lang_code' => $d['lang_code'],
                         'created_at' => $this->dateTime(),
                         'updated_at' => $this->dateTime()
                     ];
@@ -301,6 +323,35 @@ class Doctor extends BaseController
                     'updated_at' => $this->dateTime()
                 ];
                 $this->helperModel::insertData($data_doctor_specialist, false, 'doctor_specialist_list_table');
+            }
+
+            foreach ($day as $d) {
+                $doctor_worktime_start = $this->request->getVar('doctor_worktime_start_' . $d);
+                $doctor_worktime_end = $this->request->getVar('doctor_worktime_end_' . $d);
+                if ($doctor_worktime_start && $doctor_worktime_end) {
+                    $data_doctor_worktime = [
+                        'uuid' => $this->helperModel::generateUuid(),
+                        'doctor_uuid' => $data_doctor_insert['uuid'],
+                        'worktime_day' => $d,
+                        'worktime_start_time' => $doctor_worktime_start,
+                        'worktime_end_time' => $doctor_worktime_end,
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime(),
+                        'is_closed' => 0
+                    ];
+                } else {
+                    $data_doctor_worktime = [
+                        'uuid' => $this->helperModel::generateUuid(),
+                        'doctor_uuid' => $data_doctor_insert['uuid'],
+                        'worktime_day' => $d,
+                        'worktime_start_time' => '00:00',
+                        'worktime_end_time' => '00:00',
+                        'created_at' => $this->dateTime(),
+                        'updated_at' => $this->dateTime(),
+                        'is_closed' => 1
+                    ];
+                }
+                $this->helperModel::insertData($data_doctor_worktime, false, 'doctor_worktime_table');
             }
 
             if (!empty($doctor_education)) {
@@ -348,9 +399,11 @@ class Doctor extends BaseController
 
     public function editDoctor()
     {
+        $type = $this->request->getVar('type');
+        $doctor_id = $this->request->getVar('doctor_id');
         $edit_doctor_name = $this->request->getVar('edit_doctor_name');
-        $edit_doctor_image = $this->request->getFile('edit_doctor_image');
-        $edit_doctor_image_name = url_title(str_replace('.', '_', $edit_doctor_name), '_', true) . '.' . $edit_doctor_image->getClientExtension();
+        $edit_doctor_image_new = $this->request->getFile('edit_doctor_image_new');
+        $edit_doctor_image = $this->request->getVar('edit_doctor_image');
         $edit_doctor_gender = $this->request->getVar('edit_doctor_gender');
         $edit_doctor_phone = $this->request->getVar('edit_doctor_phone');
         $edit_doctor_address = $this->request->getVar('edit_doctor_address');
@@ -362,164 +415,576 @@ class Doctor extends BaseController
         // End
 
         // Education Var
+        $action_type_education = $this->request->getVar('action_type_education');
+        $doctor_education_id = $this->request->getVar('doctor_education_id');
         $edit_doctor_education = $this->request->getVar('edit_doctor_education');
         $edit_doctor_education_location = $this->request->getVar('edit_doctor_education_location');
         $edit_doctor_education_year = $this->request->getVar('edit_doctor_education_year');
         // End
 
         // Employment Var
+        $action_type_employment = $this->request->getVar('action_type_employment');
+        $doctor_employment_id = $this->request->getVar('doctor_employment_id');
         $edit_doctor_employment = $this->request->getVar('edit_doctor_employment');
         $edit_doctor_employment_year = $this->request->getVar('edit_doctor_employment_year');
         // End
 
         $language_list = $this->menuManagementModel::languageList();
 
-        $rules = [
-            'doctor_name' => [
-                'label' => 'Doctor Name',
-                'rules' => 'trim|required|is_unique[doctor_table.doctor_name]|min_length[4]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]',
-                'errors' => [
-                    'required' => 'The Doctor Name is required',
-                    'regex_match' => 'Character alphabet only and no space in first or end letter',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ],
-            'doctor_image' => [
-                'label' => 'Doctor Photo',
-                'rules' => 'trim|max_size[doctor_image,1024]|mime_in[doctor_image,image/jpg,image/jpeg,image/png, image/webp]|is_image[doctor_image]',
-                'errors' => [
-                    'uploaded' => 'No file on Doctor Photo',
-                    'max_size' => 'Image must less than 1mb',
-                    'is_image' => 'Image not valid',
-                    'mime_in' => 'Your file must be *.png, *.jpeg, *.jpg, *.webp'
-                ]
-            ],
-            'doctor_gender' => [
-                'label' => 'Doctor Gender',
-                'rules' => 'trim|required',
-                'errors' => [
-                    'required' => 'The Doctor Gender is required',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ],
-            'doctor_phone' => [
-                'label' => 'Phone',
-                'rules' => 'trim|required|regex_match[/^[0-9]+$/]',
-                'errors' => [
-                    'required' => 'The Phone is required',
-                    'regex_match' => 'Character number only',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ],
-            'doctor_address' => [
-                'label' => 'Address',
-                'rules' => 'trim|required|min_length[3]|regex_match[^[^\']*$]',
-                'errors' => [
-                    'required' => 'The Address is required',
-                    'min_length' => 'The Address must have at least 3 characters',
-                    'regex_match' => 'No single quotes allowed',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ],
-            'check_doctor_language' => [
-                'label' => 'Language',
-                'rules' => 'trim|required',
-                'errors' => [
-                    'required' => 'The Language is required',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ],
-            'check_doctor_specialist' => [
-                'label' => 'Specialist',
-                'rules' => 'trim|required',
-                'errors' => [
-                    'required' => 'The Specialist is required',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ],
-            'check_doctor_hospital' => [
-                'label' => 'Hospital',
-                'rules' => 'trim|required',
-                'errors' => [
-                    'required' => 'The Hospital is required',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ],
-        ];
+        $day = $this->dayArray();
 
-        if (!empty($doctor_education)) {
-            $rules['doctor_education.*'] = [
-                'label' => 'Education',
-                'rules' => 'trim|required|min_length[1]',
-                'errors' => [
-                    'required' => 'The Education is required',
-                    'min_length' => 'The Address must have at least 1 characters',
-                    'trim' => 'Character has space in first or end letter',
-                ]
+        // dd($doctor_id);
+        $data_doctor = $this->doctorModel::dataDoctorById($doctor_id);
+        $data_language = $this->doctorModel::dataDoctorLanguageById($doctor_id);
+        $data_biography = $this->doctorModel::dataDoctorBiographyById($doctor_id);
+        $data_education = $this->doctorModel::dataDoctorEducationById($doctor_id);
+        $data_employment = $this->doctorModel::dataDoctorEmploymentById($doctor_id);
+        $data_hospital = $this->doctorModel::dataDoctorHospitalById($doctor_id);
+        $data_specialist = $this->doctorModel::dataDoctorSpecialistListById($doctor_id);
+        $data_worktime = $this->doctorModel::dataDoctorWorktimeById($doctor_id);
+
+        if ($type != 'view') {
+
+            if ($data_doctor['doctor_name'] == $edit_doctor_name) {
+                $unique = 'trim|required|min_length[4]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]';
+            } else {
+                $unique = 'trim|required|is_unique[doctor_table.doctor_name]|min_length[4]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]';
+            }
+
+            $rules = [
+                'edit_doctor_name' => [
+                    'label' => 'Doctor Name',
+                    'rules' => $unique,
+                    'errors' => [
+                        'required' => 'The Doctor Name is required',
+                        'regex_match' => 'Character alphabet only and no space in first or end letter',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
+                'edit_doctor_image_new' => [
+                    'label' => 'Doctor Photo',
+                    'rules' => 'trim|max_size[edit_doctor_image_new,1024]|mime_in[edit_doctor_image_new,image/jpg,image/jpeg,image/png, image/webp]|is_image[edit_doctor_image_new]',
+                    'errors' => [
+                        'uploaded' => 'No file on Doctor Photo',
+                        'max_size' => 'Image must less than 1mb',
+                        'is_image' => 'Image not valid',
+                        'mime_in' => 'Your file must be *.png, *.jpeg, *.jpg, *.webp'
+                    ]
+                ],
+                'edit_doctor_gender' => [
+                    'label' => 'Doctor Gender',
+                    'rules' => 'trim|required',
+                    'errors' => [
+                        'required' => 'The Doctor Gender is required',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
+                'edit_doctor_phone' => [
+                    'label' => 'Phone',
+                    'rules' => 'trim|required|regex_match[/^[0-9]+$/]',
+                    'errors' => [
+                        'required' => 'The Phone is required',
+                        'regex_match' => 'Character number only',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
+                'edit_doctor_address' => [
+                    'label' => 'Address',
+                    'rules' => 'trim|required|min_length[3]|regex_match[^[^\']*$]',
+                    'errors' => [
+                        'required' => 'The Address is required',
+                        'min_length' => 'The Address must have at least 3 characters',
+                        'regex_match' => 'No single quotes allowed',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
+                'check_edit_doctor_language' => [
+                    'label' => 'Language',
+                    'rules' => 'trim|required',
+                    'errors' => [
+                        'required' => 'The Language is required',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
+                'check_edit_doctor_specialist' => [
+                    'label' => 'Specialist',
+                    'rules' => 'trim|required',
+                    'errors' => [
+                        'required' => 'The Specialist is required',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
+                'check_edit_doctor_hospital' => [
+                    'label' => 'Hospital',
+                    'rules' => 'trim|required',
+                    'errors' => [
+                        'required' => 'The Hospital is required',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
             ];
-            $rules['doctor_education_location.*'] = [
-                'label' => 'Education Location',
-                'rules' => 'trim|required|min_length[1]',
-                'errors' => [
-                    'required' => 'The Education Location is required',
-                    'min_length' => 'The Address must have at least 1 characters',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ];
-            $rules['doctor_education_year.*'] = [
-                'label' => 'Education Year',
-                'rules' => 'trim|required|regex_match[/^[0-9]+$/]',
-                'errors' => [
-                    'required' => 'The Education Year is required',
-                    'regex_match' => 'Character number only',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ];
+
+            if (!empty($edit_doctor_education)) {
+                $rules['edit_doctor_education.*'] = [
+                    'label' => 'Education',
+                    'rules' => 'trim|required|min_length[1]',
+                    'errors' => [
+                        'required' => 'The Education is required',
+                        'min_length' => 'The Address must have at least 1 characters',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ];
+                $rules['edit_doctor_education_location.*'] = [
+                    'label' => 'Education Location',
+                    'rules' => 'trim|required|min_length[1]',
+                    'errors' => [
+                        'required' => 'The Education Location is required',
+                        'min_length' => 'The Address must have at least 1 characters',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ];
+                $rules['edit_doctor_education_year.*'] = [
+                    'label' => 'Education Year',
+                    'rules' => 'trim|required|regex_match[/^[0-9]+$/]',
+                    'errors' => [
+                        'required' => 'The Education Year is required',
+                        'regex_match' => 'Character number only',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ];
+            }
+
+            if (!empty($edit_doctor_employment)) {
+                $rules['edit_doctor_employment.*'] = [
+                    'label' => 'Education',
+                    'rules' => 'trim|required|min_length[1]',
+                    'errors' => [
+                        'required' => 'The Education is required',
+                        'min_length' => 'The Address must have at least 1 characters',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ];
+                $rules['edit_doctor_employment_year.*'] = [
+                    'label' => 'Year',
+                    'rules' => 'trim|required',
+                    'errors' => [
+                        'required' => 'The Year is required',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ];
+            }
+
+            foreach ($language_list as $key => $d) {
+                $rules['edit_doctor_biography_' . $d['lang_code']] = [
+                    'label' => 'Biography',
+                    'rules' => 'trim|regex_match[^[^\']*$]',
+                    'errors' => [
+                        'required' => 'The Biography is required',
+                        'regex_match' => 'No single quotes allowed',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ];
+            }
+
+            foreach ($day as $d) {
+                $rules['doctor_worktime_start_' . $d] = [
+                    'label' => 'Worktime Start ' . $d,
+                    'rules' => 'trim',
+                    'errors' => [
+                        // 'required' => 'The Worktime ' . $d . ' is required',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ];
+                $rules['doctor_worktime_end_' . $d] = [
+                    'label' => 'Worktime End ' . $d,
+                    'rules' => 'trim',
+                    'errors' => [
+                        // 'required' => 'The Worktime ' . $d . ' is required',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ];
+            }
+
+            $session = null;
+            $validation = null;
+
+            if (!$this->validate($rules)) {
+                $session = $this->sessionMessage('error', "Oops, something went wrong when create. Please check your input again");
+                $validation = validation_errors();
+                $this->generalController->logUser('Edit Doctor', 'Fail to edit because field invalid');
+            } else {
+                if (!$edit_doctor_image_new->getClientExtension()) {
+                    $edit_doctor_image_name = $edit_doctor_image;
+                } else {
+                    $edit_doctor_image_name = url_title(str_replace('.', '_', $edit_doctor_name), '_', true) . '.' . $edit_doctor_image_new->getClientExtension();
+                    // $edit_doctor_image_new->move('assets/website/images/doctor', $edit_doctor_image_name);
+                }
+
+                $data_doctor_update = [
+                    'doctor_name' => $edit_doctor_name,
+                    'doctor_image' => $edit_doctor_image_name,
+                    'doctor_gender' => $edit_doctor_gender,
+                    'doctor_phone' => $edit_doctor_phone,
+                    'doctor_address' => $edit_doctor_address,
+                    'updated_at' => $this->dateTime()
+                ];
+
+                $where = [
+                    'uuid' => $doctor_id,
+                ];
+
+                if ($edit_doctor_image_new->getClientExtension()) {
+                    $this->unlinkImage('assets/website/images/doctor/' . $edit_doctor_image);
+                    $edit_doctor_image_new->move('assets/website/images/doctor', $edit_doctor_image_name);
+                }
+
+                $this->helperModel::updateData($where, $data_doctor_update, 'doctor_table');
+
+                foreach ($language_list as $key => $d) {
+                    $edit_doctor_biography = $this->request->getVar('edit_doctor_biography_' . $d['lang_code']);
+                    $data_biography_by_lang_code = $this->doctorModel::dataDoctorBiographyByIdAndLangCode($doctor_id, $d['lang_code']);
+
+                    if ($data_biography_by_lang_code) {
+                        if ($edit_doctor_biography) {
+                            $data_doctor_biography_update = [
+                                'doctor_biography' => $edit_doctor_biography,
+                                'updated_at' => $this->dateTime()
+                            ];
+
+                            $where = [
+                                'uuid' => $data_biography_by_lang_code['uuid'],
+                            ];
+                            $this->helperModel::updateData($where, $data_doctor_biography_update, 'doctor_biography_list_table');
+                        } else {
+                            $where = 'uuid';
+                            $table = 'doctor_biography_list_table';
+                            $hard_delete = true;
+
+                            $data = [];
+
+                            $this->helperModel::deleteData($where, $data_biography_by_lang_code['uuid'], $data, $table, $hard_delete);
+                        }
+                    } else {
+                        if ($edit_doctor_biography) {
+                            $data_doctor_biography_insert = [
+                                'uuid' => $this->helperModel::generateUuid(),
+                                'doctor_uuid' => $doctor_id,
+                                'doctor_biography' => $edit_doctor_biography,
+                                'lang_code' => $d['lang_code'],
+                                'created_at' => $this->dateTime(),
+                                'updated_at' => $this->dateTime()
+                            ];
+                            $this->helperModel::insertData($data_doctor_biography_insert, false, 'doctor_biography_list_table');
+                        }
+                    }
+                }
+
+                foreach ($data_language as $key => $dl) {
+                    if (in_array($dl['lang_code'], $edit_doctor_language)) {
+                        $update_data_doctor_language = [
+                            'updated_at' => $this->dateTime()
+                        ];
+                        $where = [
+                            'uuid' => $dl['uuid']
+                        ];
+
+                        $this->helperModel::updateData($where, $update_data_doctor_language, 'doctor_language_list_table');
+                    } else {
+                        if ($dl['uuid']) {
+                            $where = 'uuid';
+                            $table = 'doctor_language_list_table';
+                            $hard_delete = true;
+
+                            $data = [];
+
+                            $this->helperModel::deleteData($where, $dl['uuid'], $data, $table, $hard_delete);
+                        }
+                    }
+                }
+                foreach ($edit_doctor_language as $key => $dl) {
+                    $data_language_by_id = $this->doctorModel::dataDoctorLanguageByIdAndLangCode($doctor_id, $dl);
+                    if (!$data_language_by_id) {
+                        $data_doctor_language = [
+                            'uuid' => $this->helperModel::generateUuid(),
+                            'doctor_uuid' => $doctor_id,
+                            'lang_code' => $dl,
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+                        $this->helperModel::insertData($data_doctor_language, false, 'doctor_language_list_table');
+                    }
+                }
+
+                foreach ($data_hospital as $key => $dh) {
+                    if (in_array($dh['hospital_uuid'], $edit_doctor_hospital)) {
+                        $update_data_doctor_hospital = [
+                            'updated_at' => $this->dateTime()
+                        ];
+                        $where = [
+                            'uuid' => $dh['uuid']
+                        ];
+
+                        $this->helperModel::updateData($where, $update_data_doctor_hospital, 'doctor_hospital_table');
+                    } else {
+                        if ($dh['uuid']) {
+                            $where = 'uuid';
+                            $table = 'doctor_hospital_table';
+                            $hard_delete = true;
+
+                            $data = [];
+
+                            $this->helperModel::deleteData($where, $dh['uuid'], $data, $table, $hard_delete);
+                        }
+                    }
+                }
+                foreach ($edit_doctor_hospital as $key => $dh) {
+                    $data_hospital_by_id = $this->doctorModel::dataDoctorHospitalByIdAndHospitalId($doctor_id, $dh);
+                    if (!$data_hospital_by_id) {
+                        $data_doctor_hospital = [
+                            'uuid' => $this->helperModel::generateUuid(),
+                            'doctor_uuid' => $doctor_id,
+                            'hospital_uuid' => $dh,
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+                        $this->helperModel::insertData($data_doctor_hospital, false, 'doctor_hospital_table');
+                    }
+                }
+
+                foreach ($data_specialist as $key => $ds) {
+                    if (in_array($ds['doctor_specialist_uuid'], $edit_doctor_specialist)) {
+                        $update_data_doctor_specialist = [
+                            'updated_at' => $this->dateTime()
+                        ];
+                        $where = [
+                            'uuid' => $ds['uuid']
+                        ];
+
+                        $this->helperModel::updateData($where, $update_data_doctor_specialist, 'doctor_specialist_list_table');
+                    } else {
+                        if ($ds['uuid']) {
+                            $where = 'uuid';
+                            $table = 'doctor_specialist_list_table';
+                            $hard_delete = true;
+
+                            $data = [];
+
+                            $this->helperModel::deleteData($where, $ds['uuid'], $data, $table, $hard_delete);
+                        }
+                    }
+                }
+
+                foreach ($edit_doctor_specialist as $key => $ds) {
+                    $data_specialist_by_id = $this->doctorModel::dataDoctorSpecialistByIdAndSpecialistId($doctor_id, $ds);
+                    if (!$data_specialist_by_id) {
+                        $data_doctor_specialist = [
+                            'uuid' => $this->helperModel::generateUuid(),
+                            'doctor_uuid' => $doctor_id,
+                            'doctor_specialist_uuid' => $ds,
+                            'created_at' => $this->dateTime(),
+                            'updated_at' => $this->dateTime()
+                        ];
+                        $this->helperModel::insertData($data_doctor_specialist, false, 'doctor_specialist_list_table');
+                    }
+                }
+
+                // dd($data_worktime);
+
+                if ($data_worktime) {
+                    foreach ($data_worktime as $dw) {
+                        $edit_doctor_worktime_start = $this->request->getVar('edit_doctor_worktime_start_' . $dw['worktime_day']);
+                        $edit_doctor_worktime_end = $this->request->getVar('edit_doctor_worktime_end_' . $dw['worktime_day']);
+                        if ($edit_doctor_worktime_start && $edit_doctor_worktime_end) {
+                            $update_doctor_worktime = [
+                                'worktime_start_time' => $edit_doctor_worktime_start,
+                                'worktime_end_time' => $edit_doctor_worktime_end,
+                                'updated_at' => $this->dateTime(),
+                                'is_closed' => 0
+                            ];
+                        } else {
+                            $update_doctor_worktime = [
+                                'worktime_start_time' => '00:00',
+                                'worktime_end_time' => '00:00',
+                                'updated_at' => $this->dateTime(),
+                                'is_closed' => 1
+                            ];
+                        }
+
+                        $where = [
+                            'uuid' => $dw['uuid'],
+                        ];
+
+                        $this->helperModel::updateData($where, $update_doctor_worktime, 'doctor_worktime_table');
+                    }
+                } else {
+                    foreach ($day as $d) {
+                        $edit_doctor_worktime_start = $this->request->getVar('edit_doctor_worktime_start_' . $d);
+                        $edit_doctor_worktime_end = $this->request->getVar('edit_doctor_worktime_end_' . $d);
+                        if ($edit_doctor_worktime_start && $edit_doctor_worktime_end) {
+                            $data_doctor_worktime = [
+                                'uuid' => $this->helperModel::generateUuid(),
+                                'doctor_uuid' => $doctor_id,
+                                'worktime_day' => $d,
+                                'worktime_start_time' => $edit_doctor_worktime_start,
+                                'worktime_end_time' => $edit_doctor_worktime_end,
+                                'created_at' => $this->dateTime(),
+                                'updated_at' => $this->dateTime(),
+                                'is_closed' => 0
+                            ];
+                        } else {
+                            $data_doctor_worktime = [
+                                'uuid' => $this->helperModel::generateUuid(),
+                                'doctor_uuid' => $doctor_id,
+                                'worktime_day' => $d,
+                                'worktime_start_time' => '00:00',
+                                'worktime_end_time' => '00:00',
+                                'created_at' => $this->dateTime(),
+                                'updated_at' => $this->dateTime(),
+                                'is_closed' => 1
+                            ];
+                        }
+                        $this->helperModel::insertData($data_doctor_worktime, false, 'doctor_worktime_table');
+                    }
+                }
+
+                if (is_array($action_type_education)) {
+                    // $data_branchs = $this->hospitalModel::dataHospitalBranch($hospital_id);
+                    foreach ($action_type_education as $key => $value_arr) {
+                        if ($value_arr == 'edit_value') {
+                            foreach ($data_education as $key => $value_menu) {
+                                if (is_array($doctor_education_id) && in_array($value_menu['uuid'], $doctor_education_id)) {
+                                    $data_update = [
+                                        'updated_at' => $this->dateTime(),
+                                    ];
+
+                                    $where = [
+                                        'uuid' => $value_menu['uuid'],
+                                    ];
+                                    $this->helperModel::updateData($where, $data_update, 'doctor_education_table');
+                                } else {
+                                    $where = 'uuid';
+                                    $table = 'doctor_education_table';
+                                    $hard_delete = true;
+
+                                    $data = [];
+
+                                    $this->helperModel::deleteData($where, $value_menu['uuid'], $data, $table, $hard_delete);
+                                }
+                            }
+                        }
+                        $is_exist = 0;
+                        if ($value_arr == 'add_value') {
+                            if (empty($doctor_education_id[$key])) {
+                                $data_education_by_id = $this->doctorModel::dataDoctorEducationByIdAndEducation($doctor_id, $edit_doctor_education[$key]);
+                                if ($data_education_by_id) {
+                                    $is_exist = $key;
+                                    $validation = ['edit_doctor_education.' . $key => 'Education already exist'];
+                                    $session = $this->sessionMessage('error', 'Education already exist');
+                                    $this->generalController->logUser('Create Education', 'Education already exist');
+                                }
+                            }
+                            if ($is_exist == 0) {
+                                if (!empty($edit_doctor_education)) {
+                                    if (empty($doctor_education_id[$key])) {
+                                        $data_education_insert = [
+                                            'uuid' => $this->helperModel->generateUuid(),
+                                            'doctor_uuid' => $doctor_id,
+                                            'doctor_education' => $edit_doctor_education[$key],
+                                            'doctor_education_location' => $edit_doctor_education_location[$key],
+                                            'doctor_education_year' => $edit_doctor_education_year[$key],
+                                            'created_at' => $this->dateTime(),
+                                            'updated_at' => $this->dateTime(),
+                                        ];
+                                        $this->helperModel->insertData($data_education_insert, false, 'doctor_education_table');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (is_array($action_type_employment)) {
+                    foreach ($action_type_employment as $key => $value_arr) {
+                        if ($value_arr == 'edit_value') {
+                            foreach ($data_employment as $key => $value_menu) {
+                                if (is_array($doctor_employment_id) && in_array($value_menu['uuid'], $doctor_employment_id)) {
+                                    $data_update = [
+                                        'updated_at' => $this->dateTime(),
+                                    ];
+
+                                    $where = [
+                                        'uuid' => $value_menu['uuid'],
+                                    ];
+                                    $this->helperModel::updateData($where, $data_update, 'doctor_employment_table');
+                                } else {
+                                    $where = 'uuid';
+                                    $table = 'doctor_employment_table';
+                                    $hard_delete = true;
+
+                                    $data = [];
+
+                                    $this->helperModel::deleteData($where, $value_menu['uuid'], $data, $table, $hard_delete);
+                                }
+                            }
+                            $session = $this->sessionMessage('success', 'Doctor has been updated');
+                            $validation = null;
+                            $this->generalController->logUser('Edit Doctor', 'Doctor has been updated');
+                        }
+                        $is_exist = 0;
+                        if ($value_arr == 'add_value') {
+                            if (empty($doctor_employment_id[$key])) {
+                                $data_employment_by_id = $this->doctorModel::dataDoctorEmploymentByIdAndEmployment($doctor_id, $edit_doctor_employment[$key]);
+                                if ($data_employment_by_id) {
+                                    $is_exist = $key;
+                                    $validation = ['edit_doctor_employment.' . $key => 'Employment already exist'];
+                                    $session = $this->sessionMessage('error', 'Employment already exist');
+                                    $this->generalController->logUser('Create Employment', 'Employment already exist');
+                                }
+                            }
+                            if ($is_exist == 0) {
+                                if (!empty($edit_doctor_employment)) {
+                                    if (empty($doctor_employment_id[$key])) {
+                                        $data_employment_insert = [
+                                            'uuid' => $this->helperModel->generateUuid(),
+                                            'doctor_uuid' => $doctor_id,
+                                            'doctor_employment' => $edit_doctor_employment[$key],
+                                            'doctor_employment_year' => $edit_doctor_employment_year[$key],
+                                            'created_at' => $this->dateTime(),
+                                            'updated_at' => $this->dateTime(),
+                                        ];
+                                        $this->helperModel->insertData($data_employment_insert, false, 'doctor_employment_table');
+                                        $session = $this->sessionMessage('success', 'Doctor has been updated');
+                                        $validation = null;
+                                        $this->generalController->logUser('Edit Doctor', 'Doctor has been updated');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $session = $this->sessionMessage('success', 'Doctor has been updated');
+                    $validation = null;
+                    $this->generalController->logUser('Edit Doctor', 'Doctor has been updated');
+                }
+            }
+
+            $token = csrf_hash();
+
+            $result['notification'] = $session;
+            $result['validation'] = $validation;
+            $result['token'] = $token;
         }
 
-        if (!empty($doctor_employment)) {
-            $rules['doctor_employment.*'] = [
-                'label' => 'Education',
-                'rules' => 'trim|required|min_length[1]',
-                'errors' => [
-                    'required' => 'The Education is required',
-                    'min_length' => 'The Address must have at least 1 characters',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ];
-            $rules['doctor_employment_year.*'] = [
-                'label' => 'Year',
-                'rules' => 'trim|required',
-                'errors' => [
-                    'required' => 'The Year is required',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ];
-            // $rules['doctor_employment_end_year.*'] = [
-            //     'label' => 'End Year',
-            //     'rules' => 'trim|required|regex_match[/^[0-9]+$/]',
-            //     'errors' => [
-            //         'required' => 'The End Year is required',
-            //         'regex_match' => 'Character number only',
-            //         'trim' => 'Character has space in first or end letter',
-            //     ]
-            // ];
-        }
+        $result['data_doctor'] = $data_doctor;
+        $result['data_language'] = $data_language;
+        $result['data_biography'] = $data_biography;
+        $result['data_education'] = $data_education;
+        $result['data_employment'] = $data_employment;
+        $result['data_hospital'] = $data_hospital;
+        $result['data_specialist'] = $data_specialist;
+        $result['data_worktime'] = $data_worktime;
 
-        foreach ($language_list as $key => $d) {
-            $rules['doctor_biography_' . $d['lang_code']] = [
-                'label' => 'Biography',
-                'rules' => 'trim|regex_match[^[^\']*$]',
-                'errors' => [
-                    'required' => 'The Biography is required',
-                    'regex_match' => 'No single quotes allowed',
-                    'trim' => 'Character has space in first or end letter',
-                ]
-            ];
-        }
-
-        $session = null;
-        $validation = null;
+        return $this->response->setJSON($result);
     }
 
     // Doctor Specialist
@@ -560,8 +1025,16 @@ class Doctor extends BaseController
         $search = $this->request->getVar('search');
         $data = null;
         if ($search) {
-            $data = $data = $this->doctorModel::dataDoctorSpecialist($search, 'doctor_specialist_id', 'asc', false, 'en');
+            $data = $this->doctorModel::dataDoctorSpecialist($search, 'doctor_specialist_id', 'asc', false, 'en');
         }
+        $result['data'] = $data;
+        $result['token'] = csrf_hash();
+        return $this->response->setJSON($result);
+    }
+
+    public function getDataDoctorSpecialistForTags()
+    {
+        $data = $this->doctorModel::dataDoctorSpecialist('', 'doctor_specialist_id', 'asc', false, 'en');
         $result['data'] = $data;
         $result['token'] = csrf_hash();
         return $this->response->setJSON($result);

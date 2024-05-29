@@ -313,4 +313,11 @@ abstract class BaseController extends Controller
 
         return $data;
     }
+
+    public function dayArray()
+    {
+        $day = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        return $day;
+    }
 }

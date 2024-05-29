@@ -537,9 +537,9 @@ $(document).on('click', '#editHospital', function () {
             }
             );
             $("#edit-show-branch-hospital").html(html);
+            $("#edit-show-hospital-image img").attr('src', url + '/assets/website/images/hospital/' + hospital_image);
             $("#edit_hospital_image").val(hospital_image);
             $("#edit_hospital_id").val(hospital_id);
-            $("#edit-show-hospital-image img").attr('src', url + '/assets/website/images/hospital/' + hospital_image);
             // $("#edit-show-hospital-image img").attr('src', url + '/assets/website/images/hospital/' + hospital_image).html("<b>" + hospital_image + "</b>");
             // $("#edit-show-hospital-image").text(hospital_image);
             $("#edit_hospital_name").val(hospital_name);

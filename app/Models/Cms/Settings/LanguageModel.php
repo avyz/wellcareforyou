@@ -13,7 +13,8 @@ class LanguageModel extends Model
         $db = $instance->db;
 
         if ($fullData == true) {
-            $query = "SELECT @no:=@no+1 AS number, `language`,
+            if ($filter) {
+                $query = "SELECT @no:=@no+1 AS number, `language`,
             `lang_code`,
             lang_icon,
             is_active,
@@ -22,8 +23,20 @@ class LanguageModel extends Model
             created_at,
             lang_id FROM lang_table, (SELECT @no:= 0) AS no 
             WHERE `language` LIKE '%$filter%' ORDER BY $column $order";
+            } else {
+                $query = "SELECT @no:=@no+1 AS number, `language`,
+            `lang_code`,
+            lang_icon,
+            is_active,
+            is_lang_default,
+            uuid,
+            created_at,
+            lang_id FROM lang_table, (SELECT @no:= 0) AS no
+            ORDER BY $column $order";
+            }
         } else {
-            $query = "SELECT @no:=@no+1 AS number, `language`,
+            if ($filter) {
+                $query = "SELECT @no:=@no+1 AS number, `language`,
             `lang_code`,
             lang_icon,
             is_active,
@@ -32,6 +45,17 @@ class LanguageModel extends Model
             created_at,
             lang_id FROM lang_table, (SELECT @no:= 0) AS no 
             WHERE is_active = 1 AND `language` LIKE '%$filter%' ORDER BY $column $order";
+            } else {
+                $query = "SELECT @no:=@no+1 AS number, `language`,
+                `lang_code`,
+                lang_icon,
+                is_active,
+                is_lang_default,
+                uuid,
+                created_at,
+                lang_id FROM lang_table, (SELECT @no:= 0) AS no 
+                WHERE is_active = 1 ORDER BY $column $order";
+            }
         }
 
         $result = $db->query($query)->getResultArray();

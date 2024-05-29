@@ -11,7 +11,8 @@ class HospitalModel extends Model
         $instance = new static();
         $db = $instance->db;
 
-        $query = "SELECT @no:=@no+1 AS number, T0.`hospital_id`,
+        if ($filter) {
+            $query = "SELECT @no:=@no+1 AS number, T0.`hospital_id`,
             T0.`uuid`,
             T0.hospital_image,
             T0.hospital_name,
@@ -32,6 +33,29 @@ class HospitalModel extends Model
             LEFT JOIN hospital_location_table T2 ON T2.uuid = T1.hospital_location_uuid
             LEFT JOIN lang_table T3 ON T2.lang_uuid = T3.uuid
             WHERE T0.is_deleted = 0 AND T1.is_center = 1 AND T0.`hospital_name` LIKE '%$filter%' ORDER BY $column $order";
+        } else {
+            $query = "SELECT @no:=@no+1 AS number, T0.`hospital_id`,
+            T0.`uuid`,
+            T0.hospital_image,
+            T0.hospital_name,
+            T0.hospital_code,
+            T0.created_at,
+            T1.hospital_location_uuid,
+            T1.hospital_address,
+            T1.hospital_phone,
+            T1.hospital_map_location,
+            T1.is_center,
+            T2.hospital_location_name,
+            T2.hospital_location_code,
+            T3.uuid AS hospital_country_uuid,
+            T3.lang_code,
+            T3.language AS hospital_country
+            FROM (SELECT @no:= 0) AS no, hospital_table T0
+            LEFT JOIN hospital_address_table T1 ON T1.hospital_uuid = T0.uuid
+            LEFT JOIN hospital_location_table T2 ON T2.uuid = T1.hospital_location_uuid
+            LEFT JOIN lang_table T3 ON T2.lang_uuid = T3.uuid
+            WHERE T0.is_deleted = 0 AND T1.is_center = 1 ORDER BY $column $order";
+        }
 
         $result = $db->query($query)->getResultArray();
 

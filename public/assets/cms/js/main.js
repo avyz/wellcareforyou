@@ -70,6 +70,25 @@ function dateVal(e, date_end) {
     }
 }
 
+function timeVal(e, time_end) {
+    var time_start = $(e).val();
+    if (time_start != "") {
+        $("#" + time_end).val("").attr('min', time_start).attr('readonly', false).attr('required', true);
+
+        // Tambahkan 8 jam ke waktu start untuk mendapatkan waktu max
+        var startTime = new Date('1970-01-01T' + time_start + 'Z');
+        startTime.setHours(startTime.getHours() + 8);
+
+        // // Format waktu menjadi HH:MM
+        // var maxTimeString = startTime.toISOString().split('T')[1].substring(0, 5);
+
+        // // Set atribut max ke input time_end
+        // $("#" + time_end).attr('max', maxTimeString);
+    } else {
+        $("#" + time_end).val("").attr('min', "").attr('max', "").attr('readonly', true).removeAttr('required');
+    }
+}
+
 function toggleClick(e, target_after, target_before) {
     $(e).toggleClass('expand');
 

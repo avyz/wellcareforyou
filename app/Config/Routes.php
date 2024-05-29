@@ -186,6 +186,7 @@ $routes->delete('/user-management/user-management/(:segment)/(:segment)/(:any)',
 // Language
 $routes->get('/setting/data-language', 'Cms\Settings\Language::dataLanguage');
 $routes->get('/setting/search-language', 'Cms\Settings\Language::searchDataLanguage');
+$routes->get('/setting/data-language-for-tags', 'Cms\Settings\Language::getDataLanguageForTags');
 $routes->post('/setting/create-language', 'Cms\Settings\Language::createLanguage');
 $routes->get('/setting/edit-language', 'Cms\Settings\Language::editLanguage');
 $routes->post('/setting/edit-language', 'Cms\Settings\Language::editLanguage');
@@ -223,6 +224,7 @@ $routes->get('/hospital/edit-hospital-location', 'Cms\Hospital\Hospital::editHos
 $routes->post('/hospital/edit-hospital-location', 'Cms\Hospital\Hospital::editHospitalLocation');
 $routes->get('/hospital/data-hospital', 'Cms\Hospital\Hospital::dataHospital');
 $routes->get('/hospital/search-hospital', 'Cms\Hospital\Hospital::searchDataHospital');
+$routes->get('/hospital/data-hospital-tags', 'Cms\Hospital\Hospital::getDataHospitalForTags');
 $routes->get('/hospital/data-hospital-branch', 'Cms\Hospital\Hospital::dataHospitalBranch');
 $routes->post('/hospital/create-hospital', 'Cms\Hospital\Hospital::createHospital');
 $routes->get('/hospital/create-hospital', 'Cms\Hospital\Hospital::createHospital');
@@ -253,6 +255,7 @@ $routes->get('/doctor/edit-doctor', 'Cms\Doctor\Doctor::editDoctor');
 $routes->post('/doctor/edit-doctor', 'Cms\Doctor\Doctor::editDoctor');
 $routes->get('/doctor/data-doctor-specialist', 'Cms\Doctor\Doctor::dataDoctorSpecialist');
 $routes->get('/doctor/search-specialist', 'Cms\Doctor\Doctor::searchDataDoctorSpecialist');
+$routes->get('/doctor/data-specialist-tags', 'Cms\Doctor\Doctor::getDataDoctorSpecialistForTags');
 $routes->post('/doctor/create-doctor-specialist', 'Cms\Doctor\Doctor::createDoctorSpecialist');
 $routes->get('/doctor/create-doctor-specialist', 'Cms\Doctor\Doctor::createDoctorSpecialist');
 $routes->get('/doctor/edit-doctor-specialist', 'Cms\Doctor\Doctor::editDoctorSpecialist');

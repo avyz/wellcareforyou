@@ -40,11 +40,11 @@
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="customDropdown">
 
-                                <a class="dropdown-item d-flex align-items-center" data-value="Settings" data-icon="<i class=&quot;ri-tools-fill&quot;></i>" href="javascript:void(0);">
+                                <a href="/setting/misc" class="dropdown-item d-flex align-items-center" data-value="Settings" data-icon="<i class=&quot;ri-tools-fill&quot;></i>" href="javascript:void(0);">
                                     <i class="ri-tools-fill"></i> Settings Website
                                 </a>
 
-                                <a class="dropdown-item d-flex align-items-center" data-value="Edit" data-icon="<i class=&quot;ri-edit-circle-line&quot;></i>" href="javascript:void(0);">
+                                <a href="/pages/pages" class="dropdown-item d-flex align-items-center" data-value="Edit" data-icon="<i class=&quot;ri-edit-circle-line&quot;></i>" href="javascript:void(0);">
                                     <i class="ri-edit-circle-line"></i> Edit Website
                                 </a>
                             </div>
