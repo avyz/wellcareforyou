@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/assets/website/css/select2.min.css">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/assets/website/images/favicon.png">
+    <link rel="icon" type="image/png" href="/assets/website/images/favicon.ico">
     <!-- Title -->
     <title><?= lang('Errors.pageNotFound') ?></title>
 </head>

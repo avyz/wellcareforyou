@@ -72,6 +72,11 @@ abstract class BaseController extends Controller
     // Section CMS
     protected $dirSectionCms = "bodyCms";
 
+    // Layout CONTENT
+    protected $dirLayoutContent = "layout/template_cms_content";
+    // Section CONTENT
+    protected $dirSectionContent = "bodyContent";
+
     // OAuth
     protected $providers = [
         'google' => [

@@ -140,20 +140,40 @@ class HelperModel extends Model
             }
 
             // Perbarui urutan menu jika urutan baru lebih besar dari urutan yang lama
-            if ($urutanBaru > $menu[$column_name]) {
-                $db->table($table_name)
-                    ->where($column_name . ' >', $menu[$column_name])
-                    ->where($column_name . ' <=', $urutanBaru)
-                    ->set($column_name, $column_name . ' - 1', false)
-                    ->update();
-            }
-            // Perbarui urutan menu jika urutan baru lebih kecil dari urutan yang lama
-            elseif ($urutanBaru < $menu[$column_name]) {
-                $db->table($table_name)
-                    ->where($column_name . ' >=', $urutanBaru)
-                    ->where($column_name . ' <', $menu[$column_name])
-                    ->set($column_name, $column_name . ' + 1', false)
-                    ->update();
+            if ($lang_code) {
+                if ($urutanBaru > $menu[$column_name]) {
+                    $db->table($table_name)
+                        ->where($column_name . ' >', $menu[$column_name])
+                        ->where($column_name . ' <=', $urutanBaru)
+                        ->where('lang_code', $lang_code)
+                        ->set($column_name, $column_name . ' - 1', false)
+                        ->update();
+                }
+                // Perbarui urutan menu jika urutan baru lebih kecil dari urutan yang lama
+                elseif ($urutanBaru < $menu[$column_name]) {
+                    $db->table($table_name)
+                        ->where($column_name . ' >=', $urutanBaru)
+                        ->where($column_name . ' <', $menu[$column_name])
+                        ->where('lang_code', $lang_code)
+                        ->set($column_name, $column_name . ' + 1', false)
+                        ->update();
+                }
+            } else {
+                if ($urutanBaru > $menu[$column_name]) {
+                    $db->table($table_name)
+                        ->where($column_name . ' >', $menu[$column_name])
+                        ->where($column_name . ' <=', $urutanBaru)
+                        ->set($column_name, $column_name . ' - 1', false)
+                        ->update();
+                }
+                // Perbarui urutan menu jika urutan baru lebih kecil dari urutan yang lama
+                elseif ($urutanBaru < $menu[$column_name]) {
+                    $db->table($table_name)
+                        ->where($column_name . ' >=', $urutanBaru)
+                        ->where($column_name . ' <', $menu[$column_name])
+                        ->set($column_name, $column_name . ' + 1', false)
+                        ->update();
+                }
             }
         }
         // // Ambil semua menu yang memiliki urutan lebih besar atau sama dengan urutan baru

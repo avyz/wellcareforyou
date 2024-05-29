@@ -7,6 +7,19 @@
     <?= $this->include('layout/admin/tab_header'); ?>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="menu-tab-pane" role="tabpane0" aria-labelledby="menu-tab" tabindex="0">
+            <!-- <div class="row mt-3 justify-content-end">
+                <div class="col-6 col-md-4">
+                    <div class="d-flex align-items-center">
+                        <label class="mb-0 me-2 d-none d-md-inline">Language: </label>
+                        <select class="form-control" name="menu_lang_code" onchange="changeLang(this, url + '/menu-management/data-menu', menu_ui_table, 'menuCreateModal', false)" required>
+                            <option value="" selected disabled>-- Choose your menu language --</option>
+                            <?php foreach ($language_list as $d) : ?>
+                                <option value="<?= $d['lang_code'] ?>" <?php if ($d['lang_code'] == $language_row['lang_code']) : ?>selected<?php endif; ?>><?= $d['language'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+            </div> -->
             <div class="mt-3">
                 <table id="menu-ui-table" class="table dt-table-hover" style="width:100%">
                     <thead>
@@ -23,6 +36,19 @@
             </div>
         </div>
         <div class="tab-pane fade" id="submenu-tab-pane" role="tabpanel" aria-labelledby="submenu-tab" tabindex="1">
+            <!-- <div class="row mt-3 justify-content-end">
+                <div class="col-6 col-md-4">
+                    <div class="d-flex align-items-center">
+                        <label class="mb-0 me-2 d-none d-md-inline">Language: </label>
+                        <select class="form-control" name="menu_lang_code" onchange="changeLang(this, url + '/menu-management/submenu', submenu_ui_table, 'submenuCreateModal', false)" required>
+                            <option value="" selected disabled>-- Choose your menu language --</option>
+                            <?php foreach ($language_list as $d) : ?>
+                                <option value="<?= $d['lang_code'] ?>" <?php if ($d['lang_code'] == $language_row['lang_code']) : ?>selected<?php endif; ?>><?= $d['language'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+            </div> -->
             <div class="mt-3">
                 <table id="submenu-ui-table" class="table dt-table-hover" style="width:100%">
                     <thead>
@@ -39,6 +65,19 @@
             </div>
         </div>
         <div class="tab-pane fade" id="tab-tab-pane" role="tabpane2" aria-labelledby="tab-tab" tabindex="2">
+            <!-- <div class="row mt-3 justify-content-end">
+                <div class="col-6 col-md-4">
+                    <div class="d-flex align-items-center">
+                        <label class="mb-0 me-2 d-none d-md-inline">Language: </label>
+                        <select class="form-control" name="menu_lang_code" onchange="changeLang(this, url + '/menu-management/tabmenu', tab_ui_table, 'tabCreateModal', false)" required>
+                            <option value="" selected disabled>-- Choose your menu language --</option>
+                            <?php foreach ($language_list as $d) : ?>
+                                <option value="<?= $d['lang_code'] ?>" <?php if ($d['lang_code'] == $language_row['lang_code']) : ?>selected<?php endif; ?>><?= $d['language'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+            </div> -->
             <div class="mt-3">
                 <table id="tab-ui-table" class="table dt-table-hover" style="width:100%">
                     <thead>
@@ -71,8 +110,10 @@
             </div>
             <form action="javascript:void(0)" method="post" id="adminCreate">
                 <div class="modal-body">
-                    <?= $this->include('layout/admin/language_form'); ?>
-                    <hr>
+                    <div class="d-none">
+                        <?= $this->include('layout/admin/language_form'); ?>
+                        <hr>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -123,8 +164,10 @@
                 <div class="modal-body">
                     <input type="hidden" name="_method" value="PUT">
                     <input type="hidden" name="menu_id" id="edit_menu_id">
-                    <?= $this->include('layout/admin/language_form'); ?>
-                    <hr>
+                    <div class="d-none">
+                        <?= $this->include('layout/admin/language_form'); ?>
+                        <hr>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -174,8 +217,10 @@
             </div>
             <form action="javascript:void(0)" method="post" id="adminSubmenuCreate">
                 <div class="modal-body">
-                    <?= $this->include('layout/admin/language_form'); ?>
-                    <hr>
+                    <div class="d-none">
+                        <?= $this->include('layout/admin/language_form'); ?>
+                        <hr>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -220,8 +265,10 @@
                 <div class="modal-body">
                     <input type="hidden" name="_method" value="PUT">
                     <input type="hidden" name="menu_children_id" id="edit_menu_children_id">
-                    <?= $this->include('layout/admin/language_form'); ?>
-                    <hr>
+                    <div class="d-none">
+                        <?= $this->include('layout/admin/language_form'); ?>
+                        <hr>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -265,8 +312,10 @@
             </div>
             <form action="javascript:void(0)" method="post" id="adminTabmenuCreate">
                 <div class="modal-body">
-                    <?= $this->include('layout/admin/language_form'); ?>
-                    <hr>
+                    <div class="d-none">
+                        <?= $this->include('layout/admin/language_form'); ?>
+                        <hr>
+                    </div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -317,8 +366,10 @@
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="tab_menu_id" id="edit_tab_menu_id">
                 <div class="modal-body">
-                    <?= $this->include('layout/admin/language_form'); ?>
-                    <hr>
+                    <div class="d-none">
+                        <?= $this->include('layout/admin/language_form'); ?>
+                        <hr>
+                    </div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">

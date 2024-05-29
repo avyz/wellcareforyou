@@ -156,7 +156,7 @@ class MenuManagement extends BaseController
         $validation = null;
 
         // Ambil data terakhir dari database
-        $lastNumber = $this->menuManagementModel->getLastNumberPages();
+        $lastNumber = $this->menuManagementModel->getLastNumberPages($lang_code);
 
         // Jika tidak ada data di database, atur angka awal sebagai 0
         if (!$lastNumber) {
@@ -327,7 +327,7 @@ class MenuManagement extends BaseController
             $validation = null;
 
             // Ambil data terakhir dari database
-            $lastNumber = $this->menuManagementModel->getLastNumberPages();
+            $lastNumber = $this->menuManagementModel->getLastNumberPages($lang_code);
 
             // Jika tidak ada data di database, atur angka awal sebagai 0
             if (!$lastNumber) {
@@ -677,7 +677,6 @@ class MenuManagement extends BaseController
         $data_menu = $this->menuManagementModel::dataMenuByMenuId($edit_submenu_menu_id);
 
         if ($type != 'view') {
-
             $requestData = $this->request->getJSON();
             $menu_children_id = $requestData->menu_children_id;
             $edit_submenu_menu_id = $requestData->edit_submenu_menu_id;

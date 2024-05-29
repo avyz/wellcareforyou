@@ -20,6 +20,7 @@ $(document).ready(function () {
                 $('#edit_menu_name').val(data.menu_name);
                 $('#edit_menu_icon').val(data.menu_icon);
                 $('#edit_menu_number').val(data.menu_number);
+                $('select[name=lang_code]').val(data.lang_code);
             },
             error: function (xhr, status, error) {
                 // Handle any errors that occur during the AJAX request
@@ -93,6 +94,7 @@ $(document).ready(function () {
         });
         put(url + '/menu-management/admin/edit', 'menu-ui-table', 'adminEdit', formData);
     });
+
     // User
     $(document).on('submit', '#userEdit', function (e) {
         e.preventDefault();
@@ -104,9 +106,7 @@ $(document).ready(function () {
         });
         put(url + '/menu-management/user/edit', 'menuuser-ui-table', 'userEdit', formData);
     });
-
     // End MENU
-
 
     // SUBMENU
     // Onchange lang_code
@@ -119,6 +119,7 @@ $(document).ready(function () {
         };
         getDropdown(data, '/menu-management/data-menu-management', 'menu_name', 'uuid', 'menu_id', 'adminSubmenuCreate', 'menu', 'add');
     });
+
     // User
     $(document).on('change', '#userSubmenuCreate select[name="lang_code"]', function () {
         let lang_code = $(this).val();
@@ -208,7 +209,8 @@ $(document).ready(function () {
             success: function (data) {
                 data = data.data;
                 // Access the data returned from the AJAX request here
-                let lang_code = $("#adminSubmenuEdit select[name='lang_code']").val();
+                // console.log(data)
+                let lang_code = data.lang_code;
                 const data_values = {
                     menu_id: data.menu_uuid,
                     lang_code: lang_code,
@@ -219,6 +221,8 @@ $(document).ready(function () {
                 $('#edit_menu_children_id').val(data.menu_children_uuid);
                 $('#edit_submenu_menu_id').val(data.menu_uuid);
                 $('#edit_menu_children_name').val(data.menu_children_name);
+                $("#adminSubmenuEdit select[name='lang_code']").val(data.lang_code);
+
             },
             error: function (xhr, status, error) {
                 // Handle any errors that occur during the AJAX request
@@ -450,7 +454,7 @@ $(document).ready(function () {
                 // console.log(data);
                 data = data.data;
                 // Access the data returned from the AJAX request here
-                let lang_code = $("#adminTabmenuEdit select[name='lang_code']").val();
+                let lang_code = data.lang_code;
                 const data_values_menu = {
                     menu_id: data.menu_uuid,
                     lang_code: lang_code,
@@ -462,8 +466,9 @@ $(document).ready(function () {
                 $('#edit_tabmenu_menu_id').val(data.menu_uuid);
                 $('#edit_tabmenu_children_id').val(data.menu_children_uuid);
                 $('#edit_menu_tab_name').val(data.menu_tab_name);
+                $("#adminTabmenuEdit select[name='lang_code']").val(data.lang_code);
 
-                if (lang_code == data.lang_code) {
+                if ($("#adminTabmenuEdit select[name='lang_code']").val() == data.lang_code) {
                     const data_values_submenu = {
                         menu_id: data.menu_uuid,
                         menu_children_id: data.menu_children_uuid,

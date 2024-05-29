@@ -441,11 +441,20 @@ class UserManagement extends BaseController
         $role_uuid = $this->request->getVar('role_uuid');
         $role = $this->request->getVar('role');
         $lang_code = $this->request->getVar('lang_code');
+        $type = $this->request->getVar('type');
         $fullData = false;
         $arr_menu_management = [];
-        $data = $this->menuManagementModel::dataMenu('', 'menu_id', 'asc', $fullData, $lang_code);
+        $new_lang_code = $this->request->getVar('new_lang_code');
+
+        if ($type == 'edit') {
+            $language = $new_lang_code;
+        } else {
+            $language = $lang_code;
+        }
+
+        $data = $this->menuManagementModel::dataMenu('', 'menu_id', 'asc', $fullData, $language);
         foreach ($data as $index => $value) {
-            $menu_management = $this->userManagementModel::dataMenuManagementRoleByUuid($lang_code, $role_uuid, $value['uuid']);
+            $menu_management = $this->userManagementModel::dataMenuManagementRoleByUuid($language, $role_uuid, $value['uuid']);
             $have_children = !empty($this->menuManagementModel::dataResultSubmenuByMenuUuid('', 'menu_children_id', 'asc', $fullData, $value['uuid']));
             if ($menu_management) {
                 $arr_menu_management = [
@@ -478,11 +487,18 @@ class UserManagement extends BaseController
         $result['role_uuid'] = $role_uuid;
         $result['role'] = $role;
         $result['lang_code'] = $lang_code;
+        $result['new_lang_code'] = $new_lang_code;
+        $result['type'] = $type;
         $result['menus'] = $data;
 
         $passData = $this->dataArrayForMethodLinks($title, $result);
 
-        return  $this->generalController->links($passData);
+        if (!$type) {
+            return  $this->generalController->links($passData);
+        } else {
+            // return $this->response->setJSON($passData);
+            return $this->checkIdle(view('cms/user-management/management/roles/menu_data', $passData));
+        }
     }
 
     // Create Menu Management Role
@@ -491,6 +507,7 @@ class UserManagement extends BaseController
         $role_uuid = $this->request->getVar('role_uuid');
         $role = $this->request->getVar('role');
         $lang_code = $this->request->getVar('lang_code');
+        $type = $this->request->getVar('type');
         $view = $this->request->getVar('view');
         $create = $this->request->getVar('create');
         $edit = $this->request->getVar('edit');
@@ -587,7 +604,11 @@ class UserManagement extends BaseController
             $session = $this->sessionMessage('success', 'Menu management has been update');
             session()->setFlashdata("notif", $session);
             $this->generalController->logUser('Update menu', 'Menu management has been update');
-            return redirect()->to('/user-management/management/roles/menu?role=' . $role . '&role_uuid=' . $role_uuid . '&lang_code=' . $lang_code);
+            if (!$type) {
+                return redirect()->to('/user-management/management/roles/menu?role=' . $role . '&role_uuid=' . $role_uuid . '&lang_code=' . $lang_code);
+            } else {
+                return redirect()->back();
+            }
         } else {
             $session = $this->sessionMessage('error', 'Menu management failed to update');
             session()->setFlashdata("notif", $session);
@@ -602,12 +623,15 @@ class UserManagement extends BaseController
         $title = 'Submenu';
         $role = $this->request->getVar('role');
         $role_uuid = $this->request->getVar('role_uuid');
+        $type = $this->request->getVar('type');
         $lang_code = $this->request->getVar('lang_code');
         $menu_uuid = $this->request->getVar('menu_uuid');
         $menu_name = $this->request->getVar('menu_name');
         $menu_management_uuid = $this->request->getVar('menu_management_uuid');
         $fullData = false;
         $arr_menu_management = [];
+        $new_lang_code = $this->request->getVar('new_lang_code');
+
         $data = $this->menuManagementModel::dataResultSubmenuByMenuUuid('', 'menu_children_id', 'asc', $fullData, $menu_uuid);
         foreach ($data as $index => $value) {
             $menu_management = $this->userManagementModel::dataMenuManagementRoleChildByMenuManagementUuid($value['menu_children_uuid'], $menu_management_uuid);
@@ -645,6 +669,8 @@ class UserManagement extends BaseController
         $result['role'] = $role;
         $result['role_uuid'] = $role_uuid;
         $result['lang_code'] = $lang_code;
+        $result['new_lang_code'] = $new_lang_code;
+        $result['type'] = $type;
         $result['menu_uuid'] = $menu_uuid;
         $result['menu_name'] = $menu_name;
         $result['menu_management_uuid'] = $menu_management_uuid;
@@ -652,7 +678,12 @@ class UserManagement extends BaseController
 
         $passData = $this->dataArrayForMethodLinks($title, $result);
 
-        return  $this->generalController->links($passData);
+        if (!$type) {
+            return  $this->generalController->links($passData);
+        } else {
+            // return $this->response->setJSON($passData);
+            return $this->checkIdle(view('cms/user-management/management/roles/submenu_data', $passData));
+        }
     }
 
     // Create Menu Management Role Child
@@ -662,6 +693,7 @@ class UserManagement extends BaseController
         $role_uuid = $this->request->getVar('role_uuid');
         $lang_code = $this->request->getVar('lang_code');
         $menu_uuid = $this->request->getVar('menu_uuid');
+        $type = $this->request->getVar('type');
         $menu_name = $this->request->getVar('menu_name');
         $menu_management_uuid = $this->request->getVar('menu_management_uuid');
         $view = $this->request->getVar('view');
@@ -758,7 +790,12 @@ class UserManagement extends BaseController
             $session = $this->sessionMessage('success', 'Submenu management has been update');
             session()->setFlashdata("notif", $session);
             $this->generalController->logUser('Update submenu', 'Submenu management has been update');
-            return redirect()->to('/user-management/management/roles/submenu?role_uuid=' . $role_uuid . '&menu_uuid=' . $menu_uuid . '&menu_management_uuid=' . $menu_management_uuid . '&lang_code=' . $lang_code . '&role=' . $role . '&menu_name=' . $menu_name);
+            // return redirect()->to('/user-management/management/roles/submenu?role_uuid=' . $role_uuid . '&menu_uuid=' . $menu_uuid . '&menu_management_uuid=' . $menu_management_uuid . '&lang_code=' . $lang_code . '&role=' . $role . '&menu_name=' . $menu_name);
+            if (!$type) {
+                return redirect()->to('/user-management/management/roles/submenu?role_uuid=' . $role_uuid . '&menu_uuid=' . $menu_uuid . '&menu_management_uuid=' . $menu_management_uuid . '&lang_code=' . $lang_code . '&role=' . $role . '&menu_name=' . $menu_name);
+            } else {
+                return redirect()->back();
+            }
         } else {
             $session = $this->sessionMessage('error', 'Submenu management fail to update, something went wrong');
             session()->setFlashdata("notif", $session);

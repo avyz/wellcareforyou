@@ -39,6 +39,7 @@
         <div class="text-lg-end text-center mt-3">
             <input type="hidden" name="navbar_management_group_uuid" value="<?= $data['navbar_management_group_uuid'] ?>">
             <input type="hidden" name="lang_code" value="<?= $data['lang_code'] ?>">
+            <input type="hidden" name="lang_view" value="<?= $data['lang_view'] ?>">
             <button type="button" class="btn btn-light-dark w-auto d-block d-lg-inline" onclick="window.close()">Cancel</button>
             <button id="submit-data" type="submit" class="btn btn-primary mt-2 mt-lg-0 w-auto">Save</button>
         </div>

@@ -9,41 +9,143 @@ class MenuManagementModel extends Model
 
     // Data Menu
     // Admin
-    public static function dataMenu($filter = '', $column = '', $order = '', $fullData = null, $lang_code  = '')
+    public static function dataMenu($filter = '', $column = '', $order = '', $fullData = null, $lang_code = '')
     {
         $instance = new static();
         $db = $instance->db;
 
         if ($fullData == true) {
-            $query = "
-            SELECT
-            @no:=@no+1 AS number,
-            menu_id,
-            menu_slug,
-            menu_name,
-            menu_icon,
-            menu_url,
-            created_at,
-            updated_at,
-            is_active,
-            uuid,
-            menu_number
-            FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = '$lang_code' AND (menu_name LIKE '%$filter%' OR menu_slug LIKE '%$filter%') ORDER BY $column $order;";
+            if ($lang_code) {
+                if ($filter) {
+                    $query = "
+                    SELECT
+                    @no:=@no+1 AS number,
+                    menu_id,
+                    menu_slug,
+                    menu_name,
+                    menu_icon,
+                    menu_url,
+                    created_at,
+                    updated_at,
+                    is_active,
+                    uuid,
+                    menu_number
+                    FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = '$lang_code' AND (menu_name LIKE '%$filter%' OR menu_slug LIKE '%$filter%') ORDER BY $column $order;";
+                } else {
+                    $query = "
+                    SELECT
+                    @no:=@no+1 AS number,
+                    menu_id,
+                    menu_slug,
+                    menu_name,
+                    menu_icon,
+                    menu_url,
+                    created_at,
+                    updated_at,
+                    is_active,
+                    uuid,
+                    menu_number
+                    FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = '$lang_code' ORDER BY $column $order;";
+                }
+            } else {
+                if ($filter) {
+                    $query = "
+                    SELECT
+                    @no:=@no+1 AS number,
+                    menu_id,
+                    menu_slug,
+                    menu_name,
+                    menu_icon,
+                    menu_url,
+                    created_at,
+                    updated_at,
+                    is_active,
+                    uuid,
+                    menu_number
+                    FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = 'en' AND menu_name LIKE '%$filter%' OR menu_slug LIKE '%$filter%' ORDER BY $column $order;";
+                } else {
+                    $query = "
+                    SELECT
+                    @no:=@no+1 AS number,
+                    menu_id,
+                    menu_slug,
+                    menu_name,
+                    menu_icon,
+                    menu_url,
+                    created_at,
+                    updated_at,
+                    is_active,
+                    uuid,
+                    menu_number
+                    FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = 'en' ORDER BY $column $order;";
+                }
+            }
         } else {
-            $query = "
-            SELECT
-            @no:=@no+1 AS number,
-            menu_id,
-            menu_slug,
-            menu_name,
-            menu_icon,
-            menu_url,
-            created_at,
-            updated_at,
-            is_active,
-            uuid,
-            menu_number
-            FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = '$lang_code' AND is_active = 1 AND (menu_name LIKE '%$filter%' OR menu_slug LIKE '%$filter%') ORDER BY $column $order;";
+            if ($lang_code) {
+                if ($filter) {
+                    $query = "
+                    SELECT
+                    @no:=@no+1 AS number,
+                    menu_id,
+                    menu_slug,
+                    menu_name,
+                    menu_icon,
+                    menu_url,
+                    created_at,
+                    updated_at,
+                    is_active,
+                    uuid,
+                    menu_number
+                    FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = '$lang_code' AND is_active = 1 AND (menu_name LIKE '%$filter%' OR menu_slug LIKE '%$filter%') ORDER BY $column $order;";
+                } else {
+                    $query = "
+                    SELECT
+                    @no:=@no+1 AS number,
+                    menu_id,
+                    menu_slug,
+                    menu_name,
+                    menu_icon,
+                    menu_url,
+                    created_at,
+                    updated_at,
+                    is_active,
+                    uuid,
+                    menu_number
+                    FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = '$lang_code' AND is_active = 1 ORDER BY $column $order;";
+                }
+            } else {
+                if ($filter) {
+                    $query = "
+                    SELECT
+                    @no:=@no+1 AS number,
+                    menu_id,
+                    menu_slug,
+                    menu_name,
+                    menu_icon,
+                    menu_url,
+                    created_at,
+                    updated_at,
+                    is_active,
+                    uuid,
+                    menu_number
+                    FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = 'en' AND is_active = 1 AND (menu_name LIKE '%$filter%' OR menu_slug LIKE '%$filter%') ORDER BY $column $order;";
+                } else {
+                    $query = "
+                    SELECT
+                    @no:=@no+1 AS number,
+                    menu_id,
+                    menu_slug,
+                    menu_name,
+                    menu_icon,
+                    menu_url,
+                    created_at,
+                    updated_at,
+                    is_active,
+                    uuid,
+                    menu_number
+                    FROM `menu_table`, (SELECT @no:= 0) AS no WHERE lang_code = 'en' AND is_active = 1 ORDER BY $column $order;";
+                }
+            }
         }
 
         $result = $db->query($query)->getResultArray();
@@ -228,35 +330,145 @@ class MenuManagementModel extends Model
         $db = $instance->db;
 
         if ($fullData == true) {
-            $query = "SELECT 
-        @no:=@no+1 AS number,
-        T0.menu_children_id,
-        T0.menu_id,
-        T0.menu_children_name,
-        T0.menu_children_icon,
-        T0.menu_children_url,
-        T0.created_at,
-        T0.is_active,
-        T0.uuid as 'menu_children_uuid',
-        T1.menu_name,
-        T1.uuid as 'menu_uuid'
-        FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
-        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = '$lang_code' AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+            if ($lang_code) {
+                if ($filter) {
+                    $query = "SELECT 
+                    @no:=@no+1 AS number,
+                    T0.menu_children_id,
+                    T0.menu_id,
+                    T0.menu_children_name,
+                    T0.menu_children_icon,
+                    T0.menu_children_url,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_children_uuid',
+                    T1.menu_name,
+                    T1.lang_code,
+                    T1.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+                    LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = '$lang_code' AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+                } else {
+                    $query = "SELECT 
+                    @no:=@no+1 AS number,
+                    T0.menu_children_id,
+                    T0.menu_id,
+                    T0.menu_children_name,
+                    T0.menu_children_icon,
+                    T0.menu_children_url,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_children_uuid',
+                    T1.menu_name,
+                    T1.lang_code,
+                    T1.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+                    LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = '$lang_code' ORDER BY $column $order;";
+                }
+            } else {
+                if ($filter) {
+                    $query = "SELECT 
+                    @no:=@no+1 AS number,
+                    T0.menu_children_id,
+                    T0.menu_id,
+                    T0.menu_children_name,
+                    T0.menu_children_icon,
+                    T0.menu_children_url,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_children_uuid',
+                    T1.menu_name,
+                    T1.lang_code,
+                    T1.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+                    LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = 'en' AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+                } else {
+                    $query = "SELECT 
+                    @no:=@no+1 AS number,
+                    T0.menu_children_id,
+                    T0.menu_id,
+                    T0.menu_children_name,
+                    T0.menu_children_icon,
+                    T0.menu_children_url,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_children_uuid',
+                    T1.menu_name,
+                    T1.lang_code,
+                    T1.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+                    LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = 'en' ORDER BY $column $order;";
+                }
+            }
         } else {
-            $query = "SELECT 
-        @no:=@no+1 AS number,
-        T0.menu_children_id,
-        T0.menu_id,
-        T0.menu_children_name,
-        T0.menu_children_icon,
-        T0.menu_children_url,
-        T0.created_at,
-        T0.is_active,
-        T0.uuid as 'menu_children_uuid',
-        T1.menu_name,
-        T1.uuid as 'menu_uuid'
-        FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
-        LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+            if ($lang_code) {
+                if ($filter) {
+                    $query = "SELECT 
+                    @no:=@no+1 AS number,
+                    T0.menu_children_id,
+                    T0.menu_id,
+                    T0.menu_children_name,
+                    T0.menu_children_icon,
+                    T0.menu_children_url,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_children_uuid',
+                    T1.menu_name,
+                    T1.lang_code,
+                    T1.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+                    LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+                } else {
+                    $query = "SELECT 
+                    @no:=@no+1 AS number,
+                    T0.menu_children_id,
+                    T0.menu_id,
+                    T0.menu_children_name,
+                    T0.menu_children_icon,
+                    T0.menu_children_url,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_children_uuid',
+                    T1.menu_name,
+                    T1.lang_code,
+                    T1.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+                    LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = '$lang_code' AND T0.is_active = 1 ORDER BY $column $order;";
+                }
+            } else {
+                if ($filter) {
+                    $query = "SELECT 
+                    @no:=@no+1 AS number,
+                    T0.menu_children_id,
+                    T0.menu_id,
+                    T0.menu_children_name,
+                    T0.menu_children_icon,
+                    T0.menu_children_url,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_children_uuid',
+                    T1.menu_name,
+                    T1.lang_code,
+                    T1.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+                    LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = 'en' AND T0.is_active = 1 AND T0.menu_children_name LIKE '%$filter%' ORDER BY $column $order;";
+                } else {
+                    $query = "SELECT 
+                    @no:=@no+1 AS number,
+                    T0.menu_children_id,
+                    T0.menu_id,
+                    T0.menu_children_name,
+                    T0.menu_children_icon,
+                    T0.menu_children_url,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_children_uuid',
+                    T1.menu_name,
+                    T1.lang_code,
+                    T1.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
+                    LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T1.lang_code = 'en' AND T0.is_active = 1 ORDER BY $column $order;";
+                }
+            }
         }
 
         $result = $db->query($query)->getResultArray();
@@ -545,6 +757,7 @@ class MenuManagementModel extends Model
         T0.is_active,
         T0.uuid as 'menu_children_uuid',
         T1.menu_name,
+        T1.lang_code,
         T1.uuid as 'menu_uuid'
         FROM (SELECT @no:= 0) AS no, `menu_children_table` T0
         LEFT JOIN menu_table T1 ON T1.menu_id = T0.menu_id WHERE T0.menu_children_id=(SELECT a.menu_children_id FROM menu_children_table a WHERE a.uuid = '$uuid') ORDER BY T0.menu_children_id;";
@@ -596,39 +809,153 @@ class MenuManagementModel extends Model
         $db = $instance->db;
 
         if ($fullData == true) {
-            $query = "SELECT
-        @no:=@no+1 AS number,
-        T0.menu_tab_id,
-        T0.menu_children_id,
-        T0.menu_tab_name,
-        T0.created_at,
-        T0.is_active,
-        T0.uuid as 'menu_tab_uuid',
-        T1.menu_children_name,
-        T1.uuid as 'menu_children_uuid',
-        T1.menu_id,
-        T2.menu_name,
-        T2.uuid as 'menu_uuid'
-        FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
-        LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
-        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = '$lang_code' AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+            if ($lang_code) {
+                if ($filter) {
+                    $query = "SELECT
+                    @no:=@no+1 AS number,
+                    T0.menu_tab_id,
+                    T0.menu_children_id,
+                    T0.menu_tab_name,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_tab_uuid',
+                    T1.menu_children_name,
+                    T1.uuid as 'menu_children_uuid',
+                    T1.menu_id,
+                    T2.menu_name,
+                    T2.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
+                    LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
+                    LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = '$lang_code' AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+                } else {
+                    $query = "SELECT
+                    @no:=@no+1 AS number,
+                    T0.menu_tab_id,
+                    T0.menu_children_id,
+                    T0.menu_tab_name,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_tab_uuid',
+                    T1.menu_children_name,
+                    T1.uuid as 'menu_children_uuid',
+                    T1.menu_id,
+                    T2.menu_name,
+                    T2.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
+                    LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
+                    LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = '$lang_code' ORDER BY $column $order;";
+                }
+            } else {
+                if ($filter) {
+                    $query = "SELECT
+                    @no:=@no+1 AS number,
+                    T0.menu_tab_id,
+                    T0.menu_children_id,
+                    T0.menu_tab_name,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_tab_uuid',
+                    T1.menu_children_name,
+                    T1.uuid as 'menu_children_uuid',
+                    T1.menu_id,
+                    T2.menu_name,
+                    T2.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
+                    LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
+                    LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = 'en' AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+                } else {
+                    $query = "SELECT
+                    @no:=@no+1 AS number,
+                    T0.menu_tab_id,
+                    T0.menu_children_id,
+                    T0.menu_tab_name,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_tab_uuid',
+                    T1.menu_children_name,
+                    T1.uuid as 'menu_children_uuid',
+                    T1.menu_id,
+                    T2.menu_name,
+                    T2.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
+                    LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
+                    LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = 'en' ORDER BY $column $order;";
+                }
+            }
         } else {
-            $query = "SELECT
-        @no:=@no+1 AS number,
-        T0.menu_tab_id,
-        T0.menu_children_id,
-        T0.menu_tab_name,
-        T0.created_at,
-        T0.is_active,
-        T0.uuid as 'menu_tab_uuid',
-        T1.menu_children_name,
-        T1.uuid as 'menu_children_uuid',
-        T1.menu_id,
-        T2.menu_name,
-        T2.uuid as 'menu_uuid'
-        FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
-        LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
-        LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+            if ($lang_code) {
+                if ($filter) {
+                    $query = "SELECT
+                    @no:=@no+1 AS number,
+                    T0.menu_tab_id,
+                    T0.menu_children_id,
+                    T0.menu_tab_name,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_tab_uuid',
+                    T1.menu_children_name,
+                    T1.uuid as 'menu_children_uuid',
+                    T1.menu_id,
+                    T2.menu_name,
+                    T2.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
+                    LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
+                    LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = '$lang_code' AND T0.is_active = 1 AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+                } else {
+                    $query = "SELECT
+                    @no:=@no+1 AS number,
+                    T0.menu_tab_id,
+                    T0.menu_children_id,
+                    T0.menu_tab_name,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_tab_uuid',
+                    T1.menu_children_name,
+                    T1.uuid as 'menu_children_uuid',
+                    T1.menu_id,
+                    T2.menu_name,
+                    T2.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
+                    LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
+                    LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = '$lang_code' AND T0.is_active = 1 ORDER BY $column $order;";
+                }
+            } else {
+                if ($filter) {
+                    $query = "SELECT
+                    @no:=@no+1 AS number,
+                    T0.menu_tab_id,
+                    T0.menu_children_id,
+                    T0.menu_tab_name,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_tab_uuid',
+                    T1.menu_children_name,
+                    T1.uuid as 'menu_children_uuid',
+                    T1.menu_id,
+                    T2.menu_name,
+                    T2.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
+                    LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
+                    LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = 'en' AND T0.menu_tab_name LIKE '%$filter%' ORDER BY $column $order;";
+                } else {
+                    $query = "SELECT
+                    @no:=@no+1 AS number,
+                    T0.menu_tab_id,
+                    T0.menu_children_id,
+                    T0.menu_tab_name,
+                    T0.created_at,
+                    T0.is_active,
+                    T0.uuid as 'menu_tab_uuid',
+                    T1.menu_children_name,
+                    T1.uuid as 'menu_children_uuid',
+                    T1.menu_id,
+                    T2.menu_name,
+                    T2.uuid as 'menu_uuid'
+                    FROM (SELECT @no:= 0) AS no, `menu_children_tab_table` T0
+                    LEFT JOIN menu_children_table T1 ON T1.menu_children_id = T0.menu_children_id
+                    LEFT JOIN menu_table T2 ON T2.menu_id = T1.menu_id WHERE T2.lang_code = 'en' AND T0.is_active = 1 ORDER BY $column $order;";
+                }
+            }
         }
         $result = $db->query($query)->getResultArray();
 
@@ -950,7 +1277,7 @@ class MenuManagementModel extends Model
         ON B.menu_management_uuid = A.uuid
         LEFT JOIN menu_children_table T1
         ON T1.uuid = B.menu_children_uuid
-        WHERE T0.is_active = 1 AND A.role_uuid = (SELECT C.uuid FROM role_table C WHERE C.role_id = '$role_id') AND A.view = 1 AND T0.lang_code = (SELECT a.lang_code FROM lang_table a WHERE a.is_lang_default = 1) GROUP BY T1.menu_children_id ORDER BY T0.menu_number ASC;";
+        WHERE T0.is_active = 1 AND A.role_uuid = (SELECT C.uuid FROM role_table C WHERE C.role_id = '$role_id') AND A.view = 1 AND T0.lang_code = 'en' GROUP BY T1.menu_children_id ORDER BY T0.menu_number ASC;";
         }
 
         $result = $db->query($query)->getResultArray();
@@ -1078,7 +1405,6 @@ class MenuManagementModel extends Model
         $db = $instance->db;
 
         if ($lang_code) {
-
             $query = "SELECT 
             A.menu_management_id,
             A.role_uuid,
@@ -1100,31 +1426,30 @@ class MenuManagementModel extends Model
             T0.lang_code,
             A.menu_uuid,
             T0.uuid AS 'menu_uuid_parent',
-            B.menu_children_uuid,
-            T1.uuid AS 'menu_children_uuid_parent',
-            T1.menu_children_id,
-            T1.menu_id as 'menu_id_children',
-            T1.menu_children_name,
-            T1.menu_children_icon,
-            T1.menu_children_url,
-            T1.created_at as 'created_at_children_menu',
-            T1.is_active as 'is_active_children_menu',
-            B.view AS 'view_submenu',
-            B.create AS 'create_submenu',
-            B.edit AS 'edit_submenu',
-            B.delete AS 'delete_submenu',
-            B.buttons_csv AS 'buttons_csv_submenu',
-            B.buttons_excel AS 'buttons_excel_submenu',
-            B.buttons_print AS 'buttons_print_submenu',
-            B.uuid AS 'menu_management_children_uuid',
-            A.uuid AS 'menu_management_uuid'
+            IFNULL(B.menu_children_uuid, '') AS menu_children_uuid,
+            IFNULL(T1.uuid, '') AS menu_children_uuid_parent,
+            IFNULL(T1.menu_children_id, '') AS menu_children_id,
+            IFNULL(T1.menu_children_name, '') AS menu_children_name,
+            IFNULL(T1.menu_children_icon, '') AS menu_children_icon,
+            IFNULL(T1.menu_children_url, '') AS menu_children_url,
+            IFNULL(T1.created_at, '') AS created_at_children_menu,
+            IFNULL(T1.is_active, '') AS is_active_children_menu,
+            IFNULL(B.view, 0) AS view_submenu,
+            IFNULL(B.create, 0) AS create_submenu,
+            IFNULL(B.edit, 0) AS edit_submenu,
+            IFNULL(B.delete, 0) AS delete_submenu,
+            IFNULL(B.buttons_csv, 0) AS buttons_csv_submenu,
+            IFNULL(B.buttons_excel, 0) AS buttons_excel_submenu,
+            IFNULL(B.buttons_print, 0) AS buttons_print_submenu,
+            IFNULL(B.uuid, '') AS menu_management_children_uuid,
+            A.uuid AS menu_management_uuid
             FROM menu_management_table A
             LEFT JOIN menu_table T0
-            ON T0.uuid = A.menu_uuid
+                ON T0.uuid = A.menu_uuid
             LEFT JOIN menu_management_children_table B
-            ON B.menu_management_uuid = A.uuid
+                ON B.menu_management_uuid = A.uuid
             LEFT JOIN menu_children_table T1
-            ON T1.uuid = B.menu_children_uuid
+            ON T1.menu_id = T0.menu_id
             WHERE T0.is_active = 1 AND A.role_uuid = (SELECT C.uuid FROM role_table C WHERE C.role_id = '$role_id') AND A.view = 1 AND T0.menu_slug = '$slug' AND T0.lang_code = '$lang_code' GROUP BY T1.menu_children_id ORDER BY T0.menu_number ASC;";
 
             //     $query = "SELECT 
@@ -1168,32 +1493,31 @@ class MenuManagementModel extends Model
             T0.lang_code,
             A.menu_uuid,
             T0.uuid AS 'menu_uuid_parent',
-            B.menu_children_uuid,
-            T1.uuid AS 'menu_children_uuid_parent',
-            T1.menu_children_id,
-            T1.menu_id as 'menu_id_children',
-            T1.menu_children_name,
-            T1.menu_children_icon,
-            T1.menu_children_url,
-            T1.created_at as 'created_at_children_menu',
-            T1.is_active as 'is_active_children_menu',
-            B.view AS 'view_submenu',
-            B.create AS 'create_submenu',
-            B.edit AS 'edit_submenu',
-            B.delete AS 'delete_submenu',
-            B.buttons_csv AS 'buttons_csv_submenu',
-            B.buttons_excel AS 'buttons_excel_submenu',
-            B.buttons_print AS 'buttons_print_submenu',
-            B.uuid AS 'menu_management_children_uuid',
-            A.uuid AS 'menu_management_uuid'
+            IFNULL(B.menu_children_uuid, '') AS menu_children_uuid,
+            IFNULL(T1.uuid, '') AS menu_children_uuid_parent,
+            IFNULL(T1.menu_children_id, '') AS menu_children_id,
+            IFNULL(T1.menu_children_name, '') AS menu_children_name,
+            IFNULL(T1.menu_children_icon, '') AS menu_children_icon,
+            IFNULL(T1.menu_children_url, '') AS menu_children_url,
+            IFNULL(T1.created_at, '') AS created_at_children_menu,
+            IFNULL(T1.is_active, '') AS is_active_children_menu,
+            IFNULL(B.view, 0) AS view_submenu,
+            IFNULL(B.create, 0) AS create_submenu,
+            IFNULL(B.edit, 0) AS edit_submenu,
+            IFNULL(B.delete, 0) AS delete_submenu,
+            IFNULL(B.buttons_csv, 0) AS buttons_csv_submenu,
+            IFNULL(B.buttons_excel, 0) AS buttons_excel_submenu,
+            IFNULL(B.buttons_print, 0) AS buttons_print_submenu,
+            IFNULL(B.uuid, '') AS menu_management_children_uuid,
+            A.uuid AS menu_management_uuid
             FROM menu_management_table A
             LEFT JOIN menu_table T0
-            ON T0.uuid = A.menu_uuid
+                ON T0.uuid = A.menu_uuid
             LEFT JOIN menu_management_children_table B
-            ON B.menu_management_uuid = A.uuid
+                ON B.menu_management_uuid = A.uuid
             LEFT JOIN menu_children_table T1
-            ON T1.uuid = B.menu_children_uuid
-            WHERE T0.is_active = 1 AND A.role_uuid = (SELECT C.uuid FROM role_table C WHERE C.role_id = '$role_id') AND A.view = 1 AND T0.menu_slug = '$slug' AND T0.lang_code = (SELECT a.lang_code FROM lang_table a WHERE a.is_lang_default = 1) GROUP BY T1.menu_children_id ORDER BY T0.menu_number ASC;";
+            ON T1.menu_id = T0.menu_id
+            WHERE T0.is_active = 1 AND A.role_uuid = (SELECT C.uuid FROM role_table C WHERE C.role_id = '$role_id') AND A.view = 1 AND T0.menu_slug = '$slug' AND T0.lang_code = 'en' GROUP BY T1.menu_children_id ORDER BY T0.menu_number ASC;";
         }
 
         $query_lang = "SELECT 
@@ -1207,7 +1531,7 @@ class MenuManagementModel extends Model
         T0.uuid AS 'lang_uuid'
         FROM `lang_table` T0
         WHERE T0.is_active = 1 
-        AND EXISTS (SELECT a.lang_code FROM menu_table a WHERE a.lang_code = T0.lang_code GROUP BY a.lang_code) 
+        AND EXISTS (SELECT a.lang_code FROM page_navbar_table a WHERE a.lang_code = T0.lang_code GROUP BY a.lang_code) 
         ORDER BY T0.lang_id ASC;";
 
         $result = $db->query($query)->getRowArray();
@@ -1295,7 +1619,7 @@ class MenuManagementModel extends Model
         }
 
         $menu_management = array_values($menu_management); // Reset index array
-        // dd($menu_management);
+        // dd($result);
         if ($menu_management) {
             return $menu_management[0];
         }
@@ -1400,12 +1724,12 @@ class MenuManagementModel extends Model
         }
     }
 
-    public static function getLastNumberPages()
+    public static function getLastNumberPages($lang_code)
     {
         $instance = new static();
         $db = $instance->db;
 
-        $query = "SELECT COUNT(menu_number) as last_number FROM menu_table WHERE is_active = 1";
+        $query = "SELECT COUNT(menu_number) as last_number FROM menu_table WHERE is_active = 1 AND lang_code = '$lang_code'";
 
         $result = $db->query($query)->getRowArray();
 

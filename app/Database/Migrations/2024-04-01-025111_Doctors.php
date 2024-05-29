@@ -19,10 +19,10 @@ class Doctors extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'doctor_specialist_uuid' => [
-                'type' => 'VARCHAR',
-                'constraint' => 50,
-            ],
+            // 'doctor_specialist_uuid' => [
+            //     'type' => 'VARCHAR',
+            //     'constraint' => 50,
+            // ],
             'doctor_image' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
@@ -35,10 +35,10 @@ class Doctors extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 128,
             ],
-            'doctor_language' => [
-                'type' => 'VARCHAR',
-                'constraint' => 128,
-            ],
+            // 'doctor_language' => [
+            //     'type' => 'VARCHAR',
+            //     'constraint' => 128,
+            // ],
             'doctor_phone' => [
                 'type' => 'VARCHAR',
                 'constraint' => 15,
@@ -47,9 +47,9 @@ class Doctors extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 15,
             ],
-            'doctor_biography' => [
-                'type' => 'TEXT',
-            ],
+            // 'doctor_biography' => [
+            //     'type' => 'TEXT',
+            // ],
             'created_at' => [
                 'type' => 'datetime'
             ],

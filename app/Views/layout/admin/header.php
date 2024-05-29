@@ -9,18 +9,19 @@
              </li>
          </ul>
 
-         <ul class="navbar-item flex-row ms-lg-auto ms-0 action-area">
-             <li class="nav-item dropdown language-dropdown">
-                 <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="language-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                     <img src="/assets/website/images/lang/<?= $language_row['lang_icon'] ?>" class="flag-width rounded-circle" alt="flag">
-                 </a>
-                 <div class="dropdown-menu position-absolute" aria-labelledby="language-dropdown">
-                     <?php foreach ($dataMenu['language'] as $d) : ?>
-                         <a class="dropdown-item d-flex" href="/dashboard?lang=<?= $d['lang_code'] ?>"><img src="/assets/website/images/lang/<?= $d['lang_icon'] ?>" class="flag-width rounded-circle" alt="flag"> <span class="align-self-center"> <?= strtoupper($d['lang_code']) ?></span></a>
-                     <?php endforeach; ?>
-                     <!-- <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="/assets/website/images/lang/flag-icon-indonesia.png" class="flag-width rounded-circle" alt="flag"> <span class="align-self-center"> ID</span></a> -->
-                 </div>
-             </li>
+         <ul class="navbar-item flex-row ms-auto action-area">
+             <?php if (session()->get('is_master') == 0 && session()->get('is_admin') == 0) : ?>
+                 <li class="nav-item dropdown language-dropdown">
+                     <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="language-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         <img src="/assets/website/images/lang/<?= $language_row['lang_icon'] ?>" class="flag-width rounded-circle" alt="flag">
+                     </a>
+                     <div class="dropdown-menu position-absolute" aria-labelledby="language-dropdown">
+                         <?php foreach ($dataMenu['language'] as $d) : ?>
+                             <a class="dropdown-item d-flex" href="/dashboard?lang=<?= $d['lang_code'] ?>"><img src="/assets/website/images/lang/<?= $d['lang_icon'] ?>" class="flag-width rounded-circle" alt="flag"> <span class="align-self-center"> <?= strtoupper($d['lang_code']) ?></span></a>
+                         <?php endforeach; ?>
+                     </div>
+                 </li>
+             <?php endif; ?>
              <li class="nav-item dropdown user-profile-dropdown  order-lg-0 order-1">
                  <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="userProfileDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                      <div class="avatar-container">

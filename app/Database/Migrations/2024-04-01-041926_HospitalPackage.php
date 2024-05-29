@@ -23,12 +23,12 @@ class HospitalPackage extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'package_image' => [
-                'type' => 'VARCHAR',
-                'constraint' => 50,
-            ],
             'package' => [
                 'type' => 'TEXT',
+            ],
+            'package_title' => [
+                'type' => 'VARCHAR',
+                'constraint' => 128,
             ],
             'created_at' => [
                 'type' => 'datetime'
@@ -39,6 +39,10 @@ class HospitalPackage extends Migration
             'is_deleted' => [
                 'type' => 'INT',
                 'constraint' => 1,
+            ],
+            'lang_uuid' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
             ]
         ]);
         $this->forge->addKey('hospital_package_id', true);

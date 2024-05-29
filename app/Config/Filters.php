@@ -43,7 +43,7 @@ class Filters extends BaseConfig
     public array $globals = [
         'before' => [
             'honeypot',
-            'csrf',
+            'csrf' => ['except' => ['hospital/package-image/insert']],
             // 'invalidchars',
         ],
         'after' => [

@@ -185,6 +185,7 @@ $routes->delete('/user-management/user-management/(:segment)/(:segment)/(:any)',
 // Settings
 // Language
 $routes->get('/setting/data-language', 'Cms\Settings\Language::dataLanguage');
+$routes->get('/setting/search-language', 'Cms\Settings\Language::searchDataLanguage');
 $routes->post('/setting/create-language', 'Cms\Settings\Language::createLanguage');
 $routes->get('/setting/edit-language', 'Cms\Settings\Language::editLanguage');
 $routes->post('/setting/edit-language', 'Cms\Settings\Language::editLanguage');
@@ -211,6 +212,7 @@ $routes->delete('/pages/group-pages/(:segment)/(:segment)/(:any)', 'Cms\General\
 
 // MISC
 $routes->get('/setting/misc', 'Cms\Settings\Misc::viewDataMisc');
+$routes->get('/setting/misc/save-misc', 'Cms\Settings\Misc::createMisc');
 $routes->post('/setting/misc/save-misc', 'Cms\Settings\Misc::createMisc');
 // END MISC
 
@@ -220,10 +222,42 @@ $routes->post('/hospital/create-hospital-location', 'Cms\Hospital\Hospital::crea
 $routes->get('/hospital/edit-hospital-location', 'Cms\Hospital\Hospital::editHospitalLocation');
 $routes->post('/hospital/edit-hospital-location', 'Cms\Hospital\Hospital::editHospitalLocation');
 $routes->get('/hospital/data-hospital', 'Cms\Hospital\Hospital::dataHospital');
+$routes->get('/hospital/search-hospital', 'Cms\Hospital\Hospital::searchDataHospital');
+$routes->get('/hospital/data-hospital-branch', 'Cms\Hospital\Hospital::dataHospitalBranch');
 $routes->post('/hospital/create-hospital', 'Cms\Hospital\Hospital::createHospital');
+$routes->get('/hospital/create-hospital', 'Cms\Hospital\Hospital::createHospital');
+$routes->get('/hospital/edit-hospital', 'Cms\Hospital\Hospital::editHospital');
+$routes->post('/hospital/edit-hospital', 'Cms\Hospital\Hospital::editHospital');
+$routes->get('/hospital/data-packages', 'Cms\Hospital\Hospital::dataPackages');
+$routes->get('/hospital/hospital/packages', 'Cms\Hospital\Hospital::viewPackageHospital');
+$routes->get('/hospital/hospital/package/post', 'Cms\Hospital\Hospital::viewPackagePost');
+$routes->post('/hospital/hospital/package/data-post', 'Cms\Hospital\Hospital::createHospitalPackage');
+$routes->get('/hospital/hospital/package/data-post', 'Cms\Hospital\Hospital::createHospitalPackage');
+$routes->get('/hospital/hospital/package/update', 'Cms\Hospital\Hospital::viewPackagePost');
+$routes->post('/hospital/hospital/package/data-update', 'Cms\Hospital\Hospital::editHospitalPackage');
+$routes->get('/hospital/hospital/package/data-update', 'Cms\Hospital\Hospital::editHospitalPackage');
+$routes->get('/hospital/hospital/package/content', 'Cms\Hospital\Hospital::viewPackageContentEditor');
+$routes->post('/hospital/package-image/insert', 'Cms\Hospital\Hospital::uploadImageCustom');
+$routes->get('/hospital/package-image/insert', 'Cms\Hospital\Hospital::uploadImageCustom');
+$routes->delete('/hospital/hospital-package/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
+$routes->delete('/hospital/hospital-branch/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 $routes->delete('/hospital/hospital-location/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 $routes->delete('/hospital/hospital/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 // END HOSPITAL
+
+// DOCTOR
+$routes->get('/doctor/data-doctor', 'Cms\Doctor\Doctor::dataDoctor');
+$routes->post('/doctor/create-doctor', 'Cms\Doctor\Doctor::createDoctor');
+$routes->get('/doctor/create-doctor', 'Cms\Doctor\Doctor::createDoctor');
+$routes->get('/doctor/edit-doctor', 'Cms\Doctor\Doctor::editDoctor');
+$routes->post('/doctor/edit-doctor', 'Cms\Doctor\Doctor::editDoctor');
+$routes->get('/doctor/data-doctor-specialist', 'Cms\Doctor\Doctor::dataDoctorSpecialist');
+$routes->get('/doctor/search-specialist', 'Cms\Doctor\Doctor::searchDataDoctorSpecialist');
+$routes->post('/doctor/create-doctor-specialist', 'Cms\Doctor\Doctor::createDoctorSpecialist');
+$routes->get('/doctor/create-doctor-specialist', 'Cms\Doctor\Doctor::createDoctorSpecialist');
+$routes->get('/doctor/edit-doctor-specialist', 'Cms\Doctor\Doctor::editDoctorSpecialist');
+$routes->put('/doctor/edit-doctor-specialist', 'Cms\Doctor\Doctor::editDoctorSpecialist');
+$routes->delete('/doctor/doctor/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 
 // END ADMIN
 

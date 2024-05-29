@@ -31,9 +31,10 @@ class GroupPages extends BaseController
         $orderColumn = $this->request->getVar('order')[0]['column'];
         $column = $this->request->getVar('columns')[$orderColumn]['data'];
         $orderDir = $this->request->getVar('order')[0]['dir'];
+        $lang_code = $this->request->getVar('lang_code');
 
         $fullData = true;
-        $data = $this->groupPagesModel::dataGroupPages($filter, $column, $orderDir, $fullData);
+        $data = $this->groupPagesModel::dataGroupPages($filter, $column, $orderDir, $fullData, $lang_code);
 
         // Hitung jumlah total data
         $totalData = count($data);
@@ -173,9 +174,10 @@ class GroupPages extends BaseController
         $page = $this->request->getVar('page');
         $navbar_management_group_uuid = $this->request->getVar('navbar_management_group_uuid');
         $lang_code = $this->request->getVar('lang_code');
+        $lang_view = $this->request->getVar('lang_view');
         $fullData = false;
         $arr_group_list = [];
-        $data = $this->pagesModel::dataPages('', 'navbar_management_id', 'asc', $fullData, $lang_code);
+        $data = $this->pagesModel::dataPages('', 'navbar_management_id', 'asc', $fullData, $lang_view);
         foreach ($data as $index => $value) {
             $navbar_management_group_child = $this->groupPagesModel::dataGroupChildPagesByManagementGroupUuid($navbar_management_group_uuid, $value['uuid']);
             if ($navbar_management_group_child) {
@@ -195,6 +197,7 @@ class GroupPages extends BaseController
         $result['page'] = $page;
         $result['navbar_management_group_uuid'] = $navbar_management_group_uuid;
         $result['lang_code'] = $lang_code;
+        $result['lang_view'] = $lang_view;
         $result['group'] = $data;
 
         $passData = $this->dataArrayForMethodLinks($title, $result);
@@ -207,11 +210,12 @@ class GroupPages extends BaseController
         $navbar_management_group_uuid = $this->request->getVar('navbar_management_group_uuid');
         $page = $this->request->getVar('page');
         $lang_code = $this->request->getVar('lang_code');
+        $lang_view = $this->request->getVar('lang_view');
         $is_active = $this->request->getVar('is_active');
 
         $session = null;
         // $validation = null;
-        $data_pages = $this->pagesModel::dataPages('', 'navbar_management_id', 'asc', false, $lang_code);
+        $data_pages = $this->pagesModel::dataPages('', 'navbar_management_id', 'asc', false, $lang_view);
         if (is_array($data_pages)) {
             foreach ($data_pages as $key => $value_menu) {
                 if (is_array($is_active) && in_array($value_menu['uuid'], $is_active)) {
@@ -269,7 +273,7 @@ class GroupPages extends BaseController
             $session = $this->sessionMessage('success', 'Group List has been update');
             session()->setFlashdata("notif", $session);
             $this->generalController->logUser('Update group list', 'Group List has been update');
-            return redirect()->to('/pages/group-pages/page-list?navbar_management_group_uuid=' . $navbar_management_group_uuid . '&lang_code=' . $lang_code . '&page=' . $page);
+            return redirect()->to('/pages/group-pages/page-list?navbar_management_group_uuid=' . $navbar_management_group_uuid . '&lang_code=' . $lang_code . '&lang_view=' . $lang_view . '&page=' . $page);
         } else {
             $session = $this->sessionMessage('error', 'Group List failed to update');
             session()->setFlashdata("notif", $session);

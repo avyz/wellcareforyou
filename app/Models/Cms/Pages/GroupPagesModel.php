@@ -6,27 +6,87 @@ use CodeIgniter\Model;
 
 class GroupPagesModel extends Model
 {
-    public static function dataGroupPages($filter, $column, $order, $fullData)
+    public static function dataGroupPages($filter, $column, $order, $fullData, $lang_code)
     {
         $instance = new static();
         $db = $instance->db;
 
         if ($fullData == true) {
-            $query = "SELECT @no:=@no+1 AS number, `navbar_management_group_name`,
-            `lang_code`,
-            uuid,
-            is_active,
-            created_at,
-            navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
-            WHERE `navbar_management_group_name` LIKE '%$filter%' ORDER BY $column $order";
+            if ($lang_code) {
+                if ($filter) {
+                    $query = "SELECT @no:=@no+1 AS number, `navbar_management_group_name`,
+                    `lang_code`,
+                    uuid,
+                    is_active,
+                    created_at,
+                    navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
+                    WHERE lang_code = '$lang_code' AND `navbar_management_group_name` LIKE '%$filter%' ORDER BY $column $order";
+                } else {
+                    $query = "SELECT @no:=@no+1 AS number, `navbar_management_group_name`,
+                    `lang_code`,
+                    uuid,
+                    is_active,
+                    created_at,
+                    navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
+                    WHERE lang_code = '$lang_code' ORDER BY $column $order";
+                }
+            } else {
+                if ($filter) {
+                    $query = "SELECT @no:=@no+1 AS number, `navbar_management_group_name`,
+                    `lang_code`,
+                    uuid,
+                    is_active,
+                    created_at,
+                    navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
+                    WHERE lang_code = 'en' AND `navbar_management_group_name` LIKE '%$filter%' ORDER BY $column $order";
+                } else {
+                    $query = "SELECT @no:=@no+1 AS number, `navbar_management_group_name`,
+                    `lang_code`,
+                    uuid,
+                    is_active,
+                    created_at,
+                    navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
+                    WHERE lang_code = 'en' ORDER BY $column $order";
+                }
+            }
         } else {
-            $query = "SELECT @no:=@no+1 AS number, `navbar_management_group_name`,
-            `lang_code`,
-            uuid,
-            is_active,
-            created_at,
-            navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
-            WHERE is_active = 1 AND `navbar_management_group_name` LIKE '%$filter%' ORDER BY $column $order";
+            if ($lang_code) {
+                if ($filter) {
+                    $query = "SELECT @no:=@no+1 AS number, `navbar_management_group_name`,
+                    `lang_code`,
+                    uuid,
+                    is_active,
+                    created_at,
+                    navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
+                    WHERE lang_code = '$lang_code' AND is_active = 1 AND `navbar_management_group_name` LIKE '%$filter%' ORDER BY $column $order";
+                } else {
+                    $query = "SELECT @no:=@no+1 AS number, `navbar_management_group_name`,
+                    `lang_code`,
+                    uuid,
+                    is_active,
+                    created_at,
+                    navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
+                    WHERE lang_code = '$lang_code' AND is_active = 1 ORDER BY $column $order";
+                }
+            } else {
+                if ($filter) {
+                    $query = "SELECT @no:=@no+1 AS number, `navbar_management_group_name`,
+                    `lang_code`,
+                    uuid,
+                    is_active,
+                    created_at,
+                    navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
+                    WHERE lang_code = 'en' AND is_active = 1 AND `navbar_management_group_name` LIKE '%$filter%' ORDER BY $column $order";
+                } else {
+                    $query = "SELECT @no:=@no+1 AS number, `navbar_management_group_name`,
+                    `lang_code`,
+                    uuid,
+                    is_active,
+                    created_at,
+                    navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
+                    WHERE lang_code = 'en' AND is_active = 1 ORDER BY $column $order";
+                }
+            }
         }
 
         $result = $db->query($query)->getResultArray();

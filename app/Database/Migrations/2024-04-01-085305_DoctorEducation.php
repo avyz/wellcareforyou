@@ -23,7 +23,7 @@ class DoctorEducation extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'doctor_education_desc' => [
+            'doctor_education' => [
                 'type' => 'VARCHAR',
                 'constraint' => 128,
             ],

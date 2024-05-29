@@ -8,6 +8,19 @@
                 <?= session()->getFlashdata('notif') ?>
             <?php endif; ?>
             <?= $this->include('/layout/admin/buttons'); ?>
+            <div class="row justify-content-end mt-3">
+                <div class="col-md-4 col-6">
+                    <div class="d-flex align-items-center">
+                        <label class="mb-0 me-2 d-none d-md-inline">Language: </label>
+                        <select class="form-control" name="language_code" onchange="changeLang(this, url + '/pages/data-navbar', pages_ui_table, 'pagesCreateModal', false)">
+                            <option value="" selected disabled>-- Choose your menu language --</option>
+                            <?php foreach ($language_list as $d) : ?>
+                                <option value="<?= $d['lang_code'] ?>" <?php if ($d['lang_code'] == $language_row['lang_code']) : ?>selected<?php endif; ?>><?= $d['language'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table id="pages-ui-table" data-view="<?= $dataMenu['sidebar'][0]['view'] ?>" data-create="<?= $dataMenu['sidebar'][0]['create'] ?>" data-edit="<?= $dataMenu['sidebar'][0]['edit'] ?>" data-delete="<?= $dataMenu['sidebar'][0]['delete'] ?>" data-buttons_csv="<?= $dataMenu['sidebar'][0]['buttons_csv'] ?>" data-buttons_excel="<?= $dataMenu['sidebar'][0]['buttons_excel'] ?>" data-buttons_print="<?= $dataMenu['sidebar'][0]['buttons_print'] ?>" class="table dt-table-hover my-3" style="width:100%">
                     <thead>

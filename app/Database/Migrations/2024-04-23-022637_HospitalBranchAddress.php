@@ -39,6 +39,10 @@ class HospitalBranchAddress extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 128,
             ],
+            'is_center' => [
+                'type' => 'INT',
+                'constraint' => 1,
+            ],
             'created_at' => [
                 'type' => 'datetime'
             ],
@@ -51,11 +55,11 @@ class HospitalBranchAddress extends Migration
             ]
         ]);
         $this->forge->addKey('hospital_branch_id', true);
-        $this->forge->createTable('hospital_branch_address_table');
+        $this->forge->createTable('hospital_address_table');
     }
 
     public function down()
     {
-        $this->forge->dropTable('hospital_branch_address_table');
+        $this->forge->dropTable('hospital_address_table');
     }
 }

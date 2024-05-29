@@ -1,7 +1,7 @@
 // var lastPage = localStorage.getItem('lastPage') || 0;
 // var dataLength = localStorage.getItem('length');
-
 // Buttons Property Datatable
+
 const buttons = (data) => {
     return {
         buttons: [
@@ -9,6 +9,7 @@ const buttons = (data) => {
                 extend: 'csv',
                 className: 'btn',
                 action: function (e, dt, button, config) {
+                    metaLanguage = $('meta[name="language"]').attr('content');
                     // Mendapatkan seluruh data dari AJAX response
                     $.ajax({
                         url: '/menu-management/action-buttons',
@@ -32,6 +33,7 @@ const buttons = (data) => {
                 extend: 'excel',
                 className: 'btn',
                 action: function (e, dt, button, config) {
+                    metaLanguage = $('meta[name="language"]').attr('content');
                     // Mendapatkan seluruh data dari AJAX response
                     $.ajax({
                         url: '/menu-management/action-buttons',
@@ -54,6 +56,7 @@ const buttons = (data) => {
                 extend: 'print',
                 className: 'btn',
                 action: function (e, dt, node, config) {
+                    metaLanguage = $('meta[name="language"]').attr('content');
                     $.ajax({
                         url: "/menu-management/action-buttons",
                         type: "GET",
@@ -71,7 +74,7 @@ const buttons = (data) => {
                             var selectedColumns = dataSelected;
 
                             // Membuat HTML untuk tabel sementara
-                            var printContent = '<table class="table dt-table-hover"><thead><tr>';
+                            var printContent = '<div class="table-responsive"><table class="table dt-table-hover"><thead><tr>';
                             $.each(selectedColumns.header, function (index, column) {
                                 printContent += '<th>' + column + '</th>';
                             });
@@ -79,11 +82,11 @@ const buttons = (data) => {
                             $.each(fullData, function (index, rowData) {
                                 printContent += '<tr>';
                                 $.each(selectedColumns.column, function (index, column) {
-                                    printContent += '<td>' + rowData[column] + '</td>';
+                                    printContent += '<td class="text-wrap">' + rowData[column] + '</td>';
                                 });
                                 printContent += '</tr>';
                             });
-                            printContent += '</tbody></table>';
+                            printContent += '</tbody></table></div>';
 
                             // Membuka tab baru untuk mencetak
                             var printWindow = window.open('', '_blank');
@@ -152,18 +155,18 @@ const initialComplete = (settings, json, wrapperSelector, modalName = "") => {
 
 // Admin
 // MENU
-$('#menu-ui-table').DataTable({
+// var menu_lang_code = metaLanguage;
+const menu_ui_table = $('#menu-ui-table').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
         "url": url + "/menu-management/data-menu",
         "type": "GET",
-        "data": {
-            lang_code: metaLanguage,
-        }
+        // "data": {
+        //     lang_code: menu_lang_code,
+        // },
     },
     "dom": dom(),
-
     buttons: buttons(
         {
             columnName: "menu_id",
@@ -251,15 +254,15 @@ $('#menu-ui-table').DataTable({
 });
 
 // SUBMENU
-$('#submenu-ui-table').DataTable({
+const submenu_ui_table = $('#submenu-ui-table').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
         "url": url + "/menu-management/submenu",
         "type": "GET",
-        "data": {
-            lang_code: metaLanguage
-        }
+        // "data": {
+        //     lang_code: metaLanguage
+        // }
     },
     "dom": dom(),
 
@@ -335,15 +338,15 @@ $('#submenu-ui-table').DataTable({
 });
 
 // TAB
-$('#tab-ui-table').DataTable({
+const tab_ui_table = $('#tab-ui-table').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
         "url": url + "/menu-management/tabmenu",
         "type": "GET",
-        "data": {
-            lang_code: metaLanguage
-        }
+        // "data": {
+        //     lang_code: metaLanguage
+        // }
     },
     "dom": dom(),
 
@@ -874,12 +877,15 @@ $('#language-ui-table').DataTable({
 
 // Pages
 // Navbar
-$('#pages-ui-table').DataTable({
+const pages_ui_table = $('#pages-ui-table').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
         "url": url + "/pages/data-navbar",
-        "type": "GET"
+        "type": "GET",
+        // "data": {
+        //     "lang_code": metaLanguage
+        // }
     },
     "dom": dom(),
 
@@ -954,7 +960,7 @@ $('#pages-ui-table').DataTable({
 });
 
 // Group Navbar
-$('#group-pages-ui-table').DataTable({
+const group_pages_ui_table = $('#group-pages-ui-table').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
@@ -1015,8 +1021,9 @@ $('#group-pages-ui-table').DataTable({
             "data": null,
             "orderable": false,
             "render": function (data, type, row, meta) {
+                metaLanguage = $('meta[name="language"]').attr('content');
                 var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-navbar_management_group_id=" + row.uuid + " id='editGroupPages' data-bs-toggle='modal' data-bs-target='#groupPagesEditModal'><i class='ri-pencil-line'></i></button>";
-                button += '<a class="buttons-edit" href="/pages/group-pages/page-list?&navbar_management_group_uuid=' + row.uuid + '&lang_code=' + metaLanguage + '&page=' + row.navbar_management_group_name.toLowerCase() + '" target="_blank" class="buttons-edit"><button class="btn mx-1 px-2 py-1 btn-info"><i class="ri-pages-line"></i></button></a>';
+                button += '<a class="buttons-edit" href="/pages/group-pages/page-list?&navbar_management_group_uuid=' + row.uuid + '&lang_code=en&lang_view=' + metaLanguage + '&page=' + row.navbar_management_group_name.toLowerCase() + '" target="_blank" class="buttons-edit"><button class="btn mx-1 px-2 py-1 btn-info"><i class="ri-pages-line"></i></button></a>';
                 if (row.is_active == 1) {
                     button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="group-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
@@ -1106,7 +1113,7 @@ const hospitalLocation = $('#hospital-location-ui-table').DataTable({
 });
 
 // Hospital
-$('#hospital-ui-table').DataTable({
+const hospitalDatatable = $('#hospital-ui-table').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
@@ -1118,27 +1125,171 @@ $('#hospital-ui-table').DataTable({
     buttons: buttons(
         {
             columnName: "hospital_name",
-            modelName: "dataHospital",
+            modelName: "dataHospitalWithBranch",
             methodName: "hospitalModel",
             column: [
-                'hospital_image',
-                'hospital_location_code',
-                'hospital_location_name',
                 'hospital_name',
+                'hospital_location_name',
                 'hospital_address',
                 'hospital_phone',
                 'hospital_map_location',
+                'hospital_country',
                 'is_center',
                 'created_at'],
             header: [
-                'Photo',
-                'State Code',
-                'State',
                 'Hospital',
+                'State',
                 'Address',
                 'Phone',
                 'Map',
-                'Center',
+                'Country',
+                'HQ',
+                'Created Date'
+            ]
+        }
+    ),
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    "columns": [
+        {
+            "data": 'number',
+            "orderable": true,
+            "render": function (data, type, row, meta) {
+                return '<div class="d-flex align-items-center"><i style="font-size:1.2rem;cursor:pointer" onclick="toggleClick(this, ' + "'" + 'ri-arrow-right-s-line' + "'" + ', ' + "'" + 'ri-arrow-down-s-line' + "'" + ');clickChildren(this, ' + "'" + '/hospital/data-hospital-branch' + "'" + ', ' + "'" + 'uuid' + "'" + ', formatHospitalChildTable, hospitalDatatable)" class="expand ri-arrow-right-s-line"></i> ' + row.number + '</div>';
+            }
+        },
+        {
+            "data": "hospital_image",
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return '<img src="' + url + '/assets/website/images/hospital/' + row.hospital_image + '" alt="' + row.hospital_name + '" class="img-thumbnail" style="width: 120px;">';
+            }
+
+        },
+        {
+            "data": "hospital_name",
+            "orderable": true,
+            "render": function (data, type, row, meta) {
+                return '<div>' + row.hospital_name + '<br><span><i>' + row.hospital_code + '</i></span><br><small class="badge badge-success"><i>Hospital HQ</i></small></div>';
+            }
+
+        },
+        {
+            "data": "hospital_phone",
+            "orderable": false
+
+        },
+        {
+            "data": "hospital_address",
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return '<a class="text-primary" href="' + row.hospital_map_location + '" target="_blank">' + row.hospital_address + ' - ' + row.hospital_location_name + '</a>';
+            }
+
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-hospital_id='" + row.uuid + "' data-hospital_name='" + row.hospital_name + "' data-hq_hospital_country='" + row.hospital_country_uuid + "' data-hq_hospital_location_uuid='" + row.hospital_location_uuid + "' data-hq_hospital_phone='" + row.hospital_phone + "' data-hq_hospital_map_location='" + row.hospital_map_location + "' data-hq_hospital_address='" + row.hospital_address + "' data-hospital_image='" + row.hospital_image + "' id='editHospital' data-bs-toggle='modal' data-bs-target='#hospitalEditModal'><i class='ri-pencil-line'></i></button>";
+                button += '<a href="/hospital/hospital/packages?hospital_uuid=' + row.uuid + '&hospital_name=' + row.hospital_name + '&hospital_code=' + row.hospital_code + '&lang_code=' + metaLanguage + '" target="_blank" class="ms-1 buttons-edit"><button class="btn px-2 py-1 btn-info"><i class="ri-menu-add-line"></i></button></a>';
+                button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/hospital/hospital/deleted` + "'" + ', ' + "'" + `Are you sure want to delete ` + row.hospital_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="hospital-ui-table" data-namesec="hospital" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-delete-bin-line"></i></button></a>';
+                return button;
+            }
+        }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'hospital-ui-table', 'hospitalCreateModal');
+    }
+});
+
+// Packages
+const hospital_uuid = $("#packages-ui-table").data("hospital_uuid");
+$('#packages-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/hospital/data-packages",
+        "type": "GET",
+        "data": {
+            "hospital_uuid": hospital_uuid,
+            "lang_code": metaLanguage
+        }
+    },
+    "dom": dom(),
+
+    "buttons": [],
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    "columns": [
+        {
+            "data": 'number',
+            "orderable": true,
+            "render": function (data, type, row, meta) {
+                return row.number;
+            }
+        },
+        {
+            "data": "package_title",
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return '<div class="text-wrap">' + row.package_title + '</div>';
+            }
+
+        },
+        {
+            "data": "created_at",
+            "orderable": true,
+            "render": function (data, type, row, meta) {
+                return row.created_at;
+            }
+
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                // window.location.href=" + '"' + url + '/hospital/hospital/package/update?hospital_package_uuid=' + row.uuid + '&hospital_uuid=' + row.hospital_uuid + '&hospital_name=' + row.hospital_name + '&hospital_code=' + row.hospital_code + '&lang_code=' + row.lang_code + '&action_type=edit' + "
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' onclick='window.location.href=\"" + url + "/hospital/hospital/package/update?hospital_package_uuid=" + row.uuid + "&hospital_uuid=" + row.hospital_uuid + "&hospital_name=" + row.hospital_name + "&hospital_code=" + row.hospital_code + "&lang_code=" + row.lang_code + "&action_type=edit\"'><a href='javascript:void(0)' class='text-white'><i class='ri-pencil-line'></i></a></button>";
+                button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/hospital/hospital-package/deleted` + "'" + ', ' + "'" + `Are you sure want to delete ` + row.package_title + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="packages-ui-table" data-namesec="hospital_package" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-delete-bin-line"></i></button></a>';
+                return button;
+            }
+        }
+    ],
+});
+
+// Specialist
+const specialist_ui_table = $('#specialist-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/doctor/data-doctor-specialist",
+        "type": "GET",
+        // "data": {
+        //     "lang_code": metaLanguage
+        // }
+    },
+    "dom": dom(),
+
+    buttons: buttons(
+        {
+            columnName: "doctor_specialist_id",
+            modelName: "dataDoctorSpecialistWithSpecialistDesc",
+            methodName: "doctorModel",
+            column: ['number',
+                'lang_code',
+                'specialist_name',
+                'specialist_desc',
+                'created_at'],
+            header: [
+                'No',
+                'Lang Code',
+                'Specialist Name',
+                'Specialist Description',
                 'Created Date'
             ]
         }
@@ -1156,28 +1307,117 @@ $('#hospital-ui-table').DataTable({
             }
         },
         {
-            "data": "hospital_image",
+            "data": "specialist_name",
+            "orderable": true
+
+        },
+        // {
+        //     "data": "specialist_desc",
+        //     "orderable": true,
+        //     "render": function (data, type, row, meta) {
+        //         return '<div class="text-wrap">' + row.specialist_desc + '</div>';
+        //     }
+
+        // },
+        {
+            "data": null,
+            "orderable": false,
+            render: function (data, type, row, meta) {
+                // console.log(row);
+                let html = "";
+                if (row.is_active == 1) {
+                    html = 'Active'
+                } else {
+                    html = 'Inactive'
+                }
+                return html;
+            }
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-specialist_id=" + row.uuid + " id='editSpecialist' data-bs-toggle='modal' data-bs-target='#specialistEditModal'><i class='ri-pencil-line'></i></button>";
+                if (row.is_active == 1) {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/hospital/specialist/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.specialist_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="specialist-ui-table" data-namesec="doctor_specialist" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                } else {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/hospital/specialist/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.specialist_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="specialist-ui-table" data-namesec="doctor_specialist" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                }
+                return button;
+            }
+        }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'specialist-ui-table', 'specialistCreateModal');
+    }
+});
+
+// Doctor
+const doctor_ui_table = $('#doctors-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/doctor/data-doctor",
+        "type": "GET",
+        "data": {
+            "lang_code": metaLanguage
+        }
+    },
+    "dom": dom(),
+
+    buttons: buttons(
+        {
+            columnName: "doctor_id",
+            modelName: "dataDoctorComplete",
+            methodName: "doctorModel",
+            column: ['number',
+                'lang_code',
+                'doctor_name',
+                'doctor_email',
+                'doctor_phone',
+                'doctor_specialist_name',
+                'doctor_hospital_name',
+                'doctor_address',
+                'doctor_map_location',
+                'created_at'],
+            header: [
+                'No',
+                'Lang Code',
+                'Doctor Name',
+                'Email',
+                'Phone',
+                'Specialist',
+                'Hospital',
+                'Address',
+                'Map Location',
+                'Created Date'
+            ]
+        }
+    ),
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    "columns": [
+        {
+            "data": 'number',
+            "orderable": true,
+            "render": function (data, type, row, meta) {
+                return row.number;
+            }
+        },
+        {
+            "data": "doctor_image",
             "orderable": false
 
         },
         {
-            "data": "hospital_name",
-            "orderable": true,
-            "render": function (data, type, row, meta) {
-                return '<div>' + row.hospital_name + '<br><span><i>' + row.hospital_code + '</i></span><br><small class="badge badge-success"><i>' + row.is_center == 1 ? 'Hospital Center' : 'Hospital Union' + '</i></small></div>';
-            }
+            "data": "doctor_name",
+            "orderable": true
 
         },
         {
-            "data": "hospital_address",
-            "orderable": false,
-            "render": function (data, type, row, meta) {
-                return '<a class="text-primary" href="' + row.hospital_map_location + '" target="_blank">' + row.hospital_address + ', ' + row.hospital_location_name + '</a>';
-            }
-
-        },
-        {
-            "data": "hospital_phone",
+            "data": "doctor_phone",
             "orderable": false
 
         },
@@ -1185,13 +1425,13 @@ $('#hospital-ui-table').DataTable({
             "data": null,
             "orderable": false,
             "render": function (data, type, row, meta) {
-                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-hospital_id=" + row.uuid + " id='editHospital' data-bs-toggle='modal' data-bs-target='#hospitalEditModal'><i class='ri-pencil-line'></i></button>";
-                button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/hospital/hospital/deleted` + "'" + ', ' + "'" + `Are you sure want to delete ` + row.hospital_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="hospital-ui-table" data-namesec="hospital" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-delete-bin-line"></i></button></a>';
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-doctor_id=" + row.uuid + " id='editDoctor' data-bs-toggle='modal' data-bs-target='#doctorEditModal'><i class='ri-pencil-line'></i></button>";
+                button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/doctor/doctor/deleted` + "'" + ', ' + "'" + `Are you sure want to delete ` + row.doctor_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="doctors-ui-table" data-namesec="doctor" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-delete-bin-line"></i></button></a>';
                 return button;
             }
         }
     ],
     initComplete: function (settings, json) {
-        initialComplete(settings, json, 'hospital-ui-table', 'hospitalCreateModal');
+        initialComplete(settings, json, 'doctors-ui-table', 'doctorCreateModal');
     }
 });

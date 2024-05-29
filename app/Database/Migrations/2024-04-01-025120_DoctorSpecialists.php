@@ -19,18 +19,14 @@ class DoctorSpecialists extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'specialist_image' => [
-                'type' => 'VARCHAR',
-                'constraint' => 50,
-            ],
             'specialist_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'specialist_desc' => [
-                'type' => 'VARCHAR',
-                'constraint' => 256,
-            ],
+            // 'specialist_desc' => [
+            //     'type' => 'VARCHAR',
+            //     'constraint' => 256,
+            // ],
             'created_at' => [
                 'type' => 'datetime'
             ],
@@ -40,6 +36,14 @@ class DoctorSpecialists extends Migration
             'is_active' => [
                 'type' => 'INT',
                 'constraint' => 1,
+            ],
+            // 'lang_code' => [
+            //     'type' => 'VARCHAR',
+            //     'constraint' => 50,
+            // ],
+            'specialist_code' => [
+                'type' => 'VARCHAR',
+                'constraint' => 128,
             ]
         ]);
         $this->forge->addKey('doctor_specialist_id', true);

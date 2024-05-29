@@ -28,9 +28,10 @@ class Pages extends BaseController
         $orderColumn = $this->request->getVar('order')[0]['column'];
         $column = $this->request->getVar('columns')[$orderColumn]['data'];
         $orderDir = $this->request->getVar('order')[0]['dir'];
+        $lang_code = $this->request->getVar('lang_code');
 
         $fullData = true;
-        $data = $this->pagesModel::dataPages($filter, $column, $orderDir, $fullData);
+        $data = $this->pagesModel::dataPages($filter, $column, $orderDir, $fullData, $lang_code);
 
         // Hitung jumlah total data
         $totalData = count($data);
@@ -81,7 +82,7 @@ class Pages extends BaseController
         $validation = null;
 
         // Ambil data terakhir dari database
-        $lastNumber = $this->pagesModel->getLastNumberPages();
+        $lastNumber = $this->pagesModel->getLastNumberPages($lang_code);
 
         // Jika tidak ada data di database, atur angka awal sebagai 0
         if (!$lastNumber) {
@@ -143,7 +144,7 @@ class Pages extends BaseController
             $token = csrf_hash();
             $value = "";
             if ($data['navbar_management_name'] == $edit_navbar_management_name) {
-                $value = 'trim|required|min_length[3]|regex_match[/^[A-Za-z]+(?: [A-Za-z]+)*$/]';
+                $value = 'trim|required|min_length[3]|regex_match[/^[A-Za-z&]+(?: [A-Za-z&]+)*$/]';
             } else {
                 $value = 'trim|required|is_unique[page_navbar_table.navbar_management_name]|min_length[3]|regex_match[/^[A-Za-z&]+(?: [A-Za-z&]+)*$/]';
             }
@@ -173,7 +174,7 @@ class Pages extends BaseController
             $validation = null;
 
             // Ambil data terakhir dari database
-            $lastNumber = $this->pagesModel->getLastNumberPages();
+            $lastNumber = $this->pagesModel->getLastNumberPages($lang_code);
 
             // Jika tidak ada data di database, atur angka awal sebagai 0
             if (!$lastNumber) {

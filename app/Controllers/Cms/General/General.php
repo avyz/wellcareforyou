@@ -10,6 +10,7 @@ use App\Models\Cms\Pages\PagesModel;
 use App\Models\Cms\Pages\GroupPagesModel;
 use App\Models\Cms\Users\UsersModel;
 use App\Models\Cms\Hospital\HospitalModel;
+use App\Models\Cms\Doctor\DoctorModel;
 use App\Models\HelperModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -27,6 +28,7 @@ class General extends BaseController
     protected $pagesModel;
     protected $groupPagesModel;
     protected $hospitalModel;
+    protected $doctorModel;
     public function __construct()
     {
         $this->helperModel = new HelperModel();
@@ -37,6 +39,7 @@ class General extends BaseController
         $this->pagesModel = new PagesModel();
         $this->groupPagesModel = new GroupPagesModel();
         $this->hospitalModel = new HospitalModel();
+        $this->doctorModel = new doctorModel();
     }
 
     public function index()
@@ -44,6 +47,7 @@ class General extends BaseController
         $uri = service('uri');
         // dd($this->helperModel::generateUuid());
         $lang_code = $this->request->getVar('lang');
+        // dd($lang_code);
         $role_id = session()->get('role_id');
         $data = [
             'layout' => $this->dirLayoutCms,
@@ -55,6 +59,8 @@ class General extends BaseController
             'language_row' => $this->menuManagementModel::languageByLangCode($lang_code),
             'language_list' => $this->menuManagementModel::languageList()
         ];
+
+        // dd($data);
 
         $path = '';
         $title = null;
@@ -93,6 +99,7 @@ class General extends BaseController
 
     public function links(...$params)
     {
+        // dd($this->helperModel::generateUuid());
         $dataParams = $params[0];
         $uri = service('uri');
         if (is_array($dataParams) && isset($dataParams)) {
@@ -113,22 +120,25 @@ class General extends BaseController
                 $data['data'] = $dataParams['data'];
             }
 
+            // dd($uri->getSegment(1));
+
             $title = null;
-            if (count($data['dataMenu']['sidebar']) == 0) {
-                $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $dataParams['title'];
-            } else {
-                // dd($dataParams);
-                if ($dataParams['title'] != '') {
-                    if ($data['dataMenu']['sidebar'][0]['menu_children_name'] != $data['dataMenu']['menu']['menu_name']) {
-                        $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'] . ' | ' . $dataParams['title'];
-                    } else {
-                        $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $dataParams['title'];
-                    }
+            if (isset($data['dataMenu']['sidebar'])) {
+                if (count($data['dataMenu']['sidebar']) == 0) {
+                    $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $dataParams['title'];
                 } else {
-                    if ($data['dataMenu']['sidebar'][0]['menu_children_name'] != $data['dataMenu']['menu']['menu_name']) {
-                        $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'];
+                    if ($dataParams['title'] != '') {
+                        if ($data['dataMenu']['sidebar'][0]['menu_children_name'] != $data['dataMenu']['menu']['menu_name']) {
+                            $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'] . ' | ' . $dataParams['title'];
+                        } else {
+                            $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $dataParams['title'];
+                        }
                     } else {
-                        $title = $data['dataMenu']['menu']['menu_name'];
+                        if ($data['dataMenu']['sidebar'][0]['menu_children_name'] != $data['dataMenu']['menu']['menu_name']) {
+                            $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'];
+                        } else {
+                            $title = $data['dataMenu']['menu']['menu_name'];
+                        }
                     }
                 }
             }
@@ -137,6 +147,7 @@ class General extends BaseController
 
             $this->logUser('Access ' . $title, 'Access ' . $title . ' page successfully');
 
+            // dd('cms' . $uri->getPath(), $data);
             return $this->checkIdle(view('cms' . $uri->getPath(), $data));
         }
         $this->logUser('Access page', 'User try to access ' . $uri->getPath() . ' , but is not found, user redirected to home');
@@ -235,6 +246,8 @@ class General extends BaseController
 
         $fullData = false;
         $data = $this->$methodName::$modelName('', $columnName, 'asc', $fullData, $lang_code);
+
+        // dd($data);
 
         switch ($buttons) {
             case 'print':

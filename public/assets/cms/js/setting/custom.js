@@ -1,4 +1,12 @@
-// create role
+// Create Misc
+$(document).on('submit', '#save-misc', function (e) {
+    e.preventDefault();
+    let formData = new FormData(this);
+
+    postWithImage(url + '/setting/misc/save-misc', '', 'save-misc', formData, null, true);
+});
+
+// create language
 $(document).on('submit', '#languageCreate', function (e) {
     e.preventDefault();
     let formData = new FormData(this);
@@ -6,7 +14,7 @@ $(document).on('submit', '#languageCreate', function (e) {
     postWithImage(url + '/setting/create-language', 'language-ui-table', 'languageCreate', formData);
 });
 
-// get data role for edit
+// get data language for edit
 $(document).on('click', '#editLanguage', function () {
     const lang_id = $(this).data('lang_id');
     $.ajax({
@@ -40,7 +48,7 @@ $(document).on('click', '#editLanguage', function () {
     });
 });
 
-// edit role
+// edit language
 $(document).on('submit', '#languageEdit', function (e) {
     e.preventDefault();
     let formData = new FormData(this);

@@ -35,14 +35,6 @@ class Misc extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '20',
             ],
-            'footer_desc' => [
-                'type' => 'VARCHAR',
-                'constraint' => '256',
-            ],
-            'work_days' => [
-                'type' => 'VARCHAR',
-                'constraint' => '50',
-            ],
             'work_time' => [
                 'type' => 'VARCHAR',
                 'constraint' => '50',

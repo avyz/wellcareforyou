@@ -44,6 +44,8 @@
     <link rel="stylesheet" href="/assets/cms/filepond/FilePondPluginImagePreview.min.css">
     <!-- <link href="/assets/cms/css/scrollspyNav.css" rel="stylesheet" type="text/css" /> -->
     <link href="/assets/cms/filepond/custom-filepond.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/cms/tagify/tagify.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/cms/tagify/custom-tagify.css" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
 
     <!-- Favicon -->
@@ -52,6 +54,22 @@
     <!-- Title -->
     <title><?= $title; ?></title>
     <script src="/assets/website/js/jquery.min.js"></script>
+
+    <!-- <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/decoupled-document/ckeditor.js"></script> -->
+    <style>
+        .ck.ck-editor__editable_inline:not(.ck-editor__nested-editable) {
+            min-height: 400px;
+        }
+    </style>
+
+
+    <script src="/assets/cms/js/main.js"></script>
+    <script>
+        var url = window.location.origin;
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        var metaLanguage = $('meta[name="language"]').attr('content');
+    </script>
+    <script src="/assets/cms/js/api.js"></script>
 </head>
 
 <body class="layout-boxed">
@@ -116,11 +134,12 @@
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="/assets/cms/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+
     <script>
         var runTimeOut;
-        const url = window.location.origin;
-        var csrfToken = $('meta[name="csrf-token"]').attr('content');
-        var metaLanguage = $('meta[name="language"]').attr('content');
+        // const url = window.location.origin;
+        // var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        // var metaLanguage = $('meta[name="language"]').attr('content');
         var isClick = false;
         var countClicked = 0;
 
@@ -206,6 +225,8 @@
     <script src="/assets/cms/table/datatable/button-ext/buttons.html5.min.js"></script>
     <script src="/assets/cms/table/datatable/button-ext/buttons.print.min.js"></script>
     <!-- <script src="/assets/cms/js/scrollspyNav.js"></script> -->
+    <script src="/assets/cms/tagify/tagify.js"></script>
+    <!-- <script src="/assets/cms/tagify/custom-tagify.js"></script> -->
     <script src="/assets/cms/filepond/filepond.min.js"></script>
     <script src="/assets/cms/filepond/FilePondPluginFileValidateType.min.js"></script>
     <script src="/assets/cms/filepond/FilePondPluginImageExifOrientation.min.js"></script>
@@ -216,14 +237,14 @@
     <script src="/assets/cms/filepond/filepondPluginFileValidateSize.min.js"></script>
     <!-- <script src="/assets/cms/filepond/custom-filepond.js"></script> -->
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <!-- <script src="/assets/cms/js/ckeditor/ckeditor-classic.js"></script> -->
     <script src="/assets/cms/js/datatable_custom.js"></script>
-    <script src="/assets/cms/js/api.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
     <script src="/assets/cms/js/menu-management/custom.js"></script>
     <script src="/assets/cms/js/user-management/custom.js"></script>
     <script src="/assets/cms/js/setting/custom.js"></script>
     <script src="/assets/cms/js/pages/custom.js"></script>
     <script src="/assets/cms/js/hospital/custom.js"></script>
+    <script src="/assets/cms/js/doctor/custom.js"></script>
 
 
 </body>

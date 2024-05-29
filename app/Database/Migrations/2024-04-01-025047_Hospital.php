@@ -19,10 +19,6 @@ class Hospital extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'hospital_location_uuid' => [
-                'type' => 'VARCHAR',
-                'constraint' => 50,
-            ],
             'hospital_image' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
@@ -35,22 +31,26 @@ class Hospital extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 20,
             ],
-            'hospital_address' => [
-                'type' => 'VARCHAR',
-                'constraint' => 128,
-            ],
-            'hospital_phone' => [
-                'type' => 'VARCHAR',
-                'constraint' => 128,
-            ],
-            'hospital_map_location' => [
-                'type' => 'VARCHAR',
-                'constraint' => 128,
-            ],
-            'is_center' => [
-                'type' => 'INT',
-                'constraint' => 1,
-            ],
+            // 'hospital_location_uuid' => [
+            //     'type' => 'VARCHAR',
+            //     'constraint' => 50,
+            // ],
+            // 'hospital_address' => [
+            //     'type' => 'VARCHAR',
+            //     'constraint' => 128,
+            // ],
+            // 'hospital_phone' => [
+            //     'type' => 'VARCHAR',
+            //     'constraint' => 128,
+            // ],
+            // 'hospital_map_location' => [
+            //     'type' => 'VARCHAR',
+            //     'constraint' => 128,
+            // ],
+            // 'is_center' => [
+            //     'type' => 'INT',
+            //     'constraint' => 1,
+            // ],
             'created_at' => [
                 'type' => 'datetime'
             ],
