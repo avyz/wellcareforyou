@@ -32,6 +32,10 @@ class DoctorBiographyList extends Migration
             'updated_at' => [
                 'type' => 'datetime'
             ],
+            'lang_code' => [
+                'type' => 'VARCHAR',
+                'constraint' => 10,
+            ],
         ]);
         $this->forge->addKey('doctor_biography_list_id', true);
         $this->forge->createTable('doctor_biography_list_table');
