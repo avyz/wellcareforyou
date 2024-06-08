@@ -19,7 +19,7 @@ class HospitalLocation extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
-            'lang_uuid' => [
+            'country_uuid' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],

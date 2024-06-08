@@ -43,6 +43,21 @@ class NavbarManagement extends Migration
             ],
             'page_number' => [
                 'type' => 'INT',
+            ],
+            'navbar_management_whatsapp' => [
+                'type' => 'VARCHAR',
+                'constraint' => 15,
+            ],
+            'navbar_management_meta_desc' => [
+                'type' => 'TEXT'
+            ],
+            'is_main' => [
+                'type' => 'INT',
+                'constraint' => 1,
+            ],
+            'to_page' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
             ]
         ]);
         $this->forge->addKey('navbar_management_id', true);

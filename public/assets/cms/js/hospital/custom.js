@@ -36,12 +36,12 @@ var no_insert_data = 0;
 $(document).on("click", "#insert-data-location", function () {
     // append file input when trigger click
     const hospital_location_name = $("#hospital_location_name").val();
-    const lang_uuid = $("#lang_uuid").val();
+    const country_uuid = $("#country_uuid").val();
     // get option label in selected option
-    const lang_uuid_label = $("#lang_uuid option:selected").text();
-    if (hospital_location_name == "" || lang_uuid == "") {
-        if (lang_uuid == "") {
-            $("#lang_uuid").trigger('focus');
+    const country_uuid_label = $("#country_uuid option:selected").text();
+    if (hospital_location_name == "" || country_uuid == "") {
+        if (country_uuid == "") {
+            $("#country_uuid").trigger('focus');
         }
         if (hospital_location_name == "") {
             $("#hospital_location_name").trigger('focus');
@@ -78,9 +78,9 @@ $(document).on("click", "#insert-data-location", function () {
     let html = '';
     html += '<tr>';
     html += '<td>';
-    html += lang_uuid_label;
-    html += '<input type="hidden" class="form-control" name="lang_uuid[]" value="' + lang_uuid + '" required>';
-    html += '<div class="invalid-feedback" data-id="lang_uuid"></div>';
+    html += country_uuid_label;
+    html += '<input type="hidden" class="form-control" name="country_uuid[]" value="' + country_uuid + '" required>';
+    html += '<div class="invalid-feedback" data-id="country_uuid"></div>';
     // html += '<br><div class="invalid-feedback" id="lang_uuid.' + no_insert_data + '_validation"></div>';
     html += '</td>';
     html += '<td>';
@@ -94,14 +94,14 @@ $(document).on("click", "#insert-data-location", function () {
     html += '</tr>';
     $("#show-state").append(html);
     $("#hospital_location_name").val("");
-    $("#lang_uuid").val("");
+    $("#country_uuid").val("");
     updateInsertDataNumber("show-state");
     if ($("#show-state").find("tr").length > 0) {
         $("#hospital_location_name").attr("required", false);
-        $("#lang_uuid").attr("required", false);
+        $("#country_uuid").attr("required", false);
     } else {
         $("#hospital_location_name").attr("required", true);
-        $("#lang_uuid").attr("required", true);
+        $("#country_uuid").attr("required", true);
     }
 })
 
@@ -111,10 +111,10 @@ $(document).on("click", ".delete-data-location", function () {
     updateInsertDataNumber("show-state");
     if ($("#show-state").find("tr").length > 0) {
         $("#hospital_location_name").attr("required", false);
-        $("#lang_uuid").attr("required", false);
+        $("#country_uuid").attr("required", false);
     } else {
         $("#hospital_location_name").attr("required", true);
-        $("#lang_uuid").attr("required", true);
+        $("#country_uuid").attr("required", true);
     }
 });
 
@@ -139,12 +139,12 @@ $(document).on('submit', '#locationCreate', function (e) {
 
 // Edit Hospital Location
 $(document).on('click', '#editLocation', function () {
-    const lang_id = $(this).data('lang_id');
+    const country_id = $(this).data('country_id');
     $.ajax({
         url: url + '/hospital/edit-hospital-location',
         type: 'GET',
         data: {
-            lang_id: lang_id,
+            country_id: country_id,
             type: 'view'
         },
         dataType: 'json',
@@ -155,11 +155,11 @@ $(document).on('click', '#editLocation', function () {
             data?.map(function (value, index) {
                 html += '<tr>';
                 html += '<td>';
-                html += value.language;
+                html += value.country;
                 html += '<input type="hidden" class="form-control" name="action_type[]" value="edit_value">';
                 html += '<input type="hidden" class="form-control" name="location_id[]" value="' + value.uuid + '" required>';
-                html += '<input type="hidden" class="form-control" name="edit_lang_uuid[]" value="' + value.lang_uuid + '" required>';
-                html += '<div class="invalid-feedback" data-id="edit_lang_uuid"></div>';
+                html += '<input type="hidden" class="form-control" name="edit_country_uuid[]" value="' + value.country_uuid + '" required>';
+                html += '<div class="invalid-feedback" data-id="edit_country_uuid"></div>';
                 html += '</td>';
                 html += '<td>';
                 html += value.hospital_location_name;
@@ -172,7 +172,7 @@ $(document).on('click', '#editLocation', function () {
                 html += '</tr>';
             });
             $("#edit-show-state").html(html);
-            $("#edit_lang_uuid").val(lang_id);
+            $("#edit_country_uuid").val(country_id);
             editUpdateInsertDataNumber("edit-show-state");
         },
         error: function (xhr, status, error) {
@@ -192,12 +192,12 @@ var edit_no_insert_data = 0;
 $(document).on("click", "#edit-insert-data-location", function () {
     // append file input when trigger click
     const edit_hospital_location_name = $("#edit_hospital_location_name").val();
-    const edit_lang_uuid = $("#edit_lang_uuid").val();
+    const edit_country_uuid = $("#edit_country_uuid").val();
     // get option label in selected option
-    const edit_lang_uuid_label = $("#edit_lang_uuid option:selected").text();
-    if (edit_hospital_location_name == "" || edit_lang_uuid == "") {
-        if (edit_lang_uuid == "") {
-            $("#edit_lang_uuid").trigger('focus');
+    const edit_country_uuid_label = $("#edit_country_uuid option:selected").text();
+    if (edit_hospital_location_name == "" || edit_country_uuid == "") {
+        if (edit_country_uuid == "") {
+            $("#edit_country_uuid").trigger('focus');
         }
         if (edit_hospital_location_name == "") {
             $("#edit_hospital_location_name").trigger('focus');
@@ -234,10 +234,10 @@ $(document).on("click", "#edit-insert-data-location", function () {
     let html = '';
     html += '<tr>';
     html += '<td>';
-    html += edit_lang_uuid_label;
+    html += edit_country_uuid_label;
     html += '<input type="hidden" class="form-control" name="action_type[]" value="add_value">';
-    html += '<input type="hidden" class="form-control" name="edit_lang_uuid[]" value="' + edit_lang_uuid + '" required>';
-    html += '<div class="invalid-feedback" data-id="edit_lang_uuid"></div>';
+    html += '<input type="hidden" class="form-control" name="edit_country_uuid[]" value="' + edit_country_uuid + '" required>';
+    html += '<div class="invalid-feedback" data-id="edit_country_uuid"></div>';
     html += '</td>';
     html += '<td>';
     html += edit_hospital_location_name;
@@ -250,14 +250,14 @@ $(document).on("click", "#edit-insert-data-location", function () {
     html += '</tr>';
     $("#edit-show-state").append(html);
     $("#edit_hospital_location_name").val("");
-    // $("#edit_lang_uuid").val("");
+    // $("#edit_country_uuid").val("");
     editUpdateInsertDataNumber("edit-show-state");
     if ($("#edit-show-state").find("tr").length > 0) {
         $("#edit_hospital_location_name").attr("required", false);
-        $("#edit_lang_uuid").attr("required", false);
+        $("#edit_country_uuid").attr("required", false);
     } else {
         $("#edit_hospital_location_name").attr("required", true);
-        $("#edit_lang_uuid").attr("required", true);
+        $("#edit_country_uuid").attr("required", true);
     }
 })
 
@@ -267,10 +267,10 @@ $(document).on("click", ".edit-delete-data-location", function () {
     editUpdateInsertDataNumber("edit-show-state");
     if ($("#edit-show-state").find("tr").length > 0) {
         $("#edit_hospital_location_name").attr("required", false);
-        $("#edit_lang_uuid").attr("required", false);
+        $("#edit_country_uuid").attr("required", false);
     } else {
         $("#edit_hospital_location_name").attr("required", true);
-        $("#edit_lang_uuid").attr("required", true);
+        $("#edit_country_uuid").attr("required", true);
     }
 });
 

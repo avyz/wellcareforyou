@@ -55,6 +55,56 @@ $(document).on('submit', '#languageEdit', function (e) {
     putWithImage(url + '/setting/edit-language', 'language-ui-table', 'languageEdit', formData);
 });
 
+// Country
+// create country
+$(document).on('submit', '#countryCreate', function (e) {
+    e.preventDefault();
+    let formData = new FormData(this);
+
+    postWithImage(url + '/setting/create-country', 'country-ui-table', 'countryCreate', formData);
+});
+
+// get data country for edit
+$(document).on('click', '#editCountry', function () {
+    const country_id = $(this).data('country_id');
+    $.ajax({
+        url: url + '/setting/edit-country',
+        type: 'GET',
+        data: {
+            country_id: country_id,
+            type: 'view'
+        },
+        dataType: 'json',
+        success: function (data) {
+            data = data.data;
+            // Access the data returned from the AJAX request here
+            $('#edit_country_id').val(data.uuid);
+            $('#edit_country').val(data.country);
+            $('#edit_old_country_icon').val(data.country_icon);
+            $('#edit_country_icon_label').text(data.country_icon);
+            $('#edit_country_icon').attr("name", "");
+            $('#edit_country_code').val(data.country_code);
+        },
+        error: function (xhr, status, error) {
+            // Handle any errors that occur during the AJAX request
+            Swal.fire({
+                title: 'Error!',
+                text: error,
+                icon: 'error',
+                showConfirmButton: true,
+                showCancelButton: false
+            });
+        }
+    });
+});
+
+// edit country
+$(document).on('submit', '#countryEdit', function (e) {
+    e.preventDefault();
+    let formData = new FormData(this);
+    putWithImage(url + '/setting/edit-country', 'country-ui-table', 'countryEdit', formData);
+});
+
 // FilePond.registerPlugin(
 //     FilePondPluginFileValidateType,
 //     FilePondPluginImageExifOrientation,

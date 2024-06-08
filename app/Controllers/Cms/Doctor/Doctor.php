@@ -65,6 +65,9 @@ class Doctor extends BaseController
         $doctor_gender = $this->request->getVar('doctor_gender');
         $doctor_phone = $this->request->getVar('doctor_phone');
         $doctor_address = $this->request->getVar('doctor_address');
+        $doctor_facebook = $this->request->getVar('doctor_facebook');
+        $doctor_twitter = $this->request->getVar('doctor_twitter');
+        $doctor_linkedin = $this->request->getVar('doctor_linkedin');
 
         // Tag
         $doctor_language = $this->request->getVar('doctor_language');
@@ -269,6 +272,9 @@ class Doctor extends BaseController
                 'doctor_gender' => $doctor_gender,
                 'doctor_phone' => $doctor_phone,
                 'doctor_address' => $doctor_address,
+                'doctor_facebook' => $doctor_facebook,
+                'doctor_twitter' => $doctor_twitter,
+                'doctor_linkedin' => $doctor_linkedin,
                 'created_at' => $this->dateTime(),
                 'updated_at' => $this->dateTime()
             ];
@@ -407,6 +413,9 @@ class Doctor extends BaseController
         $edit_doctor_gender = $this->request->getVar('edit_doctor_gender');
         $edit_doctor_phone = $this->request->getVar('edit_doctor_phone');
         $edit_doctor_address = $this->request->getVar('edit_doctor_address');
+        $edit_doctor_facebook = $this->request->getVar('edit_doctor_facebook');
+        $edit_doctor_twitter = $this->request->getVar('edit_doctor_twitter');
+        $edit_doctor_linkedin = $this->request->getVar('edit_doctor_linkedin');
 
         // Tag
         $edit_doctor_language = $this->request->getVar('edit_doctor_language');
@@ -626,6 +635,9 @@ class Doctor extends BaseController
                     'doctor_gender' => $edit_doctor_gender,
                     'doctor_phone' => $edit_doctor_phone,
                     'doctor_address' => $edit_doctor_address,
+                    'doctor_facebook' => $edit_doctor_facebook,
+                    'doctor_twitter' => $edit_doctor_twitter,
+                    'doctor_linkedin' => $edit_doctor_linkedin,
                     'updated_at' => $this->dateTime()
                 ];
 
@@ -633,12 +645,12 @@ class Doctor extends BaseController
                     'uuid' => $doctor_id,
                 ];
 
+                $this->helperModel::updateData($where, $data_doctor_update, 'doctor_table');
+
                 if ($edit_doctor_image_new->getClientExtension()) {
                     $this->unlinkImage('assets/website/images/doctor/' . $edit_doctor_image);
                     $edit_doctor_image_new->move('assets/website/images/doctor', $edit_doctor_image_name);
                 }
-
-                $this->helperModel::updateData($where, $data_doctor_update, 'doctor_table');
 
                 foreach ($language_list as $key => $d) {
                     $edit_doctor_biography = $this->request->getVar('edit_doctor_biography_' . $d['lang_code']);
@@ -1044,6 +1056,8 @@ class Doctor extends BaseController
     {
         // $lang_code = $this->request->getVar('lang_code');
         $specialist_name = $this->request->getVar('specialist_name');
+        $specialist_image = $this->request->getFile('specialist_image');
+        $specialist_image_name = url_title(str_replace('.', '_', $specialist_name), '_', true) . '.' . $specialist_image->getClientExtension();
         // $specialist_desc = $this->request->getVar('specialist_desc');
 
         $language_list = $this->menuManagementModel::languageList();
@@ -1057,7 +1071,17 @@ class Doctor extends BaseController
                     'regex_match' => 'Character alphabet only and no space in first or end letter',
                     'trim' => 'Character has space in first or end letter',
                 ]
-            ]
+            ],
+            'specialist_image' => [
+                'label' => 'Doctor Photo',
+                'rules' => 'trim|max_size[specialist_image,1024]|mime_in[specialist_image,image/jpg,image/jpeg,image/png, image/webp]|is_image[specialist_image]',
+                'errors' => [
+                    'uploaded' => 'No file on Specialist Photo',
+                    'max_size' => 'Image must less than 1mb',
+                    'is_image' => 'Image not valid',
+                    'mime_in' => 'Your file must be *.png, *.jpeg, *.jpg, *.webp'
+                ]
+            ],
         ];
 
         foreach ($language_list as $key => $d) {
@@ -1082,7 +1106,7 @@ class Doctor extends BaseController
             $data_specialist = [
                 'uuid' => $this->helperModel::generateUuid(),
                 'specialist_name' => ucwords($specialist_name),
-                // 'specialist_desc' => $specialist_desc,
+                'specialist_image' => $specialist_image_name,
                 'created_at' => $this->dateTime(),
                 'updated_at' => $this->dateTime(),
                 // 'lang_code' => strtolower($lang_code),
@@ -1090,6 +1114,8 @@ class Doctor extends BaseController
                 'is_active' => 1
             ];
             $this->helperModel::insertData($data_specialist, false, 'doctor_specialist_table');
+
+            $specialist_image->move('assets/website/images/specialist', $specialist_image_name);
 
             foreach ($language_list as $key => $d) {
                 $specialist_desc = $this->request->getVar('specialist_desc_' . $d['lang_code']);
@@ -1125,8 +1151,8 @@ class Doctor extends BaseController
     {
         $doctor_specialist_id = $this->request->getVar('doctor_specialist_id');
         $specialist_name = $this->request->getVar('edit_specialist_name');
-        // $specialist_desc = $this->request->getVar('edit_specialist_desc');
-        // $lang_code = $this->request->getVar('lang_code');
+        $edit_specialist_image_new = $this->request->getFile('edit_specialist_image_new');
+        $edit_specialist_image = $this->request->getVar('edit_specialist_image');
         $type = $this->request->getVar('type');
         $language_list = $this->menuManagementModel::languageList();
         $data['specialist'] = $this->doctorModel::dataDoctorSpecialistById($doctor_specialist_id);
@@ -1143,24 +1169,16 @@ class Doctor extends BaseController
                         'trim' => 'Character has space in first or end letter',
                     ]
                 ],
-                // 'edit_specialist_desc' => [
-                //     'label' => 'Specialist Description',
-                //     'rules' => 'trim|required|min_length[4]|regex_match[^[^\']*$]',
-                //     'errors' => [
-                //         'required' => 'The Specialist Description is required',
-                //         'regex_match' => 'Character alphabet only and no space in first or end letter',
-                //         'trim' => 'Character has space in first or end letter',
-                //     ]
-                // ],
-                // 'lang_code' => [
-                //     'label' => 'Language',
-                //     'rules' => 'trim|required|min_length[2]',
-                //     'errors' => [
-                //         'required' => 'The Language is required',
-                //         'regex_match' => 'Character alphabet only and no space in first or end letter',
-                //         'trim' => 'Character has space in first or end letter',
-                //     ]
-                // ]
+                'edit_specialist_image_new' => [
+                    'label' => 'Specialist Image',
+                    'rules' => 'trim|max_size[edit_specialist_image_new,1024]|mime_in[edit_specialist_image_new,image/jpg,image/jpeg,image/png, image/webp]|is_image[edit_specialist_image_new]',
+                    'errors' => [
+                        'uploaded' => 'No file on Specialist Image',
+                        'max_size' => 'Image must less than 1mb',
+                        'is_image' => 'Image not valid',
+                        'mime_in' => 'Your file must be *.png, *.jpeg, *.jpg, *.webp'
+                    ]
+                ],
             ];
 
             foreach ($language_list as $key => $d) {
@@ -1182,11 +1200,17 @@ class Doctor extends BaseController
                 $validation = validation_errors();
                 $this->generalController->logUser('Update Specialist', 'Fail to update data because field invalid');
             } else {
+
+                if (!$edit_specialist_image_new->getClientExtension()) {
+                    $edit_specialist_image_name = $edit_specialist_image;
+                } else {
+                    $edit_specialist_image_name = url_title(str_replace('.', '_', $specialist_name), '_', true) . '.' . $edit_specialist_image_new->getClientExtension();
+                }
+
                 $data_specialist = [
                     'specialist_name' => ucwords($specialist_name),
-                    // 'specialist_desc' => $specialist_desc,
+                    'specialist_image' => $edit_specialist_image_name,
                     'updated_at' => $this->dateTime(),
-                    // 'lang_code' => strtolower($lang_code)
                 ];
 
                 $where = [
@@ -1194,6 +1218,11 @@ class Doctor extends BaseController
                 ];
 
                 $this->helperModel::updateData($where, $data_specialist, 'doctor_specialist_table');
+
+                if ($edit_specialist_image_new->getClientExtension()) {
+                    $this->unlinkImage('assets/website/images/specialist/' . $edit_specialist_image);
+                    $edit_specialist_image_new->move('assets/website/images/specialist', $edit_specialist_image_name);
+                }
 
                 foreach ($language_list as $key => $d) {
                     $specialist_desc = $this->request->getVar('edit_specialist_desc_' . $d['lang_code']);

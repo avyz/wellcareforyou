@@ -58,6 +58,7 @@ class GroupPages extends BaseController
     {
         $navbar_management_group_name = $this->request->getVar('navbar_management_group_name');
         $lang_code = $this->request->getVar('lang_code');
+        $is_navbar = $this->request->getVar('is_navbar');
 
         $rules = [
             'navbar_management_group_name' => [
@@ -73,11 +74,17 @@ class GroupPages extends BaseController
         ];
         $session = null;
         $validation = null;
+        $cek_is_navbar = $this->groupPagesModel->cekIsNavbar($lang_code);
         if (!$this->validate($rules)) {
             $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $navbar_management_group_name . " please check your input again");
             $validation = validation_errors();
             $this->generalController->logUser('Create Group Pages', 'Fail to insert data because field invalid');
+        } else if ($is_navbar == 1 && $cek_is_navbar) {
+            $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $navbar_management_group_name . " please check your input again");
+            $validation = ['is_navbar' => 'Cannot force to be navbar because you already set navbar in this language'];
+            $this->generalController->logUser('Create Pages', 'Fail to insert data because Cannot force to be navbar because you already set navbar in this language');
         } else {
+
             $data = [
                 'uuid' => $this->helperModel::generateUuid(),
                 'lang_code' => $lang_code,
@@ -85,6 +92,7 @@ class GroupPages extends BaseController
                 'created_at' => $this->dateTime(),
                 'updated_at' => $this->dateTime(),
                 'is_active' => 1,
+                'is_navbar' => $is_navbar
             ];
             $this->helperModel::insertData($data, false, 'page_navbar_group_table');
             $session = $this->sessionMessage('success', 'Group Pages ' . $navbar_management_group_name . ' has been created');
@@ -107,7 +115,9 @@ class GroupPages extends BaseController
         $edit_navbar_management_group_name = $this->request->getVar('edit_navbar_management_group_name');
         $lang_code = $this->request->getVar('lang_code');
         $type = $this->request->getVar('type');
+        $edit_is_navbar = $this->request->getVar('edit_is_navbar');
         $data = $this->groupPagesModel::dataGroupPagesByPagesUuid($navbar_management_group_id);
+
         if ($type != 'view') {
             $requestData = $this->request->getJSON();
             $navbar_management_group_id = $requestData->navbar_management_group_id;
@@ -137,24 +147,33 @@ class GroupPages extends BaseController
             ];
             $session = null;
             $validation = null;
+            $cek_is_navbar = $this->groupPagesModel->cekIsNavbar($lang_code);
             if (!$this->validate($rules)) {
                 $session = $this->sessionMessage('error', "Oops, something went wrong when update " . $edit_navbar_management_group_name . " please check your input again");
                 $validation = validation_errors();
                 $this->generalController->logUser('Edit Group Pages', 'Fail to update because field invalid');
             } else {
-                $data_update = [
-                    'lang_code' => $lang_code,
-                    'navbar_management_group_name' => $edit_navbar_management_group_name,
-                    'updated_at' => $this->dateTime(),
-                ];
 
-                $where = [
-                    'uuid' => $navbar_management_group_id,
-                ];
-                $this->helperModel::updateData($where, $data_update, 'page_navbar_group_table');
-                $session = $this->sessionMessage('success', 'Group Pages ' . $data['navbar_management_group_name'] . ' has been updated');
-                $validation = null;
-                $this->generalController->logUser('Edit Group Pages', 'Group Pages ' . $data['navbar_management_group_name'] . ' has been updated');
+                if ($data['is_navbar'] == 0 && $cek_is_navbar && $edit_is_navbar == 1) {
+                    $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $edit_navbar_management_group_name . " please check your input again");
+                    $validation = ['edit_is_navbar' => 'Cannot force to be navbar because you already set navbar in this language'];
+                    $this->generalController->logUser('Create Pages', 'Fail to insert data because Cannot force to be navbar because you already set navbar in this language');
+                } else {
+                    $data_update = [
+                        'lang_code' => $lang_code,
+                        'navbar_management_group_name' => $edit_navbar_management_group_name,
+                        'updated_at' => $this->dateTime(),
+                        'is_navbar' => $edit_is_navbar ? 1 : 0
+                    ];
+
+                    $where = [
+                        'uuid' => $navbar_management_group_id,
+                    ];
+                    $this->helperModel::updateData($where, $data_update, 'page_navbar_group_table');
+                    $session = $this->sessionMessage('success', 'Group Pages ' . $data['navbar_management_group_name'] . ' has been updated');
+                    $validation = null;
+                    $this->generalController->logUser('Edit Group Pages', 'Group Pages ' . $data['navbar_management_group_name'] . ' has been updated');
+                }
             }
             $result['notification'] = $session;
             $result['validation'] = $validation;

@@ -51,7 +51,7 @@
                 <div class="modal-body">
                     <?= $this->include('layout/admin/language_form'); ?>
                     <hr>
-                    <div class="row">
+                    <div class="row my-3">
                         <div class="col-md-9">
                             <div class="form-group">
                                 <label for="navbar_management_name">Page Name :</label>
@@ -67,6 +67,31 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group mb-3">
+                        <label for="to_page">To Page : </label>
+                        <select name="to_page" id="to_page" class="form-control" required>
+                            <option value="">-- Select Page --</option>
+                            <option value="home">Home</option>
+                            <option value="about">About</option>
+                            <option value="hospitals">Hospital</option>
+                            <option value="doctors">Doctor</option>
+                            <option value="specialists">Specialist</option>
+                            <option value="newsblog">News & Blog</option>
+                            <option value="pharmacies">Pharmacies</option>
+                            <option value="contact">Contact</option>
+                            <option value="privacy-policy">Privacy Policy</option>
+                            <option value="terms-condition">Terms Condition</option>
+                        </select>
+                        <div class="invalid-feedback" id="to_page_validation"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check form-switch ps-4">
+                            <label class="form-check-label" for="is_main">Force page url to "/"</label>
+                            <input class="form-check-input" type="checkbox" name="is_main" id="is_main" value="1">
+                            <div class="invalid-feedback" id="is_main_validation"></div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
@@ -93,7 +118,7 @@
                     <input type="hidden" name="navbar_management_id" id="edit_navbar_management_id">
                     <?= $this->include('layout/admin/language_form'); ?>
                     <hr>
-                    <div class="row">
+                    <div class="row my-3">
                         <div class="col-md-9">
                             <div class="form-group">
                                 <label for="edit_navbar_management_name">Page Name :</label>
@@ -107,6 +132,30 @@
                                 <input type="number" min="1" class="form-control" name="edit_navbar_management_number" id="edit_navbar_management_number" required>
                                 <div class="invalid-feedback" id="edit_navbar_management_number_validation"></div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="edit_to_page">To Page : </label>
+                        <select name="edit_to_page" id="edit_to_page" class="form-control" required>
+                            <option value="">-- Select Page --</option>
+                            <option value="home">Home</option>
+                            <option value="about">About</option>
+                            <option value="hospitals">Hospital</option>
+                            <option value="doctors">Doctor</option>
+                            <option value="specialists">Specialist</option>
+                            <option value="newsblog">News & Blog</option>
+                            <option value="pharmacies">Pharmacies</option>
+                            <option value="contact">Contact</option>
+                            <option value="privacy-policy">Privacy Policy</option>
+                            <option value="terms-condition">Terms Condition</option>
+                        </select>
+                        <div class="invalid-feedback" id="edit_to_page_validation"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check form-switch ps-4">
+                            <label class="form-check-label" for="edit_is_main">Force page url to "/"</label>
+                            <input class="form-check-input" type="checkbox" name="edit_is_main" id="edit_is_main" value="1">
+                            <div class="invalid-feedback" id="edit_is_main_validation"></div>
                         </div>
                     </div>
                 </div>

@@ -55,7 +55,9 @@ class Pages extends BaseController
     {
         $navbar_management_name = $this->request->getVar('navbar_management_name');
         $navbar_management_number = $this->request->getVar('navbar_management_number');
+        $is_main = $this->request->getVar('is_main');
         $lang_code = $this->request->getVar('lang_code');
+        $to_page = $this->request->getVar('to_page');
 
         $rules = [
             'navbar_management_name' => [
@@ -77,6 +79,14 @@ class Pages extends BaseController
                     'trim' => 'Character has space in first or end letter',
                 ]
             ],
+            'to_page' => [
+                'label' => 'To Page',
+                'rules' => 'trim|required',
+                'errors' => [
+                    'required' => 'The To Page is required',
+                    'trim' => 'Character has space in first or end letter',
+                ]
+            ],
         ];
         $session = null;
         $validation = null;
@@ -89,6 +99,8 @@ class Pages extends BaseController
             $lastNumber = 1;
         }
 
+        $cek_navbar_main = $this->pagesModel->cekNavbarMain($lang_code, '/');
+        $cek_to_page = $this->pagesModel->cekToPage($lang_code, $to_page);
         if (!$this->validate($rules)) {
             $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $navbar_management_name . " please check your input again");
             $validation = validation_errors();
@@ -97,18 +109,35 @@ class Pages extends BaseController
             $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $navbar_management_name . " please check your input again");
             $validation = ['navbar_management_number' => 'Num must be ' . ($lastNumber + 1)];
             $this->generalController->logUser('Create Pages', 'Fail to insert data because page number invalid');
+        } else if ($is_main == 1 && $cek_navbar_main) {
+            $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $navbar_management_name . " please check your input again");
+            $validation = ['is_main' => 'Cannot force url page to "/" because url "/" already exist'];
+            $this->generalController->logUser('Create Pages', 'Fail to insert data because Cannot force url page to "/" because url "/" already exist');
+        } else if ($to_page && $cek_to_page) {
+            $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $navbar_management_name . " please check your input again");
+            $validation = ['to_page' => 'Cannot update to page ' . $to_page . ' because to page has used'];
+            $this->generalController->logUser('Create Pages', 'Fail to insert data because Cannot update to page ' . $to_page . ' because to page has used');
         } else {
+
             $this->helperModel::tambahUrutan($navbar_management_number, 'page_navbar_table', 'page_number', 'navbar_management_id', $lang_code, 'add');
+
+            if ($is_main == 1) {
+                $navbar_url = '/';
+            } else {
+                $navbar_url = '/' . url_title($navbar_management_name, '-', true);
+            }
 
             $data = [
                 'uuid' => $this->helperModel::generateUuid(),
                 'lang_code' => $lang_code,
                 'navbar_management_name' => ucwords($navbar_management_name),
-                'navbar_management_url' => '/' . url_title($navbar_management_name, '-', true),
+                'navbar_management_url' => $navbar_url,
                 'created_at' => $this->dateTime(),
                 'updated_at' => $this->dateTime(),
                 'is_active' => 1,
                 'page_number' => $navbar_management_number,
+                'is_main' => $is_main,
+                'to_page' => $to_page,
             ];
             $this->helperModel::insertData($data, false, 'page_navbar_table');
             $session = $this->sessionMessage('success', 'Pages ' . $navbar_management_name . ' has been created');
@@ -130,6 +159,8 @@ class Pages extends BaseController
         $navbar_management_id = $this->request->getVar('navbar_management_id');
         $edit_navbar_management_name = $this->request->getVar('edit_navbar_management_name');
         $edit_navbar_management_number = $this->request->getVar('edit_navbar_management_number');
+        $edit_is_main = $this->request->getVar('edit_is_main');
+        $edit_to_page = $this->request->getVar('edit_to_page');
         $lang_code = $this->request->getVar('lang_code');
         $type = $this->request->getVar('type');
         $data = $this->pagesModel::dataPagesByPagesUuid($navbar_management_id);
@@ -169,6 +200,14 @@ class Pages extends BaseController
                         'trim' => 'Character has space in first or end letter',
                     ]
                 ],
+                'edit_to_page' => [
+                    'label' => 'To Page',
+                    'rules' => 'trim|required',
+                    'errors' => [
+                        'required' => 'The To Page is required',
+                        'trim' => 'Character has space in first or end letter',
+                    ]
+                ],
             ];
             $session = null;
             $validation = null;
@@ -180,7 +219,8 @@ class Pages extends BaseController
             if (!$lastNumber) {
                 $lastNumber = 1;
             }
-
+            $cek_navbar_main = $this->pagesModel->cekNavbarMain($lang_code, '/');
+            $cek_to_page = $this->pagesModel->cekToPage($lang_code, $edit_to_page);
             if (!$this->validate($rules)) {
                 $session = $this->sessionMessage('error', "Oops, something went wrong when update " . $edit_navbar_management_name . " please check your input again");
                 $validation = validation_errors();
@@ -190,22 +230,41 @@ class Pages extends BaseController
                 $validation = ['edit_navbar_management_number' => 'Num must be ' . ($lastNumber)];
                 $this->generalController->logUser('Create Pages', 'Fail to insert data because page number invalid');
             } else {
-                $this->helperModel::tambahUrutan($edit_navbar_management_number, 'page_navbar_table', 'page_number', 'navbar_management_id', $lang_code, 'edit', $data['navbar_management_id']);
-                $data_update = [
-                    'lang_code' => $lang_code,
-                    'navbar_management_name' => $edit_navbar_management_name,
-                    'navbar_management_url' => '/' . url_title($edit_navbar_management_name, '-', true),
-                    'updated_at' => $this->dateTime(),
-                    'page_number' => $edit_navbar_management_number,
-                ];
 
-                $where = [
-                    'uuid' => $navbar_management_id,
-                ];
-                $this->helperModel::updateData($where, $data_update, 'page_navbar_table');
-                $session = $this->sessionMessage('success', 'Pages ' . $data['navbar_management_name'] . ' has been updated');
-                $validation = null;
-                $this->generalController->logUser('Edit Pages', 'Pages ' . $data['navbar_management_name'] . ' has been updated');
+                if ($cek_navbar_main && $data['is_main'] == 0 && $edit_is_main == 1) {
+                    $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $edit_navbar_management_name . " please check your input again");
+                    $validation = ['edit_is_main' => 'Cannot force url page to "/" because url "/" already exist'];
+                    $this->generalController->logUser('Create Pages', 'Fail to insert data because Cannot force url page to "/" because url "/" already exist');
+                } else if ($cek_to_page && !$data['to_page'] && $edit_to_page) {
+                    $session = $this->sessionMessage('error', "Oops, something went wrong when create " . $edit_navbar_management_name . " please check your input again");
+                    $validation = ['edit_to_page' => 'Cannot update to page ' . $edit_to_page . ' because to page has used'];
+                    $this->generalController->logUser('Create Pages', 'Fail to insert data because Cannot update to page ' . $edit_to_page . ' because to page has used');
+                } else {
+                    if ($edit_is_main == 1) {
+                        $navbar_url = '/';
+                    } else {
+                        $navbar_url = '/' . url_title($edit_navbar_management_name, '-', true);
+                    }
+
+                    $this->helperModel::tambahUrutan($edit_navbar_management_number, 'page_navbar_table', 'page_number', 'navbar_management_id', $lang_code, 'edit', $data['navbar_management_id']);
+                    $data_update = [
+                        'lang_code' => $lang_code,
+                        'navbar_management_name' => $edit_navbar_management_name,
+                        'navbar_management_url' => $navbar_url,
+                        'updated_at' => $this->dateTime(),
+                        'page_number' => $edit_navbar_management_number,
+                        'is_main' => $edit_is_main ? 1 : 0,
+                        'to_page' => $edit_to_page,
+                    ];
+
+                    $where = [
+                        'uuid' => $navbar_management_id,
+                    ];
+                    $this->helperModel::updateData($where, $data_update, 'page_navbar_table');
+                    $session = $this->sessionMessage('success', 'Pages ' . $data['navbar_management_name'] . ' has been updated');
+                    $validation = null;
+                    $this->generalController->logUser('Edit Pages', 'Pages ' . $data['navbar_management_name'] . ' has been updated');
+                }
             }
             $result['notification'] = $session;
             $result['validation'] = $validation;

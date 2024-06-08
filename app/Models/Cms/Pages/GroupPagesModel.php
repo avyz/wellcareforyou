@@ -19,6 +19,7 @@ class GroupPagesModel extends Model
                     uuid,
                     is_active,
                     created_at,
+                    is_navbar,
                     navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
                     WHERE lang_code = '$lang_code' AND `navbar_management_group_name` LIKE '%$filter%' ORDER BY $column $order";
                 } else {
@@ -27,6 +28,7 @@ class GroupPagesModel extends Model
                     uuid,
                     is_active,
                     created_at,
+                    is_navbar,
                     navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
                     WHERE lang_code = '$lang_code' ORDER BY $column $order";
                 }
@@ -37,6 +39,7 @@ class GroupPagesModel extends Model
                     uuid,
                     is_active,
                     created_at,
+                    is_navbar,
                     navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
                     WHERE lang_code = 'en' AND `navbar_management_group_name` LIKE '%$filter%' ORDER BY $column $order";
                 } else {
@@ -45,6 +48,7 @@ class GroupPagesModel extends Model
                     uuid,
                     is_active,
                     created_at,
+                    is_navbar,
                     navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
                     WHERE lang_code = 'en' ORDER BY $column $order";
                 }
@@ -57,6 +61,7 @@ class GroupPagesModel extends Model
                     uuid,
                     is_active,
                     created_at,
+                    is_navbar,
                     navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
                     WHERE lang_code = '$lang_code' AND is_active = 1 AND `navbar_management_group_name` LIKE '%$filter%' ORDER BY $column $order";
                 } else {
@@ -65,6 +70,7 @@ class GroupPagesModel extends Model
                     uuid,
                     is_active,
                     created_at,
+                    is_navbar,
                     navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
                     WHERE lang_code = '$lang_code' AND is_active = 1 ORDER BY $column $order";
                 }
@@ -75,6 +81,7 @@ class GroupPagesModel extends Model
                     uuid,
                     is_active,
                     created_at,
+                    is_navbar,
                     navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
                     WHERE lang_code = 'en' AND is_active = 1 AND `navbar_management_group_name` LIKE '%$filter%' ORDER BY $column $order";
                 } else {
@@ -83,6 +90,7 @@ class GroupPagesModel extends Model
                     uuid,
                     is_active,
                     created_at,
+                    is_navbar,
                     navbar_management_group_id FROM page_navbar_group_table, (SELECT @no:= 0) AS no 
                     WHERE lang_code = 'en' AND is_active = 1 ORDER BY $column $order";
                 }
@@ -108,6 +116,7 @@ class GroupPagesModel extends Model
         uuid,
         is_active,
         created_at,
+        is_navbar,
         navbar_management_group_id FROM page_navbar_group_table 
         WHERE `uuid` = '$uuid'";
 
@@ -133,6 +142,29 @@ class GroupPagesModel extends Model
         `uuid` AS navbar_management_group_child_uuid
         FROM page_navbar_group_child_table 
         WHERE `navbar_management_group_uuid` = '$navbar_management_group_uuid' AND `navbar_management_uuid` = '$management_uuid'";
+
+        $result = $db->query($query)->getRowArray();
+
+        if (isset($result)) {
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
+    public static function cekIsNavbar($lang_code)
+    {
+        $instance = new static();
+        $db = $instance->db;
+
+        $query = "SELECT `navbar_management_group_name`,
+        `lang_code`,
+        uuid,
+        is_active,
+        created_at,
+        is_navbar,
+        navbar_management_group_id FROM page_navbar_group_table 
+        WHERE `lang_code` = '$lang_code' AND `is_navbar` = 1";
 
         $result = $db->query($query)->getRowArray();
 

@@ -26,12 +26,12 @@ class HospitalModel extends Model
             T2.hospital_location_name,
             T2.hospital_location_code,
             T3.uuid AS hospital_country_uuid,
-            T3.lang_code,
-            T3.language AS hospital_country
+            T3.country_code,
+            T3.country AS hospital_country
             FROM (SELECT @no:= 0) AS no, hospital_table T0
             LEFT JOIN hospital_address_table T1 ON T1.hospital_uuid = T0.uuid
             LEFT JOIN hospital_location_table T2 ON T2.uuid = T1.hospital_location_uuid
-            LEFT JOIN lang_table T3 ON T2.lang_uuid = T3.uuid
+            LEFT JOIN country_table T3 ON T2.country_uuid = T3.uuid
             WHERE T0.is_deleted = 0 AND T1.is_center = 1 AND T0.`hospital_name` LIKE '%$filter%' ORDER BY $column $order";
         } else {
             $query = "SELECT @no:=@no+1 AS number, T0.`hospital_id`,
@@ -48,12 +48,12 @@ class HospitalModel extends Model
             T2.hospital_location_name,
             T2.hospital_location_code,
             T3.uuid AS hospital_country_uuid,
-            T3.lang_code,
-            T3.language AS hospital_country
+            T3.country_code,
+            T3.country AS hospital_country
             FROM (SELECT @no:= 0) AS no, hospital_table T0
             LEFT JOIN hospital_address_table T1 ON T1.hospital_uuid = T0.uuid
             LEFT JOIN hospital_location_table T2 ON T2.uuid = T1.hospital_location_uuid
-            LEFT JOIN lang_table T3 ON T2.lang_uuid = T3.uuid
+            LEFT JOIN country_table T3 ON T2.country_uuid = T3.uuid
             WHERE T0.is_deleted = 0 AND T1.is_center = 1 ORDER BY $column $order";
         }
 
@@ -87,13 +87,13 @@ class HospitalModel extends Model
             T1.is_center,
             T2.hospital_location_name,
             T2.hospital_location_code,
-            T3.lang_code,
-            T3.language AS hospital_country
+            T3.country_code,
+            T3.country AS hospital_country
             FROM (SELECT @no:= 0) AS no, hospital_table T0
             LEFT JOIN hospital_address_table T1 ON T1.hospital_uuid = T0.uuid
             LEFT JOIN hospital_location_table T2 ON T2.uuid = T1.hospital_location_uuid
-            LEFT JOIN lang_table T3 ON T2.lang_uuid = T3.uuid
-            WHERE T0.is_deleted = 0 AND T1.is_deleted = 0 ORDER BY $column $order";
+            LEFT JOIN country_table T3 ON T2.country_uuid = T3.uuid
+            WHERE T0.is_deleted = 0 AND T1.is_deleted = 0 ORDER BY $column $order, T1.is_center DESC";
 
         $result = $db->query($query)->getResultArray();
 
@@ -120,12 +120,12 @@ class HospitalModel extends Model
             T1.hospital_name,
             T1.hospital_code,
             T2.hospital_location_name,
-            T3.lang_code,
-            T3.language AS hospital_country
+            T3.country_code,
+            T3.country AS hospital_country
             FROM (SELECT @no:= 0) AS no, hospital_address_table T0
             LEFT JOIN hospital_table T1 ON T1.uuid = T0.hospital_uuid
             LEFT JOIN hospital_location_table T2 ON T2.uuid = T0.hospital_location_uuid
-            LEFT JOIN lang_table T3 ON T2.lang_uuid = T3.uuid
+            LEFT JOIN country_table T3 ON T2.country_uuid = T3.uuid
             WHERE T0.is_deleted = 0 AND T0.is_center = 0 AND T0.`hospital_uuid` = '$hospital_uuid' AND T0.`hospital_address` = '$hospital_address' ORDER BY `number` ASC";
 
         $result = $db->query($query)->getRowArray();
@@ -153,12 +153,12 @@ class HospitalModel extends Model
             T1.hospital_name,
             T1.hospital_code,
             T2.hospital_location_name,
-            T3.lang_code,
-            T3.language AS hospital_country
+            T3.country_code,
+            T3.country AS hospital_country
             FROM (SELECT @no:= 0) AS no, hospital_address_table T0
             LEFT JOIN hospital_table T1 ON T1.uuid = T0.hospital_uuid
             LEFT JOIN hospital_location_table T2 ON T2.uuid = T0.hospital_location_uuid
-            LEFT JOIN lang_table T3 ON T2.lang_uuid = T3.uuid
+            LEFT JOIN country_table T3 ON T2.country_uuid = T3.uuid
             WHERE T0.is_deleted = 0 AND T0.is_center = 0 AND T0.`hospital_uuid` = '$hospital_uuid' ORDER BY `number` ASC";
 
         $result = $db->query($query)->getResultArray();
@@ -178,15 +178,15 @@ class HospitalModel extends Model
         $query = "SELECT @no:=@no+1 AS number, 
         T0.`hospital_location_id`,
         T0.`uuid`,
-        T0.`lang_uuid`,
+        T0.`country_uuid`,
         T0.hospital_location_name,
         T0.hospital_location_code,
         T0.created_at,
-        T1.lang_code,
-        T1.language
+        T1.country_code,
+        T1.country
         FROM (SELECT @no:= 0) AS no, hospital_location_table T0 
-        LEFT JOIN lang_table T1 ON T0.lang_uuid = T1.uuid
-        WHERE T0.is_deleted = 0 AND (T0.hospital_location_name LIKE '%$filter%' OR T1.language LIKE '%$filter%') ORDER BY $column $order";
+        LEFT JOIN country_table T1 ON T0.country_uuid = T1.uuid
+        WHERE T0.is_deleted = 0 AND (T0.hospital_location_name LIKE '%$filter%' OR T1.country LIKE '%$filter%') ORDER BY $column $order";
 
         $result = $db->query($query)->getResultArray();
 
@@ -197,7 +197,7 @@ class HospitalModel extends Model
         }
     }
 
-    public static function dataArrayLocationByLangUuid($lang_uuid)
+    public static function dataArrayLocationByCountryUuid($country_uuid)
     {
         $instance = new static();
         $db = $instance->db;
@@ -205,15 +205,15 @@ class HospitalModel extends Model
         $query = "SELECT @no:=@no+1 AS `number`, 
         T0.`hospital_location_id`,
         T0.`uuid`,
-        T0.`lang_uuid`,
+        T0.`country_uuid`,
         T0.hospital_location_name,
         T0.hospital_location_code,
         T0.created_at,
-        T1.lang_code,
-        T1.language
+        T1.country_code,
+        T1.country
         FROM (SELECT @no:= 0) AS `no`, hospital_location_table T0 
-        LEFT JOIN lang_table T1 ON T0.lang_uuid = T1.uuid
-        WHERE T0.is_deleted = 0 AND T0.lang_uuid = '$lang_uuid' ORDER BY `number` ASC";
+        LEFT JOIN country_table T1 ON T0.country_uuid = T1.uuid
+        WHERE T0.is_deleted = 0 AND T0.country_uuid = '$country_uuid' ORDER BY `number` ASC";
 
         $result = $db->query($query)->getResultArray();
 
@@ -224,7 +224,7 @@ class HospitalModel extends Model
         }
     }
 
-    public static function dataLocationByLangUuidAndHospitalLocationName($lang_uuid, $hospital_location_name)
+    public static function dataLocationByCountryUuidAndHospitalLocationName($country_uuid, $hospital_location_name)
     {
         $instance = new static();
         $db = $instance->db;
@@ -232,15 +232,15 @@ class HospitalModel extends Model
         $query = "SELECT @no:=@no+1 AS number, 
         T0.`hospital_location_id`,
         T0.`uuid`,
-        T0.`lang_uuid`,
+        T0.`country_uuid`,
         T0.hospital_location_name,
         T0.hospital_location_code,
         T0.created_at,
-        T1.lang_code,
-        T1.language
+        T1.country_code,
+        T1.country
         FROM (SELECT @no:= 0) AS no, hospital_location_table T0 
-        LEFT JOIN lang_table T1 ON T0.lang_uuid = T1.uuid
-        WHERE T0.is_deleted = 0 AND T0.lang_uuid = '$lang_uuid' AND T0.hospital_location_name = '$hospital_location_name' ORDER BY `number` ASC";
+        LEFT JOIN country_table T1 ON T0.country_uuid = T1.uuid
+        WHERE T0.is_deleted = 0 AND T0.country_uuid = '$country_uuid' AND T0.hospital_location_name = '$hospital_location_name' ORDER BY `number` ASC";
 
         $result = $db->query($query)->getRowArray();
 

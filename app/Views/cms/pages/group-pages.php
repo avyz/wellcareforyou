@@ -55,6 +55,13 @@
                         <input type="text" class="form-control" name="navbar_management_group_name" id="navbar_management_group_name" required>
                         <div class="invalid-feedback" id="navbar_management_group_name_validation"></div>
                     </div>
+                    <div class="form-group my-3">
+                        <div class="form-check form-switch ps-4">
+                            <label class="form-check-label" for="is_navbar">Force to be navbar</label>
+                            <input class="form-check-input" type="checkbox" name="is_navbar" id="is_navbar" value="1">
+                            <div class="invalid-feedback" id="is_navbar_validation"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
@@ -85,6 +92,13 @@
                         <label for="edit_navbar_management_group_name">Group Name :</label>
                         <input type="text" class="form-control" name="edit_navbar_management_group_name" id="edit_navbar_management_group_name" required>
                         <div class="invalid-feedback" id="edit_navbar_management_group_name_validation"></div>
+                    </div>
+                    <div class="form-group my-3">
+                        <div class="form-check form-switch ps-4">
+                            <label class="form-check-label" for="edit_is_navbar">Force to be navbar</label>
+                            <input class="form-check-input" type="checkbox" name="edit_is_navbar" id="edit_is_navbar" value="1">
+                            <div class="invalid-feedback" id="edit_is_navbar_validation"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

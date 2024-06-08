@@ -40,6 +40,10 @@ class Language extends Migration
             'is_active' => [
                 'type' => 'INT',
                 'constraint' => '1'
+            ],
+            'is_lang_default' => [
+                'type' => 'INT',
+                'constraint' => '1'
             ]
         ]);
         $this->forge->addKey('lang_id', true);

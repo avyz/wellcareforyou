@@ -382,7 +382,7 @@ class Hospital extends BaseController
                     $hospital_image_name = $edit_hospital_image;
                 } else {
                     $hospital_image_name = 'logo_' . url_title($edit_hospital_name, '_') . '.' . $edit_hospital_image_new->getClientExtension();
-                    $this->unlinkImage('assets/website/images/hospital/' . $hospital_image_name);
+                    $this->unlinkImage('assets/website/images/hospital/' . $edit_hospital_image);
                     $edit_hospital_image_new->move('assets/website/images/hospital', $hospital_image_name);
                 }
 
@@ -490,10 +490,10 @@ class Hospital extends BaseController
         return $this->response->setJSON($result);
     }
 
-    public function dataLocationByLangUuid()
+    public function dataLocationByCountryUuid()
     {
-        $lang_uuid = $this->request->getVar('id');
-        $data = $this->hospitalModel::dataArrayLocationByLangUuid($lang_uuid);
+        $country_uuid = $this->request->getVar('id');
+        $data = $this->hospitalModel::dataArrayLocationByCountryUuid($country_uuid);
         return $this->response->setJSON($data);
     }
 
@@ -531,7 +531,7 @@ class Hospital extends BaseController
 
     public function createHospitalLocation()
     {
-        $lang_uuid = $this->request->getVar('lang_uuid');
+        $country_uuid = $this->request->getVar('country_uuid');
         $hospital_location_name = $this->request->getVar('hospital_location_name');
 
         $rules = [
@@ -544,7 +544,7 @@ class Hospital extends BaseController
                     'trim' => 'Character has space in first or end letter',
                 ]
             ],
-            'lang_uuid.*' => [
+            'country_uuid.*' => [
                 'label' => 'Country',
                 'rules' => 'trim|required|min_length[1]',
                 'errors' => [
@@ -562,8 +562,8 @@ class Hospital extends BaseController
             $this->generalController->logUser('Create Location', 'Fail to create because field invalid');
         } else {
             $is_exist = 0;
-            foreach ($lang_uuid as $key => $value) {
-                $data_by_name = $this->hospitalModel::dataLocationByLangUuidAndHospitalLocationName($value, ucwords($hospital_location_name[$key]));
+            foreach ($country_uuid as $key => $value) {
+                $data_by_name = $this->hospitalModel::dataLocationByCountryUuidAndHospitalLocationName($value, ucwords($hospital_location_name[$key]));
                 if ($data_by_name) {
                     $is_exist = $key;
                     $validation = ['hospital_location_name.' . $key => 'Location already exist'];
@@ -572,10 +572,10 @@ class Hospital extends BaseController
             $session = $this->sessionMessage('error', 'Location already exist');
             $this->generalController->logUser('Create Location', 'Location already exist');
             if (!$is_exist) {
-                foreach ($lang_uuid as $key => $value) {
+                foreach ($country_uuid as $key => $value) {
                     $data_location_insert = [
                         'uuid' => $this->helperModel::generateUuid(),
-                        'lang_uuid' => $value,
+                        'country_uuid' => $value,
                         'hospital_location_code' => $this->generateUniqueCharacter($hospital_location_name[$key]),
                         'hospital_location_name' => ucwords($hospital_location_name[$key]),
                         'created_at' => $this->dateTime(),
@@ -600,15 +600,15 @@ class Hospital extends BaseController
 
     public function editHospitalLocation()
     {
-        $lang_id = $this->request->getVar('lang_id');
+        $country_id = $this->request->getVar('country_id');
         $type = $this->request->getVar('type');
 
-        $data = $this->hospitalModel::dataArrayLocationByLangUuid($lang_id);
+        $data = $this->hospitalModel::dataArrayLocationByCountryUuid($country_id);
         if ($type != 'view') {
             $edit_hospital_location_name = $this->request->getVar('edit_hospital_location_name');
             $action_type = $this->request->getVar('action_type');
             $location_id = $this->request->getVar('location_id');
-            $edit_lang_uuid = $this->request->getVar('edit_lang_uuid');
+            $edit_country_uuid = $this->request->getVar('edit_country_uuid');
 
             $token = csrf_hash();
             $rules = [
@@ -621,7 +621,7 @@ class Hospital extends BaseController
                         'trim' => 'Character has space in first or end letter',
                     ]
                 ],
-                'edit_lang_uuid.*' => [
+                'edit_country_uuid.*' => [
                     'label' => 'Country',
                     'rules' => 'trim|required|min_length[1]',
                     'errors' => [
@@ -638,7 +638,7 @@ class Hospital extends BaseController
                 $this->generalController->logUser('Edit Location', 'Fail to update because field invalid');
             } else {
 
-                $data_location = $this->hospitalModel::dataArrayLocationByLangUuid($edit_lang_uuid[0]);
+                $data_location = $this->hospitalModel::dataArrayLocationByCountryUuid($edit_country_uuid[0]);
                 if (is_array($action_type)) {
                     foreach ($action_type as $key => $value_arr) {
                         if ($value_arr == 'edit_value') {
@@ -671,7 +671,7 @@ class Hospital extends BaseController
                         $is_exist = 0;
                         if ($value_arr == 'add_value') {
                             if (!isset($location_id[$key])) {
-                                $data_by_name = $this->hospitalModel::dataLocationByLangUuidAndHospitalLocationName($edit_lang_uuid[$key], ucwords($edit_hospital_location_name[$key]));
+                                $data_by_name = $this->hospitalModel::dataLocationByCountryUuidAndHospitalLocationName($edit_country_uuid[$key], ucwords($edit_hospital_location_name[$key]));
                                 if ($data_by_name) {
                                     $is_exist = $key;
                                     $validation = ['edit_hospital_location_name.' . $key => 'Location already exist'];
@@ -681,7 +681,7 @@ class Hospital extends BaseController
                             }
                             // foreach ($edit_lang_uuid as $key => $value) {
                             //     if (!isset($location_id[$key])) {
-                            //         $data_by_name = $this->hospitalModel::dataLocationByLangUuidAndHospitalLocationName($value, ucwords($edit_hospital_location_name[$key]));
+                            //         $data_by_name = $this->hospitalModel::dataLocationByCountryUuidAndHospitalLocationName($value, ucwords($edit_hospital_location_name[$key]));
                             //         if ($data_by_name) {
                             //             $is_exist = $key;
                             //             $validation = ['edit_hospital_location_name.' . $key => 'Location already exist'];
@@ -694,7 +694,7 @@ class Hospital extends BaseController
                                 if (!isset($location_id[$key])) {
                                     $data_location_insert = [
                                         'uuid' => $this->helperModel::generateUuid(),
-                                        'lang_uuid' => $edit_lang_uuid[$key],
+                                        'country_uuid' => $edit_country_uuid[$key],
                                         'hospital_location_code' => $this->generateUniqueCharacter($edit_hospital_location_name[$key]),
                                         'hospital_location_name' => ucwords($edit_hospital_location_name[$key]),
                                         'created_at' => $this->dateTime(),

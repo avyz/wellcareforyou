@@ -59,6 +59,18 @@ class Doctors extends Migration
             'is_deleted' => [
                 'type' => 'INT',
                 'constraint' => 1,
+            ],
+            'doctor_facebook' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
+            'doctor_twitter' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
+            'doctor_linkedin' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
             ]
         ]);
         $this->forge->addKey('doctor_id', true);

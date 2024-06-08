@@ -1689,7 +1689,8 @@ class Auth extends BaseController
                         $dataUsersByEmail = $this->userModel::dataUsersByEmail($email);
                         session()->set('last_activity', time());
                         session()->set('is_lockscreen', $dataUsersByEmail['is_lockscreen']);
-                        return redirect()->to('/dashboard');
+                        $last_url = session()->get('last_url');
+                        return redirect()->to($last_url ? $last_url : '/dashboard');
                     } else {
                         $data = [
                             'email' => $email,

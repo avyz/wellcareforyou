@@ -10,35 +10,39 @@ use CodeIgniter\Router\RouteCollection;
 
 // Home
 $routes->get('/', 'Website\Home\Home::index');
-$routes->get('/terms-conditions', 'Website\Home\Home::terms');
-$routes->get('/privacy-policy', 'Website\Home\Home::privacy');
+
+// About
+$routes->get('/page/about/edit-content', 'Website\About\About::editContentAbout');
+$routes->post('/page/about/edit-content', 'Website\About\About::editContentAbout');
+// $routes->get('/terms-conditions', 'Website\Home\Home::terms');
+// $routes->get('/privacy-policy', 'Website\Home\Home::privacy');
 // End Home
 // About
-$routes->get('/about', 'Website\About\About::index');
+// $routes->get('/about-us', 'Website\About\About::index');
 // End About
 // NewsBlog
-$routes->get('/news-blog', 'Website\NewsBlog\NewsBlog::index');
-$routes->get('/news-blog/detail/(:num)/(:num)/(:num)/(:any)', 'Website\NewsBlog\NewsBlog::detail/$1/$2/$3/$4');
+// $routes->get('/news-blog', 'Website\NewsBlog\NewsBlog::index');
+// $routes->get('/news-blog/detail/(:num)/(:num)/(:num)/(:any)', 'Website\NewsBlog\NewsBlog::detail/$1/$2/$3/$4');
 // End NewsBlog
 // Hospitals
-$routes->get('/hospitals', 'Website\Hospitals\Hospitals::index');
-$routes->get('/hospitals/package/(:any)/(:any)', 'Website\Hospitals\Hospitals::package/$1/$2');
-$routes->get('/hospitals/(:any)', 'Website\Hospitals\Hospitals::single/$1');
+// $routes->get('/hospitals', 'Website\Hospitals\Hospitals::index');
+// $routes->get('/hospitals/package/(:any)/(:any)', 'Website\Hospitals\Hospitals::package/$1/$2');
+// $routes->get('/hospitals/(:any)', 'Website\Hospitals\Hospitals::single/$1');
 // End Hospitals
 // Doctors
-$routes->get('/doctors', 'Website\Doctors\Doctors::index');
-$routes->get('/doctors/specialists/(:any)', 'Website\Doctors\Doctors::index/$1');
-$routes->get('/doctors/profile/(:any)', 'Website\Doctors\Doctors::profile/$1');
-$routes->get('/doctors/appointment/(:any)', 'Website\Doctors\Doctors::appointment/$1');
+// $routes->get('/doctors', 'Website\Doctors\Doctors::index');
+// $routes->get('/doctors/specialists/(:any)', 'Website\Doctors\Doctors::index/$1');
+// $routes->get('/doctors/profile/(:any)', 'Website\Doctors\Doctors::profile/$1');
+// $routes->get('/doctors/appointment/(:any)', 'Website\Doctors\Doctors::appointment/$1');
 // End Doctors
 // Pharmacies
-$routes->get('/pharmacies', 'Website\Pharmacies\Pharmacies::index');
+// $routes->get('/pharmacies', 'Website\Pharmacies\Pharmacies::index');
 // End Pharmacies
 // Specialists
-$routes->get('/specialists', 'Website\Specialists\Specialists::index');
+// $routes->get('/specialists', 'Website\Specialists\Specialists::index');
 // End Specialists
 // Contact
-$routes->get('/contact-us', 'Website\Contact\Contact::index');
+// $routes->get('/contact-us', 'Website\Contact\Contact::index');
 // End Contact
 
 // END WEBSITE SECTION
@@ -190,7 +194,14 @@ $routes->get('/setting/data-language-for-tags', 'Cms\Settings\Language::getDataL
 $routes->post('/setting/create-language', 'Cms\Settings\Language::createLanguage');
 $routes->get('/setting/edit-language', 'Cms\Settings\Language::editLanguage');
 $routes->post('/setting/edit-language', 'Cms\Settings\Language::editLanguage');
-$routes->delete('/setting/language/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
+// Country
+$routes->get('/setting/data-country', 'Cms\Settings\Country::dataCountry');
+$routes->get('/setting/search-country', 'Cms\Settings\Country::searchDataCountry');
+$routes->get('/setting/data-country-for-tags', 'Cms\Settings\Country::getDataCountryForTags');
+$routes->post('/setting/create-country', 'Cms\Settings\Country::createCountry');
+$routes->get('/setting/edit-country', 'Cms\Settings\Country::editCountry');
+$routes->post('/setting/edit-country', 'Cms\Settings\Country::editCountry');
+$routes->delete('/setting/country/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 // End Settings
 
 // Pages
@@ -218,7 +229,7 @@ $routes->post('/setting/misc/save-misc', 'Cms\Settings\Misc::createMisc');
 // END MISC
 
 // HOSPITAL
-$routes->get('/hospital/data-hospital-location', 'Cms\Hospital\Hospital::dataLocationByLangUuid');
+$routes->get('/hospital/data-hospital-location', 'Cms\Hospital\Hospital::dataLocationByCountryUuid');
 $routes->post('/hospital/create-hospital-location', 'Cms\Hospital\Hospital::createHospitalLocation');
 $routes->get('/hospital/edit-hospital-location', 'Cms\Hospital\Hospital::editHospitalLocation');
 $routes->post('/hospital/edit-hospital-location', 'Cms\Hospital\Hospital::editHospitalLocation');
@@ -259,15 +270,21 @@ $routes->get('/doctor/data-specialist-tags', 'Cms\Doctor\Doctor::getDataDoctorSp
 $routes->post('/doctor/create-doctor-specialist', 'Cms\Doctor\Doctor::createDoctorSpecialist');
 $routes->get('/doctor/create-doctor-specialist', 'Cms\Doctor\Doctor::createDoctorSpecialist');
 $routes->get('/doctor/edit-doctor-specialist', 'Cms\Doctor\Doctor::editDoctorSpecialist');
-$routes->put('/doctor/edit-doctor-specialist', 'Cms\Doctor\Doctor::editDoctorSpecialist');
+$routes->post('/doctor/edit-doctor-specialist', 'Cms\Doctor\Doctor::editDoctorSpecialist');
 $routes->delete('/doctor/doctor/(:segment)/(:segment)/(:any)', 'Cms\General\General::delMenu/$1/$2/$3');
 
 // END ADMIN
 
 // GENERAL VIEW
-$routes->get('/(:segment)', 'Cms\General\General::index/$1', ['filter' => 'canView']);
-$routes->get('/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2', ['filter' => 'canView']);
-$routes->get('/(:segment)/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2/$3', ['filter' => 'canView']);
+$routes->get('/(:segment)', 'Website\Home\Home::general/$1');
+$routes->get('/(:segment)/(:segment)', 'Website\Home\Home::general/$1/$2');
+$routes->get('/(:segment)/(:segment)/(:segment)', 'Website\Home\Home::general/$1/$2/$3');
+// $routes->get('/(:segment)', 'Website\Home\Home::general/$1');
+// $routes->group('cms', ['filter' => 'canView'], function ($routes) {
+//     $routes->get('(:segment)', 'Cms\General\General::index/$1');
+// });
+// $routes->get('/(:segment)/(:segment)', 'Cms\General\General::index/$1/$2', ['filter' => 'canView']);
+// $routes->get('/(:segment)/(:segment)', 'Website\Home\Home::general/$1/$2');
 // END GENERAL VIEW
 
 // End CMS SECTION

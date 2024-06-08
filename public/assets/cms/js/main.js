@@ -237,7 +237,7 @@ function previewImg(selector, previewImgClass) {
     fileCover.readAsDataURL(fileName.files[0]);
     // Load gambar
     fileCover.onload = function (e) {
-        if (fileName.files[0].type == 'image/jpg' || fileName.files[0].type == 'image/jpeg' || fileName.files[0].type == 'image/png') {
+        if (fileName.files[0].type == 'image/jpg' || fileName.files[0].type == 'image/jpeg' || fileName.files[0].type == 'image/png' || fileName.files[0].type == 'image/svg+xml' || fileName.files[0].type == 'image/webp') {
             previewImg.src = e.target.result;
         } else {
             Swal.fire({

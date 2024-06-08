@@ -1,8 +1,10 @@
 // Add
 $(document).on('submit', '#specialistCreate', function (e) {
     e.preventDefault();
-    const data = $(this).serializeArray();
-    post(url + '/doctor/create-doctor-specialist', 'specialist-ui-table', 'specialistCreate', data);
+    // const data = $(this).serializeArray();
+    let formData = new FormData(this);
+    // post(url + '/doctor/create-doctor-specialist', 'specialist-ui-table', 'specialistCreate', data);
+    postWithImage(url + '/doctor/create-doctor-specialist', 'specialist-ui-table', 'specialistCreate', formData, null, false, false);
 });
 
 // Edit
@@ -28,6 +30,8 @@ $(document).on('click', '#editSpecialist', function () {
                 var edit_specialist_desc = $('#edit_specialist_desc_' + item.lang_code);
                 edit_specialist_desc.val(item.specialist_desc);
             });
+            $("#edit-show-specialist-image img").attr('src', url + '/assets/website/images/specialist/' + data.specialist.specialist_image);
+            $('#edit_specialist_image').val(data.specialist.specialist_image);
             // $('#edit_specialist_desc').val(data.specialist_desc);
             // $('#specialistEdit select[name="lang_code"]').val(data.lang_code);
         },
@@ -46,13 +50,15 @@ $(document).on('click', '#editSpecialist', function () {
 
 $(document).on('submit', '#specialistEdit', function (e) {
     e.preventDefault();
-    let data = $(this).serializeArray();
-    data.push({ name: 'type', value: 'edit' });
-    var formData = {};
-    $.each(data, function () {
-        formData[this.name] = this.value;
-    });
-    put(url + '/doctor/edit-doctor-specialist', 'specialist-ui-table', 'specialistEdit', formData);
+    // let data = $(this).serializeArray();
+    // data.push({ name: 'type', value: 'edit' });
+    // var formData = {};
+    // $.each(data, function () {
+    //     formData[this.name] = this.value;
+    // });
+    let formData = new FormData(this);
+    // put(url + '/doctor/edit-doctor-specialist', 'specialist-ui-table', 'specialistEdit', formData);
+    postWithImage(url + '/doctor/edit-doctor-specialist', 'specialist-ui-table', 'specialistEdit', formData, null, false, false);
 });
 
 // Doctor Section
@@ -351,6 +357,9 @@ $(document).on('click', '#editDoctor', function () {
             $('#edit_doctor_name').val(data_doctor.doctor_name);
             $('#edit_doctor_gender').val(data_doctor.doctor_gender);
             $('#edit_doctor_phone').val(data_doctor.doctor_phone);
+            $('#edit_doctor_facebook').val(data_doctor.doctor_facebook);
+            $('#edit_doctor_twitter').val(data_doctor.doctor_twitter);
+            $('#edit_doctor_linkedin').val(data_doctor.doctor_linkedin);
 
             const json_doctor_language = data_doctor_language.map(function (item) {
                 return { value: item.language, id: item.lang_code };

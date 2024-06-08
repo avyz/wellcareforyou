@@ -1636,7 +1636,12 @@ class MenuManagementModel extends Model
         $breadcrumb = [];
         if ($breadcrumbs) {
             $getSegments = $breadcrumbs->getSegments();
-            $segment = $breadcrumbs->getSegment($breadcrumbs->getTotalSegments());
+            // dd($breadcrumbs->getTotalSegments());
+            if ($breadcrumbs->getTotalSegments() > 0) {
+                $segment = $breadcrumbs->getSegment($breadcrumbs->getTotalSegments());
+            } else {
+                $segment = '/';
+            }
             // $first_segment = self::menuAksesBySlug($breadcrumbs->getSegment(1), $lang_code)['menu'] ?? null;
             $i = 1;
             // if ($first_segment) {
@@ -1648,7 +1653,8 @@ class MenuManagementModel extends Model
                 $breadcrumb[] = [
                     // 'segment' => $first_segment['menu_slug'] === $breadcrumbs->getSegment($i) ? $first_segment['menu_name'] : ucwords($text),
                     'segment' => ucwords($text),
-                    'url' => $segment == $text ? '#' : $url
+                    'url' => $segment == $text ? '#' : $url,
+                    'is_active' => $i == $breadcrumbs->getTotalSegments() ? 1 : 0
                 ];
                 $i++;
             }

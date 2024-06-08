@@ -6,16 +6,19 @@ use App\Controllers\BaseController;
 use App\Models\Cms\MenuManagement\MenuManagementModel;
 use App\Models\Cms\UserManagement\UserManagementModel;
 use App\Models\Cms\Settings\LanguageModel;
+use App\Models\Cms\Settings\CountryModel;
 use App\Models\Cms\Pages\PagesModel;
 use App\Models\Cms\Pages\GroupPagesModel;
 use App\Models\Cms\Users\UsersModel;
 use App\Models\Cms\Hospital\HospitalModel;
 use App\Models\Cms\Doctor\DoctorModel;
+use App\Models\Cms\Settings\MiscModel;
 use App\Models\HelperModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use App\Filters\CanViewFilters;
 
 class General extends BaseController
 {
@@ -25,10 +28,12 @@ class General extends BaseController
     protected $userManagementModel;
     protected $userModel;
     protected $languageModel;
+    protected $countryModel;
     protected $pagesModel;
     protected $groupPagesModel;
     protected $hospitalModel;
     protected $doctorModel;
+    protected $miscModel;
     public function __construct()
     {
         $this->helperModel = new HelperModel();
@@ -36,66 +41,223 @@ class General extends BaseController
         $this->userManagementModel = new UserManagementModel();
         $this->userModel = new UsersModel();
         $this->languageModel = new LanguageModel();
+        $this->countryModel = new CountryModel();
         $this->pagesModel = new PagesModel();
         $this->groupPagesModel = new GroupPagesModel();
         $this->hospitalModel = new HospitalModel();
         $this->doctorModel = new doctorModel();
+        $this->miscModel = new miscModel();
     }
 
-    public function index()
+    public function generalView(...$params)
     {
         $uri = service('uri');
+        $dataParams = $params[0];
         // dd($this->helperModel::generateUuid());
-        $lang_code = $this->request->getVar('lang');
-        // dd($lang_code);
-        $role_id = session()->get('role_id');
+        if ($dataParams['data']['dataMenu']) {
 
-        $data = [
-            'layout' => $this->dirLayoutCms,
-            'section' => $this->dirSectionCms,
-            'idleTime' => $this->timeIdle,
-            'sidebar' => $this->menuManagementModel::sidebar($role_id, $lang_code),
-            'dataMenu' => $this->menuManagementModel::menuAksesBySlug($uri->getSegment(1), $lang_code, $role_id),
-            'breadcrumbs' => $this->menuManagementModel::breadCrumbsBySlug(),
-            'language_row' => $this->menuManagementModel::languageByLangCode($lang_code),
-            'language_list' => $this->menuManagementModel::languageList()
-        ];
+            // $lang_code = $this->request->getVar('lang');
+            $role_id = session()->get('role_id');
 
-        // dd($data);
+            $filter = new CanViewFilters();
 
-        $path = '';
-        $title = null;
-        if ($data['dataMenu']) {
-            if (count($data['dataMenu']['sidebar']) == 0) {
-                $menu_url = $data['dataMenu']['menu']['menu_url'];
-                $path = $menu_url . '/' . 'body';
-                $title = $data['dataMenu']['menu']['menu_name'];
-            } else {
-                $menu_url = $data['dataMenu']['sidebar'][0]['menu_children_url'];
-                $path = $menu_url;
-                if ($data['dataMenu']['sidebar'][0]['menu_children_name'] != $data['dataMenu']['menu']['menu_name']) {
-                    $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'];
-                } else {
+            $request = service('request');
+            $response = $filter->before($request);
+
+            if ($response instanceof \CodeIgniter\HTTP\ResponseInterface) {
+                return $response;
+            }
+
+            // dd($dataParams);
+            // $language_for_user = $this->request->getVar('language');
+            // dd($language_for_user);
+            // if (session()->get('is_master') == 1) {
+            //     $dataParams['lang_code'] == $language_for_user;
+            // } else {
+            //     $dataParams['lang_code'] == 'en';
+            // }
+
+            $data = [
+                'layout' => $this->dirLayoutCms,
+                'section' => $this->dirSectionCms,
+                'idleTime' => $this->timeIdle,
+                'sidebar' => $this->menuManagementModel::sidebar($role_id, $dataParams['lang_code']),
+                'dataMenu' => $dataParams['data']['dataMenu'],
+                'breadcrumbs' => $this->menuManagementModel::breadCrumbsBySlug(),
+                'language_row' => $this->menuManagementModel::languageByLangCode($dataParams['lang_code']),
+                'language_list' => $this->menuManagementModel::languageList(),
+                'country_list' => $this->countryModel::countryList(),
+            ];
+
+            if (session()->get('is_master') == 0) {
+                $data['misc'] = $this->miscModel::dataMisc($dataParams['lang_code_website']);
+                $data['navbar'] = $this->pagesModel::dataArrayPageNavbarByLangCode($dataParams['lang_code_website']);
+                $data['lang_code'] = $this->menuManagementModel::languageByLangCode($dataParams['lang_code_website'])['lang_code'];
+                $data['data']['type'] = 'view';
+            }
+
+            $path = '';
+            $title = null;
+            if ($data['dataMenu']) {
+                if (count($data['dataMenu']['sidebar']) == 0) {
+                    $menu_url = $data['dataMenu']['menu']['menu_url'];
+                    $path = $menu_url . '/' . 'body';
                     $title = $data['dataMenu']['menu']['menu_name'];
+                } else {
+                    $menu_url = $data['dataMenu']['sidebar'][0]['menu_children_url'];
+                    $path = $menu_url;
+                    if ($data['dataMenu']['sidebar'][0]['menu_children_name'] != $data['dataMenu']['menu']['menu_name']) {
+                        $title = $data['dataMenu']['menu']['menu_name'] . ' | ' . $data['dataMenu']['sidebar'][0]['menu_children_name'];
+                    } else {
+                        $title = $data['dataMenu']['menu']['menu_name'];
+                    }
+                }
+
+
+                if ($menu_url == $uri->getPath()) {
+                    session()->set('last_url', $menu_url);
+                    $data['title'] = $title;
+                    // dd($data);
+
+                    $this->logUser('Access ' . $title, 'Access ' . $title . ' page successfully');
+
+                    return $this->checkIdle(view('cms' . $path, $data));
+                } else {
+                    $this->logUser('Access not found', 'Page ' . $uri->getPath() . ' is not found');
+
+                    throw new \CodeIgniter\Exceptions\PageNotFoundException("Not Found");
                 }
             }
+            $this->logUser('Access menu', 'User try to access ' . $uri->getPath() . ' , but is not found, user redirected to home');
 
-            if ($menu_url == $uri->getPath()) {
-                $data['title'] = $title;
-                // dd($data);
+            return redirect()->to('/login');
+        } else {
+            // dd($dataParams);
+            if (is_array($dataParams) && isset($dataParams)) {
 
-                $this->logUser('Access ' . $title, 'Access ' . $title . ' page successfully');
+                if ($uri->getPath() == '/') {
+                    $segment_uri = '/';
+                } else {
+                    $segment_uri = '/' . $uri->getSegment(1);
+                }
 
-                return $this->checkIdle(view('cms' . $path, $data));
-            } else {
-                $this->logUser('Access not found', 'Page ' . $uri->getPath() . ' is not found');
+                $data = [
+                    'layout' => $this->dirLayoutWebsite,
+                    'section' => $this->dirSectionWebsite,
+                    'idleTime' => $this->timeIdle,
+                    // 'title' => $dataParams['title'],
+                    'misc' => $this->miscModel::dataMisc($dataParams['lang_code_website']),
+                    'navbar' => $this->pagesModel::dataArrayPageNavbarByLangCode($dataParams['lang_code_website']),
+                    'page_navbar' => $this->pagesModel::dataPageNavbarByLangCode($dataParams['lang_code_website'], $segment_uri),
+                    'language_list' => $this->menuManagementModel::languageList(),
+                    'language_row' => $this->menuManagementModel::languageByLangCode($dataParams['lang_code_website']),
+                    'country_list' => $this->countryModel::countryList()
+                ];
 
-                throw new \CodeIgniter\Exceptions\PageNotFoundException("Not Found");
+                // dd($dataParams['lang_code_website']);
+                // dd($data['page_navbar']);
+
+                if (isset($dataParams['data']) && isset($data['page_navbar'])) {
+                    $page_table = $this->pagesModel->dataPagesWebsiteByNavbarId($dataParams['data']['nid'], $data['language_row']['lang_code']);
+
+                    $arr_page_section = [];
+                    $arr_pages = [];
+                    foreach ($page_table as $keyp => $value) {
+                        $section = $keyp + 1;
+                        $page_section = $this->pagesModel->dataPagesSectionWebsiteByNavbarId($dataParams['data']['nid'], $data['language_row']['lang_code'], $section);
+                        if ($page_section) {
+                            $arr_page_section[] =  [
+                                'uuid' => $page_section['uuid'],
+                                'navbar_uuid' => $page_section['navbar_uuid'],
+                                'section' => $page_section['section'],
+                                'title' => $page_section['title'],
+                                'optional_title' => $page_section['optional_title'],
+                                'subtitle' => $page_section['subtitle'],
+                                'page_image' => $page_section['page_image'],
+                                'paragraph' => $page_section['paragraph'],
+                                'lang_code' => $page_section['lang_code'],
+                                'button' => $this->pagesModel->dataPagesButtonWebsiteByPageId($page_section['uuid']),
+                                'grid' => [],
+                                'image' => [],
+                            ];
+
+
+
+                            $grid = $this->pagesModel->dataPagesGridWebsiteByPageId($page_section['uuid']);
+                            // $arr_grid_urutan = [];
+                            if ($grid) {
+                                foreach ($grid as $key => $value) {
+                                    $arr_page_section[$keyp]['grid'][] = [
+                                        'uuid' => $value['uuid'],
+                                        'page_uuid' => $value['page_uuid'],
+                                        'image' => $value['image'],
+                                        'title' => $value['title'],
+                                        'paragraph' => $value['paragraph'],
+                                        'urutan' => $value['urutan'],
+                                    ];
+                                };
+                            }
+
+                            $image = $this->pagesModel->dataPagesImageWebsiteByPageId($page_section['uuid']);
+                            // $arr_image_urutan = [];
+                            if ($image) {
+                                foreach ($image as $key => $value) {
+                                    $arr_page_section[$keyp]['image'][] = [
+                                        'uuid' => $value['uuid'],
+                                        'page_uuid' => $value['page_uuid'],
+                                        'title' => $value['title'],
+                                        'page_image' => $value['page_image'],
+                                        'page_image_urutan' => $value['page_image_urutan']
+                                    ];
+                                };
+                            }
+                        }
+                    };
+                    // d($arr_page_section);
+                    // die;
+
+                    $arr_page_section = array_values($arr_page_section);
+                    $data['page'] = $arr_page_section;
+                    $data['data'] = $dataParams['data'];
+                    $data['lang_code'] = $data['language_row']['lang_code'];
+                    $data['title'] = $data['page_navbar']['navbar_management_name'];
+                    // $path = $dataParams['data']['path'];
+                    // $breadcrumbs = [
+                    //     [
+                    //         'segment' => $data['page_navbar']['navbar_management_name'],
+                    //         'url' => 'javascript:void(0)',
+                    //         'is_active' => '0'
+                    //     ]
+                    // ];
+
+                    // if ($dataParams['data']['arr_breadcrumbs']) {
+                    //     foreach ($dataParams['data']['arr_breadcrumbs'] as $key => $value) {
+                    //         $breadcrumbs[] = [
+                    //             'segment' => $value['segment'],
+                    //             'url' => $value['url'],
+                    //             'is_active' => $value['is_active']
+                    //         ];
+                    //     }
+                    // }
+
+                    // dd("masuk");
+
+                    $data['breadcrumbs'] = $this->menuManagementModel::breadCrumbsBySlug();
+
+                    // dd($data);
+
+                    $this->logUser('Access ' . $data['title'], 'Access ' . $data['title'] . ' page successfully');
+                    if (session()->get('role_id')) {
+                        return $this->checkIdle(view('website/' . $data['page_navbar']['to_page'] . '/body', $data));
+                    } else {
+                        return view('website/' . $data['page_navbar']['to_page'] . '/body', $data);
+                    }
+                }
             }
-        }
-        $this->logUser('Access menu', 'User try to access ' . $uri->getPath() . ' , but is not found, user redirected to home');
+            $this->logUser('Access page', 'User try to access a page but is not found, user redirected to home');
 
-        return redirect()->to('/login');
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Not Found");
+        }
     }
 
     public function links(...$params)
@@ -114,11 +276,19 @@ class General extends BaseController
                 'dataMenu' => $this->menuManagementModel::menuAksesBySlug($uri->getSegment(1), $lang_code, $role_id),
                 'breadcrumbs' => $this->menuManagementModel::breadCrumbsBySlug(),
                 'language_row' => $this->menuManagementModel::languageByLangCode($lang_code),
-                'language_list' => $this->menuManagementModel::languageList()
+                'language_list' => $this->menuManagementModel::languageList(),
+                'country_list' => $this->countryModel::countryList()
             ];
 
             if (isset($dataParams['data'])) {
                 $data['data'] = $dataParams['data'];
+            }
+
+            if (session()->get('is_master') == 0) {
+                $data['misc'] = $this->miscModel::dataMisc($dataParams['lang_code_website']);
+                $data['navbar'] = $this->pagesModel::dataArrayPageNavbarByLangCode($dataParams['lang_code_website']);
+                $data['lang_code'] = $this->menuManagementModel::languageByLangCode($dataParams['lang_code_website'])['lang_code'];
+                $data['data']['type'] = 'view';
             }
 
             // dd($uri->getSegment(1));
@@ -149,9 +319,116 @@ class General extends BaseController
             $this->logUser('Access ' . $title, 'Access ' . $title . ' page successfully');
 
             // dd('cms' . $uri->getPath(), $data);
+            session()->set('last_url', $uri->getPath());
             return $this->checkIdle(view('cms' . $uri->getPath(), $data));
         }
         $this->logUser('Access page', 'User try to access ' . $uri->getPath() . ' , but is not found, user redirected to home');
+
+        throw new \CodeIgniter\Exceptions\PageNotFoundException("Not Found");
+    }
+
+    public function linksWebsite(...$params)
+    {
+        $dataParams = $params[0];
+        // dd($dataParams);
+        $uri = service('uri');
+        if (is_array($dataParams) && isset($dataParams)) {
+
+            if ($uri->getPath() == '/') {
+                $segment_uri = '/';
+            } else {
+                $segment_uri = '/' . $uri->getSegment(1);
+            }
+
+            $data = [
+                'layout' => $this->dirLayoutWebsite,
+                'section' => $this->dirSectionWebsite,
+                'idleTime' => $this->timeIdle,
+                // 'title' => $dataParams['title'],
+                'misc' => $this->miscModel::dataMisc($dataParams['lang_code']),
+                'navbar' => $this->pagesModel::dataArrayPageNavbarByLangCode($dataParams['lang_code']),
+                'page_navbar' => $this->pagesModel::dataPageNavbarByLangCode($dataParams['lang_code'], $segment_uri),
+                'language_list' => $this->menuManagementModel::languageList(),
+                'language_row' => $this->menuManagementModel::languageByLangCode($dataParams['lang_code']),
+                'country_list' => $this->countryModel::countryList()
+            ];
+
+            // dd($dataParams['lang_code']);
+            // dd($data['navbar']);
+
+            if (isset($dataParams['data']) && isset($data['page_navbar'])) {
+                $page_table = $this->pagesModel->dataPagesWebsiteByNavbarId($dataParams['data']['nid'], $data['language_row']['lang_code']);
+
+                $arr_page_section = [];
+                foreach ($page_table as $keyp => $value) {
+                    $section = $keyp + 1;
+                    $page_section = $this->pagesModel->dataPagesSectionWebsiteByNavbarId($dataParams['data']['nid'], $data['language_row']['lang_code'], $section);
+                    if ($page_section) {
+
+                        $arr_page_section = [
+                            $keyp => [
+                                'uuid' => $page_section['uuid'],
+                                'navbar_uuid' => $page_section['navbar_uuid'],
+                                'section' => $page_section['section'],
+                                'title' => $page_section['title'],
+                                'optional_title' => $page_section['optional_title'],
+                                'subtitle' => $page_section['subtitle'],
+                                'paragraph' => $page_section['paragraph'],
+                                'lang_code' => $page_section['lang_code'],
+                                'button' => $this->pagesModel->dataPagesButtonWebsiteByPageId($page_section['uuid']),
+                                'grid' => [],
+                                'image' => [],
+                            ],
+                        ];
+
+                        $grid = $this->pagesModel->dataPagesGridWebsiteByPageId($page_section['uuid']);
+                        // $arr_grid_urutan = [];
+                        if ($grid) {
+                            foreach ($grid as $key => $value) {
+                                $arr_page_section[$keyp]['grid'][] = [
+                                    'uuid' => $value['uuid'],
+                                    'page_uuid' => $value['page_uuid'],
+                                    'image' => $value['image'],
+                                    'title' => $value['title'],
+                                    'paragraph' => $value['paragraph'],
+                                    'urutan' => $value['urutan'],
+                                ];
+                            };
+                        }
+
+                        $image = $this->pagesModel->dataPagesImageWebsiteByPageId($page_section['uuid']);
+                        // $arr_image_urutan = [];
+                        if ($image) {
+                            foreach ($image as $key => $value) {
+                                $arr_page_section[$keyp]['image'][] = [
+                                    'uuid' => $value['uuid'],
+                                    'page_uuid' => $value['page_uuid'],
+                                    'title' => $value['title'],
+                                    'page_image' => $value['page_image'],
+                                    'page_image_urutan' => $value['page_image_urutan']
+                                ];
+                            };
+                        }
+                    }
+                };
+
+                $arr_page_section = array_values($arr_page_section);
+                $data['page'] = $arr_page_section;
+                $data['data'] = $dataParams['data'];
+                $data['lang_code'] = $dataParams['lang_code'];
+                $data['title'] = $data['page_navbar']['navbar_management_name'];
+
+                $data['breadcrumbs'] = $this->menuManagementModel::breadCrumbsBySlug();
+
+                $this->logUser('Access ' . $data['title'], 'Access ' . $data['title'] . ' page successfully');
+                if (session()->get('role_id')) {
+                    return $this->checkIdle(view('website/' . $data['page_navbar']['to_page'] . '/body', $data));
+                } else {
+                    return view('website/' . $data['page_navbar']['to_page'] . '/body', $data);
+                }
+            }
+        }
+        $this->logUser('Access page', 'User try to access a page but is not found, user redirected to home');
 
         throw new \CodeIgniter\Exceptions\PageNotFoundException("Not Found");
     }

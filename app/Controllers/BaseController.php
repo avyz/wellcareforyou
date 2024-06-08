@@ -302,10 +302,17 @@ abstract class BaseController extends Controller
         return $view;
     }
 
-    public function dataArrayForMethodLinks($title, $data = null)
+    public function dataArrayForMethodLinks($title, $data = null, $isWebsiteView = false)
     {
-        $lang_code = $this->request->getVar('lang_code');
+        if (!$isWebsiteView) {
+            $lang_code = $this->request->getVar('lang_code');
+            $lang_code_website = $this->request->getVar('language');
+        } else {
+            $lang_code = $this->request->getVar('language');
+            $lang_code_website = null;
+        }
         $data = [
+            'lang_code_website' => $lang_code_website,
             'lang_code' => $lang_code,
             'title' => $title,
             'data' => $data
@@ -319,5 +326,11 @@ abstract class BaseController extends Controller
         $day = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
         return $day;
+    }
+
+    public function removeExtension($filename)
+    {
+        $nameWithoutExtension = pathinfo($filename, PATHINFO_FILENAME);
+        return $nameWithoutExtension;
     }
 }

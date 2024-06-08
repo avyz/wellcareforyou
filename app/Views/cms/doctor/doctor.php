@@ -217,6 +217,21 @@
                         <textarea name="doctor_address" id="doctor_address" class="form-control" rows="3"></textarea>
                         <div class="invalid-feedback" id="doctor_address_validation"></div>
                     </div>
+                    <div class="form-group my-3">
+                        <label for="doctor_facebook">Facebook : </label>
+                        <input type="text" class="form-control" name="doctor_facebook" id="doctor_facebook">
+                        <div class="invalid-feedback" id="doctor_facebook_validation"></div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="doctor_twitter">Twitter : </label>
+                        <input type="text" class="form-control" name="doctor_twitter" id="doctor_twitter">
+                        <div class="invalid-feedback" id="doctor_twitter_validation"></div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="doctor_linkedin">LinkedIn : </label>
+                        <input type="text" class="form-control" name="doctor_linkedin" id="doctor_linkedin">
+                        <div class="invalid-feedback" id="doctor_linkedin_validation"></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
@@ -417,9 +432,24 @@
                         </div>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="edit_doctor_address">Address :</label>
+                        <label for="edit_doctor_address">Address<small class="text-danger">*</small> :</label>
                         <textarea name="edit_doctor_address" id="edit_doctor_address" class="form-control" rows="3"></textarea>
                         <div class="invalid-feedback" id="edit_doctor_address_validation"></div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="edit_doctor_facebook">Facebook : </label>
+                        <input type="text" class="form-control" name="edit_doctor_facebook" id="edit_doctor_facebook">
+                        <div class="invalid-feedback" id="edit_doctor_facebook_validation"></div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="edit_doctor_twitter">Twitter : </label>
+                        <input type="text" class="form-control" name="edit_doctor_twitter" id="edit_doctor_twitter">
+                        <div class="invalid-feedback" id="edit_doctor_twitter_validation"></div>
+                    </div>
+                    <div class="form-group my-3">
+                        <label for="edit_doctor_linkedin">LinkedIn : </label>
+                        <input type="text" class="form-control" name="edit_doctor_linkedin" id="edit_doctor_linkedin">
+                        <div class="invalid-feedback" id="edit_doctor_linkedin_validation"></div>
                     </div>
                 </div>
                 <div class="modal-footer">

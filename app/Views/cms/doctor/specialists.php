@@ -8,19 +8,6 @@
                 <?= session()->getFlashdata('notif') ?>
             <?php endif; ?>
             <?= $this->include('/layout/admin/buttons'); ?>
-            <!-- <div class="row justify-content-end mt-3">
-                <div class="col-md-4 col-6">
-                    <div class="d-flex align-items-center">
-                        <label class="mb-0 me-2 d-none d-md-inline">Language: </label>
-                        <select class="form-control" name="language_code" onchange="changeLang(this, url + '/doctor/data-doctor-specialist', specialist_ui_table, 'specialistCreateModal', false)">
-                            <option value="" selected disabled>-- Choose your menu language --</option>
-                            <?php foreach ($language_list as $d) : ?>
-                                <option value="<?= $d['lang_code'] ?>" <?php if ($d['lang_code'] == $language_row['lang_code']) : ?>selected<?php endif; ?>><?= $d['language'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-            </div> -->
             <div class="table-responsive">
                 <table id="specialist-ui-table" data-view="<?= $dataMenu['sidebar'][0]['view'] ?>" data-create="<?= $dataMenu['sidebar'][0]['create'] ?>" data-edit="<?= $dataMenu['sidebar'][0]['edit'] ?>" data-delete="<?= $dataMenu['sidebar'][0]['delete'] ?>" data-buttons_csv="<?= $dataMenu['sidebar'][0]['buttons_csv'] ?>" data-buttons_excel="<?= $dataMenu['sidebar'][0]['buttons_excel'] ?>" data-buttons_print="<?= $dataMenu['sidebar'][0]['buttons_print'] ?>" class="table dt-table-hover my-3" style="width:100%">
                     <thead>
@@ -60,6 +47,18 @@
                             <div class="invalid-feedback" id="specialist_desc_<?= $d['lang_code'] ?>_validation"></div>
                         </div>
                     <?php endforeach; ?>
+                    <div class="form-group">
+                        <label for="specialist_image">Image<small class="text-danger">*</small> : </label>
+                        <div class="row align-items-center">
+                            <div class="col-lg-2">
+                                <img src="/assets/website/images/specialist/default.png" class="preview-img-specialist-image mb-2 mb-lg-0" style="width:120px" alt="img">
+                            </div>
+                            <div class="col-lg-10">
+                                <input onchange="previewImg('specialist_image', 'preview-img-specialist-image')" class="form-control" type="file" id="specialist_image" name="specialist_image" accept="image/*" required>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback" id="specialist_image_validation"></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
@@ -96,11 +95,19 @@
                             <div class="invalid-feedback" id="edit_specialist_desc_<?= $d['lang_code'] ?>_validation"></div>
                         </div>
                     <?php endforeach; ?>
-                    <!-- <div class="form-group mb-3">
-                        <label for="edit_specialist_desc">Description :</label>
-                        <textarea name="edit_specialist_desc" id="edit_specialist_desc" class="form-control" rows="3"></textarea>
-                        <div class="invalid-feedback" id="edit_specialist_desc_validation"></div>
-                    </div> -->
+                    <div class="form-group">
+                        <label>Image<small class="text-danger">*</small> : </label>
+                        <div class="row align-items-center" id="edit-show-specialist-image">
+                            <div class="col-lg-2">
+                                <img class="edit-preview-img-specialist-image mb-2 mb-lg-0" style="width:120px" alt="img">
+                            </div>
+                            <div class="col-lg-10">
+                                <input onchange="previewImg('edit_specialist_image_new', 'edit-preview-img-specialist-image')" class="form-control" type="file" id="edit_specialist_image_new" name="edit_specialist_image_new" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="invalid-feedback" id="edit_specialist_image_new_validation"></div>
+                        <input type="hidden" class="form-control" name="edit_specialist_image" id="edit_specialist_image">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Cancel</button>

@@ -215,17 +215,33 @@ if (currentUrl.split("/").length > 4) {
 var navLinks = $('.menu-link-sidebar');
 navLinks.map((index, link) => {
     // // Memeriksa apakah path URL cocok dengan link URL
-    if (!link.classList.contains('single-menu')) {
-        if (currentUrl.split("?")[0] === link.children[0].href) {
-            var parent = link.parentNode.parentNode;
-            parent.classList.add('active');
-            parent.children[0].setAttribute("aria-expanded", "true");
-            parent.children[1].classList.add('show');
-            link.classList.add('active');
+    if (!link.classList.contains('menu-access')) {
+        if (!link.classList.contains('single-menu')) {
+            if (currentUrl.split("?")[0] === link.children[0].href) {
+                var parent = link.parentNode.parentNode;
+                parent.classList.add('active');
+                parent.children[0].setAttribute("aria-expanded", "true");
+                parent.children[1].classList.add('show');
+                link.classList.add('active');
+            }
+        } else {
+            if (currentUrl.split("?")[0] === link.children[0].href) {
+                link.classList.add('active');
+            }
         }
     } else {
-        if (currentUrl.split("?")[0] === link.children[0].href) {
-            link.classList.add('active');
+        if (!link.classList.contains('single-menu')) {
+            if (currentUrl.split("?")[0] === link.children[0].href.split("?")[0]) {
+                var parent = link.parentNode.parentNode;
+                parent.classList.add('active');
+                parent.children[0].setAttribute("aria-expanded", "true");
+                parent.children[1].classList.add('show');
+                link.classList.add('active');
+            }
+        } else {
+            if (currentUrl.split("?")[0] === link.children[0].href.split("?")[0]) {
+                link.classList.add('active');
+            }
         }
     }
 })

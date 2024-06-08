@@ -875,6 +875,87 @@ $('#language-ui-table').DataTable({
     }
 });
 
+// Setting Country
+$('#country-ui-table').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "ajax": {
+        "url": url + "/setting/data-country",
+        "type": "GET"
+    },
+    "dom": dom(),
+
+    buttons: buttons(
+        {
+            columnName: "country_id",
+            modelName: "dataCountry",
+            methodName: "countryModel",
+            column: ['number',
+                'country',
+                'country_code',
+                'country_icon',
+                'created_at'],
+            header: [
+                'No',
+                'Country',
+                'Code',
+                'Icon',
+                'Created Date'
+            ]
+        }
+    ),
+    "oLanguage": language(),
+    "stripeClasses": [],
+    "lengthMenu": [7, 10, 20, 50],
+    "pageLength": 10,
+    "columns": [
+        {
+            "data": 'number',
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                return row.number;
+            }
+        },
+        {
+            "data": "country",
+            "orderable": true
+
+        },
+        { "data": "country_code", "orderable": false },
+        { "data": "country_icon", "orderable": false },
+        {
+            "data": null,
+            "orderable": false,
+            render: function (data, type, row, meta) {
+                // console.log(row);
+                let html = "";
+                if (row.is_active == 1) {
+                    html = 'Active'
+                } else {
+                    html = 'Inactive'
+                }
+                return html;
+            }
+        },
+        {
+            "data": null,
+            "orderable": false,
+            "render": function (data, type, row, meta) {
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-country_id=" + row.uuid + " id='editCountry' data-bs-toggle='modal' data-bs-target='#countryEditModal'><i class='ri-pencil-line'></i></button>";
+                if (row.is_active == 1) {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/setting/country/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.country + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="country-ui-table" data-namesec="country" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                } else {
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/setting/country/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.country + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="country-ui-table" data-namesec="country" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                }
+                return button;
+            }
+        }
+    ],
+    initComplete: function (settings, json) {
+        initialComplete(settings, json, 'country-ui-table', 'countryCreateModal');
+    }
+});
+
 // Pages
 // Navbar
 const pages_ui_table = $('#pages-ui-table').DataTable({
@@ -922,7 +1003,14 @@ const pages_ui_table = $('#pages-ui-table').DataTable({
         },
         {
             "data": "navbar_management_name",
-            "orderable": true
+            "orderable": true,
+            "render": function (data, type, row, meta) {
+                if (row.is_main == 1) {
+                    return row.navbar_management_name + '<br><small class="badge badge-success">Force to "/"</small>';
+                } else {
+                    return row.navbar_management_name;
+                }
+            }
 
         },
         { "data": "navbar_management_url", "orderable": false },
@@ -944,7 +1032,14 @@ const pages_ui_table = $('#pages-ui-table').DataTable({
             "data": null,
             "orderable": false,
             "render": function (data, type, row, meta) {
+                let path_url = '';
+                if (row.navbar_management_url == '/') {
+                    path_url = window.location.origin;
+                } else {
+                    path_url = row.navbar_management_url;
+                }
                 var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-navbar_management_id=" + row.uuid + " id='editPages' data-bs-toggle='modal' data-bs-target='#pagesEditModal'><i class='ri-pencil-line'></i></button>";
+                button += '<a class="buttons-edit ms-1" href="' + path_url + '?nid=' + row.uuid + '&language=' + row.lang_code + '&type=edit" target="_blank"><button class="btn px-2 py-1 btn-info"><i class="ri-edit-circle-line"></i></button></a>';
                 if (row.is_active == 1) {
                     button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/pages/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.navbar_management_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="pages-ui-table" data-namesec="page_navbar" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
@@ -1000,8 +1095,14 @@ const group_pages_ui_table = $('#group-pages-ui-table').DataTable({
         },
         {
             "data": "navbar_management_group_name",
-            "orderable": true
-
+            "orderable": true,
+            "render": function (data, type, row, meta) {
+                if (row.is_navbar == 1) {
+                    return row.navbar_management_group_name + '<br><small class="badge badge-success">Force Navbar</small>';
+                } else {
+                    return row.navbar_management_group_name;
+                }
+            }
         },
         {
             "data": null,
@@ -1022,12 +1123,16 @@ const group_pages_ui_table = $('#group-pages-ui-table').DataTable({
             "orderable": false,
             "render": function (data, type, row, meta) {
                 metaLanguage = $('meta[name="language"]').attr('content');
-                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-navbar_management_group_id=" + row.uuid + " id='editGroupPages' data-bs-toggle='modal' data-bs-target='#groupPagesEditModal'><i class='ri-pencil-line'></i></button>";
+
+                var button = '';
+                // if (row.navbar_management_group_name != 'Navbar') {
+                button += "<button class='buttons-edit btn px-2 py-1 btn-primary' data-navbar_management_group_id=" + row.uuid + " id='editGroupPages' data-bs-toggle='modal' data-bs-target='#groupPagesEditModal'><i class='ri-pencil-line'></i></button>";
+                // }
                 button += '<a class="buttons-edit" href="/pages/group-pages/page-list?&navbar_management_group_uuid=' + row.uuid + '&lang_code=en&lang_view=' + metaLanguage + '&page=' + row.navbar_management_group_name.toLowerCase() + '" target="_blank" class="buttons-edit"><button class="btn mx-1 px-2 py-1 btn-info"><i class="ri-pages-line"></i></button></a>';
                 if (row.is_active == 1) {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="group-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/deactivate` + "'" + ', ' + "'" + `Are you sure want to deactivate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="group-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="buttons-delete"><button class="btn px-2 py-1 btn-danger"><i class="ri-shut-down-line"></i></button></a>';
                 } else {
-                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="group-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="ms-1 buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
+                    button += '<a href="javascript:void(0)" onclick="del(this, ' + "'" + `/pages/group-pages/activate` + "'" + ', ' + "'" + `Are you sure want to activate ` + row.navbar_management_group_name + "?'" + ', ' + "'" + `DELETE` + "'" + ')" data-id_datatable="group-pages-ui-table" data-namesec="page_navbar_group" data-id="' + row.uuid + '" class="buttons-delete"><button class="btn px-2 py-1 btn-success"><i class="ri-checkbox-circle-line"></i></button></a>';
                 }
                 return button;
             }
@@ -1043,7 +1148,7 @@ const hospitalLocation = $('#hospital-location-ui-table').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
-        "url": url + "/setting/data-language",
+        "url": url + "/setting/data-country",
         "type": "GET"
     },
     "dom": dom(),
@@ -1054,7 +1159,7 @@ const hospitalLocation = $('#hospital-location-ui-table').DataTable({
             modelName: "dataLocation",
             methodName: "hospitalModel",
             column: ['number',
-                'language',
+                'country',
                 'hospital_location_code',
                 'hospital_location_name',
                 'created_at'],
@@ -1080,7 +1185,7 @@ const hospitalLocation = $('#hospital-location-ui-table').DataTable({
             }
         },
         {
-            "data": "language",
+            "data": "country",
             "orderable": true
 
         },
@@ -1102,7 +1207,7 @@ const hospitalLocation = $('#hospital-location-ui-table').DataTable({
             "data": null,
             "orderable": false,
             "render": function (data, type, row, meta) {
-                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-lang_id=" + row.uuid + " id='editLocation' data-bs-toggle='modal' data-bs-target='#locationEditModal'><i class='ri-pencil-line'></i></button>";
+                var button = "<button class='buttons-edit btn px-2 py-1 btn-primary' data-country_id=" + row.uuid + " id='editLocation' data-bs-toggle='modal' data-bs-target='#locationEditModal'><i class='ri-pencil-line'></i></button>";
                 return button;
             }
         }

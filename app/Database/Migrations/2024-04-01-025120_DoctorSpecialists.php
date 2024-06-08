@@ -44,7 +44,11 @@ class DoctorSpecialists extends Migration
             'specialist_code' => [
                 'type' => 'VARCHAR',
                 'constraint' => 128,
-            ]
+            ],
+            'specialist_image' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
         ]);
         $this->forge->addKey('doctor_specialist_id', true);
         $this->forge->createTable('doctor_specialist_table');

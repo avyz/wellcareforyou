@@ -69,8 +69,8 @@
                                         <label for="hq_hospital_country">Hospital Country</label>
                                         <select name="hq_hospital_country" id="hq_hospital_country" class="form-control" required>
                                             <option value="">-- Choose your country --</option>
-                                            <?php foreach ($language_list as $d) : ?>
-                                                <option value="<?= $d['uuid'] ?>"><?= $d['language'] ?></option>
+                                            <?php foreach ($country_list as $d) : ?>
+                                                <option value="<?= $d['uuid'] ?>"><?= $d['country'] ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                         <div class="invalid-feedback" id="hq_hospital_country_validation"></div>
@@ -116,8 +116,8 @@
                                         <label for="branch_hospital_country">Hospital Country</label>
                                         <select id="branch_hospital_country" class="form-control">
                                             <option value="">-- Choose your country --</option>
-                                            <?php foreach ($language_list as $d) : ?>
-                                                <option value="<?= $d['uuid'] ?>"><?= $d['language'] ?></option>
+                                            <?php foreach ($country_list as $d) : ?>
+                                                <option value="<?= $d['uuid'] ?>"><?= $d['country'] ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                         <div class="invalid-feedback" id="branch_hospital_country_validation"></div>
@@ -222,8 +222,8 @@
                                         <label for="edit_hq_hospital_country">Hospital Country</label>
                                         <select name="edit_hq_hospital_country" id="edit_hq_hospital_country" class="form-control" required>
                                             <option value="">-- Choose your country --</option>
-                                            <?php foreach ($language_list as $d) : ?>
-                                                <option value="<?= $d['uuid'] ?>"><?= $d['language'] ?></option>
+                                            <?php foreach ($country_list as $d) : ?>
+                                                <option value="<?= $d['uuid'] ?>"><?= $d['country'] ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                         <div class="invalid-feedback" id="edit_hq_hospital_country_validation"></div>
@@ -269,8 +269,8 @@
                                         <label for="edit_branch_hospital_country">Hospital Country</label>
                                         <select id="edit_branch_hospital_country" class="form-control">
                                             <option value="">-- Choose your country --</option>
-                                            <?php foreach ($language_list as $d) : ?>
-                                                <option value="<?= $d['uuid'] ?>"><?= $d['language'] ?></option>
+                                            <?php foreach ($country_list as $d) : ?>
+                                                <option value="<?= $d['uuid'] ?>"><?= $d['country'] ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                         <div class="invalid-feedback" id="edit_branch_hospital_country_validation"></div>

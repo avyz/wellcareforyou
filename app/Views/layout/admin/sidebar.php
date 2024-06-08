@@ -4,7 +4,7 @@
           <div class="navbar-nav theme-brand flex-row text-center">
               <div class="nav-logo">
                   <div class="nav-item theme-logo">
-                      <a href="/wc-admin/dashboard">
+                      <a href="/dashboard">
                           <img src="/assets/website/images/logo_white.png" class="navbar-logo" alt="logo">
                       </a>
                   </div>
@@ -21,8 +21,8 @@
           <div class="shadow-bottom"></div>
           <ul class="list-unstyled menu-categories" id="accordionExample">
               <?php foreach ($sidebar as $s) : ?>
-                  <li class="menu <?php if (empty($s['sidebar'])) : ?> menu-link-sidebar single-menu <?php endif; ?>">
-                      <a href="<?php if (!empty($s['sidebar'])) : ?>#<?= $s['menu_slug'] ?><?php else : ?><?= $s['menu_url'] ?><?php endif; ?>" <?php if (!empty($s['sidebar'])) : ?> data-bs-toggle="collapse" aria-expanded="false" <?php endif; ?> class="dropdown-toggle">
+                  <li class="menu <?php if (empty($s['sidebar'])) : ?>menu-link-sidebar <?php if (session()->get('is_master') == 0) : ?>menu-access<?php endif; ?> single-menu <?php endif; ?>">
+                      <a href="<?php if (!empty($s['sidebar'])) : ?>#<?= $s['menu_slug'] ?><?php else : ?><?php if (session()->get('is_master') == 0) : ?><?= $s['menu_url'] ?>?language=<?= $lang_code ?><?php else : ?><?= $s['menu_url'] ?><?php endif; ?><?php endif; ?>" <?php if (!empty($s['sidebar'])) : ?> data-bs-toggle="collapse" aria-expanded="false" <?php endif; ?> class="dropdown-toggle">
                           <div class="menu-sidebar">
                               <?= $s['menu_icon'] ?>
                               <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
@@ -42,8 +42,12 @@
                       <?php if (!empty($s['sidebar'])) : ?>
                           <ul class="collapse submenu list-unstyled" id="<?= $s['menu_slug'] ?>" data-bs-parent="#<?= $s['menu_slug'] ?>">
                               <?php foreach ($s['sidebar'] as $sb) : ?>
-                                  <li class="menu-link-sidebar">
-                                      <a href="<?= $sb['menu_children_url'] ?>"> <?= $sb['menu_children_name'] ?> </a>
+                                  <li class="menu-link-sidebar <?php if (session()->get('is_master') == 0) : ?>menu-access<?php endif; ?>">
+                                      <?php if (session()->get('is_master') == 0) : ?>
+                                          <a href="<?= $sb['menu_children_url'] ?>?language=<?= $lang_code ?>"> <?= $sb['menu_children_name'] ?></a>
+                                      <?php else : ?>
+                                          <a href="<?= $sb['menu_children_url'] ?>"> <?= $sb['menu_children_name'] ?></a>
+                                      <?php endif; ?>
                                   </li>
                               <?php endforeach; ?>
                           </ul>

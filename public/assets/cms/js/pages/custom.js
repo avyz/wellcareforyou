@@ -29,7 +29,13 @@ $(document).on('click', '#editPages', function () {
             $('#edit_navbar_management_id').val(data.uuid);
             $('#edit_navbar_management_name').val(data.navbar_management_name);
             $('#edit_navbar_management_number').val(data.page_number);
+            if (data.is_main == 1) {
+                $('#edit_is_main').prop('checked', true);
+            } else {
+                $('#edit_is_main').prop('checked', false);
+            }
             $('#pagesEdit select[name="lang_code"]').val(data.lang_code);
+            $('#edit_to_page').val(data.to_page);
         },
         error: function (xhr, status, error) {
             // Handle any errors that occur during the AJAX request
@@ -101,6 +107,12 @@ $(document).on('click', '#editGroupPages', function () {
             $('#edit_navbar_management_group_id').val(data.uuid);
             $('#edit_navbar_management_group_name').val(data.navbar_management_group_name);
             $('#groupPagesEdit select[name="lang_code"]').val(data.lang_code);
+            // console.log(data.is_navbar)
+            if (data.is_navbar == 1) {
+                $('#edit_is_navbar').prop('checked', true);
+            } else {
+                $('#edit_is_navbar').prop('checked', false);
+            }
         },
         error: function (xhr, status, error) {
             // Handle any errors that occur during the AJAX request

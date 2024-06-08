@@ -97,7 +97,7 @@
                     <div class="row align-items-center mt-2">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_language">edit_Language :</label>
+                                <label for="edit_language">Language :</label>
                                 <input type="text" class="form-control" name="edit_language" id="edit_language" required>
                                 <div class="invalid-feedback" id="edit_language_validation"></div>
                             </div>
@@ -106,7 +106,7 @@
                             <div class="form-group mt-2 mt-md-0">
                                 <input type="hidden" class="form-control" name="edit_old_lang_icon" id="edit_old_lang_icon">
                                 <label for="edit_data_lang_icon" class="form-label">Icon :</label>
-                                <input class="form-control" type="file" name="edit_data_lang_icon" id="edit_data_lang_icon" accept="image/jpg, image/jpeg, image/png" required>
+                                <input class="form-control" type="file" name="edit_data_lang_icon" id="edit_data_lang_icon" accept="image/jpg, image/jpeg, image/png">
                                 <div class="invalid-feedback" id="edit_data_lang_icon_validation"></div>
                             </div>
                         </div>

@@ -37,12 +37,9 @@ class NavbarManagementGroup extends Migration
                 'type' => 'INT',
                 'constraint' => 1,
             ],
-            'navbar_management_whatsapp' => [
-                'type' => 'VARCHAR',
-                'constraint' => 15,
-            ],
-            'navbar_management_meta_desc' => [
-                'type' => 'TEXT'
+            'is_navbar' => [
+                'type' => 'INT',
+                'constraint' => 1,
             ]
         ]);
         $this->forge->addKey('navbar_management_group_id', true);

@@ -5,6 +5,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="<?= csrf_hash() ?>">
+    <meta name="language" content="<?= $lang_code; ?>">
 
     <!-- Links Of CSS File -->
     <link rel="stylesheet" href="/assets/website/css/bootstrap.min.css">
@@ -20,17 +22,28 @@
     <link rel="stylesheet" href="/assets/website/css/dark-mode.css">
     <link rel="stylesheet" href="/assets/website/css/responsive.css">
     <link rel="stylesheet" href="/assets/website/css/select2.min.css">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/assets/website/images/favicon.ico">
     <!-- Title -->
     <title><?= $title; ?></title>
 
-    <meta name="description" content="<?= $metaDescription; ?>">
+    <meta name="description" content="<?= $page_navbar['navbar_management_meta_desc']; ?>">
+
+    <script src="/assets/website/js/jquery.min.js"></script>
+
+    <script src="/assets/website/js/main.js" defer></script>
+
+    <script>
+        var url = window.location.origin;
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        var metaLanguage = $('meta[name="language"]').attr('content');
+    </script>
+    <script src="/assets/cms/js/api.js" defer></script>
 </head>
 
 <body>
-
+    <div class="sweet-alert"></div>
     <!-- Load Preloader -->
     <?= $this->include('layout/website/preloader'); ?>
 
@@ -62,7 +75,6 @@
     <!-- End Go Top Area -->
 
     <!-- Links of JS File -->
-    <script src="/assets/website/js/jquery.min.js"></script>
     <script src="/assets/website/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/website/js/meanmenu.min.js"></script>
     <script src="/assets/website/js/owl.carousel.min.js"></script>

@@ -161,7 +161,7 @@ class Language extends BaseController
 
         if ($type != 'view') {
             $token = csrf_hash();
-            $edit_data_lang_icon_name = url_title($edit_language, '-', true) . '.' . $edit_data_lang_icon->getClientExtension();
+
             // if (isset($match_value_lang_icon) != isset($edit_old_lang_icon)) {
             // } else {
             //     $edit_data_lang_icon_name = $edit_old_lang_icon;
@@ -221,6 +221,11 @@ class Language extends BaseController
                 // session()->setFlashdata('notif', $session);
                 // return redirect()->back()->withInput();
             } else {
+                if ($edit_data_lang_icon->getClientExtension()) {
+                    $edit_data_lang_icon_name = 'flag-icon-' . url_title($edit_language, '-', true) . '.' . $edit_data_lang_icon->getClientExtension();
+                } else {
+                    $edit_data_lang_icon_name = $edit_old_lang_icon;
+                }
                 $data_role_input = [
                     'lang_code' => $edit_lang_code,
                     'language' => ucwords($edit_language),
@@ -233,7 +238,7 @@ class Language extends BaseController
                 ];
                 $this->helperModel::updateData($where, $data_role_input, 'lang_table');
 
-                if ($edit_data_lang_icon->getError() == 4) {
+                if (!$edit_data_lang_icon->getClientExtension()) {
                     // Jika nama file gambar sebelum dan sesudah sama, masukkan file lama
                     $edit_data_lang_icon_name = $edit_old_lang_icon;
                 } else {

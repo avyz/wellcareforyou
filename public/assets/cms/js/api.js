@@ -131,7 +131,7 @@ function put(url, id_datatable, id_form, data_values, tableOnModal = null) {
     });
 }
 
-function postWithImage(url, id_datatable, id_form, formData, tableOnModal = null, noModal = false, tableOnModalIsArray = false) {
+function postWithImage(url, id_datatable, id_form, formData, tableOnModal = null, noModal = false, tableOnModalIsArray = false, hardRefresh = false) {
     csrfToken = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         headers: {
@@ -163,9 +163,16 @@ function postWithImage(url, id_datatable, id_form, formData, tableOnModal = null
                             $('#' + keys).text(value);
                             $('#' + key + '_validation').text(value);
                             $(".invalid-feedback").css("display", "block");
-                        } else {
                             // console.log("masuk");
-                            $('#' + key + '_validation').text(value);
+                        } else {
+                            if(hardRefresh){
+                                keys = key.replaceAll(".", "_validation_");
+                                $('#' + keys).text(value);
+                                $('#' + key + '_validation').text(value);
+                                $(".invalid-feedback").css("display", "block");
+                            }else{
+                                $('#' + key + '_validation').text(value);
+                            }
                         }
                     } else {
                         $('#' + key + '_validation').text(value);
@@ -177,25 +184,32 @@ function postWithImage(url, id_datatable, id_form, formData, tableOnModal = null
                 $('.sweet-alert').html(data.notification);
                 // Update DataTable
                 if (!noModal) {
-                    const table = $('#' + id_datatable).DataTable();
-                    table.ajax.reload(null, false);
-                    $('#' + id_form).trigger("reset");
-                    $(".modal").modal("hide");
+                    if(!hardRefresh){
+                        const table = $('#' + id_datatable).DataTable();
+                        table.ajax.reload(null, false);
+                        $('#' + id_form).trigger("reset");
+                        $(".modal").modal("hide");
 
-                    if (tableOnModalIsArray) {
-                        if (tableOnModal.length > 0) {
-                            tableOnModal.forEach(function (item) {
-                                $('#' + item).html('');
-                            });
-                            $(".invalid-feedback").css("display", "none");
+                        if (tableOnModalIsArray) {
+                            if (tableOnModal.length > 0) {
+                                tableOnModal.forEach(function (item) {
+                                    $('#' + item).html('');
+                                });
+                                $(".invalid-feedback").css("display", "none");
+                            }
+                        }else{
+                            if (tableOnModal) {
+                                $('#' + tableOnModal).html('');
+                                $(".invalid-feedback").css("display", "none");
+                            }
                         }
+                        
+                        $('textarea').text('');
                     }else{
-                        if (tableOnModal) {
-                            $('#' + tableOnModal).html('');
-                            $(".invalid-feedback").css("display", "none");
-                        }
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1500);
                     }
-                    $('textarea').text('');
                 } else {
                     $(".invalid-feedback").css("display", "none");
                 }
@@ -222,7 +236,7 @@ function postWithImage(url, id_datatable, id_form, formData, tableOnModal = null
     });
 }
 
-function putWithImage(url, id_datatable, id_form, data_values, tableOnModal = null, noModal = false, tableOnModalIsArray = false) {
+function putWithImage(url, id_datatable, id_form, data_values, tableOnModal = null, noModal = false, tableOnModalIsArray = false, hardRefresh = false) {
     csrfToken = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         headers: {
@@ -257,8 +271,14 @@ function putWithImage(url, id_datatable, id_form, data_values, tableOnModal = nu
                             $('#' + key + '_validation').text(value);
                             $(".invalid-feedback").css("display", "block");
                         } else {
-                            // console.log("masuk");
-                            $('#' + key + '_validation').text(value);
+                            if(hardRefresh){
+                                keys = key.replaceAll(".", "_validation_");
+                                $('#' + keys).text(value);
+                                $('#' + key + '_validation').text(value);
+                                $(".invalid-feedback").css("display", "block");
+                            }else{
+                                $('#' + key + '_validation').text(value);
+                            }
                         }
                     } else {
                         $('#' + key + '_validation').text(value);
@@ -281,25 +301,31 @@ function putWithImage(url, id_datatable, id_form, data_values, tableOnModal = nu
 
                 // Update DataTable
                 if (!noModal) {
-                    const table = $('#' + id_datatable).DataTable();
-                    table.ajax.reload(null, false);
-                    $('#' + id_form).trigger("reset");
-                    $(".modal").modal("hide");
+                    if(!hardRefresh){
+                        const table = $('#' + id_datatable).DataTable();
+                        table.ajax.reload(null, false);
+                        $('#' + id_form).trigger("reset");
+                        $(".modal").modal("hide");
 
-                    if (tableOnModalIsArray) {
-                        if (tableOnModal.length > 0) {
-                            tableOnModal.forEach(function (item) {
-                                $('#' + item).html('');
-                            });
-                            $(".invalid-feedback").css("display", "none");
+                        if (tableOnModalIsArray) {
+                            if (tableOnModal.length > 0) {
+                                tableOnModal.forEach(function (item) {
+                                    $('#' + item).html('');
+                                });
+                                $(".invalid-feedback").css("display", "none");
+                            }
+                        }else{
+                            if (tableOnModal) {
+                                $('#' + tableOnModal).html('');
+                                $(".invalid-feedback").css("display", "none");
+                            }
                         }
+                        $('textarea').text('');
                     }else{
-                        if (tableOnModal) {
-                            $('#' + tableOnModal).html('');
-                            $(".invalid-feedback").css("display", "none");
-                        }
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1500);
                     }
-                    $('textarea').text('');
                 } else {
                     $(".invalid-feedback").css("display", "none");
                 }
@@ -546,6 +572,47 @@ function addTagifyValue(name_attr, value) {
         console.error('No Tagify found for:', name_attr);
         return [];
     }
+}
+
+function getDataAjax(api, selector, selector_form) {
+    return new Promise((resolve, reject) => {
+        const navbar_uuid = $('#' + selector).data('navbar_uuid');
+        $('#' + selector_form + ' input[name="navbar_uuid"]').val(navbar_uuid);
+        const lang_code = $('#' + selector).data('lang_code');
+        $('#' + selector_form + ' input[name="lang_code"]').val(lang_code);
+        const page_uuid = $('#' + selector).data('page_uuid');
+        $('#' + selector_form + ' input[name="page_uuid"]').val(page_uuid);
+        const section = $('#' + selector_form + ' input[name="section"]').val();
+
+        $.ajax({
+            url: url + api,
+            type: 'GET',
+            data: {
+                navbar_uuid: navbar_uuid,
+                lang_code: lang_code,
+                page_uuid: page_uuid,
+                section: section,
+                type: 'view'
+            },
+            dataType: 'json',
+            success: function (data) {
+                resolve(data);
+            },
+            error: function (xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+              var notif = Swal.fire({
+                    title: 'Error!',
+                    text: error,
+                    icon: 'error',
+                    showConfirmButton: true,
+                    showCancelButton: false
+                });
+                reject(notif);
+            }
+        });
+
+        // return response.responseJSON;
+    });
 }
 
 // function searchTags(link_api, value, tagify_variable, initObject) {

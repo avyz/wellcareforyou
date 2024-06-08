@@ -38,11 +38,11 @@
                     <div class="row">
                         <div class="col-md-5">
                             <div class="form-group">
-                                <label for="lang_uuid">Country : </label>
-                                <select id="lang_uuid" class="form-control" required>
+                                <label for="country_uuid">Country : </label>
+                                <select id="country_uuid" class="form-control" required>
                                     <option value="">-- Choose your country --</option>
-                                    <?php foreach ($language_list as $d) : ?>
-                                        <option value="<?= $d['uuid'] ?>"><?= $d['language'] ?></option>
+                                    <?php foreach ($country_list as $d) : ?>
+                                        <option value="<?= $d['uuid'] ?>"><?= $d['country'] ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -96,11 +96,11 @@
             <form action="javascript:void(0)" method="post" id="locationEdit" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group" style="display: none;">
-                        <label for="edit_lang_uuid">Country : </label>
-                        <select id="edit_lang_uuid" class="form-control" required>
+                        <label for="edit_country_uuid">Country : </label>
+                        <select id="edit_country_uuid" class="form-control" required>
                             <option value="">-- Choose your country --</option>
-                            <?php foreach ($language_list as $d) : ?>
-                                <option value="<?= $d['uuid'] ?>"><?= $d['language'] ?></option>
+                            <?php foreach ($country_list as $d) : ?>
+                                <option value="<?= $d['uuid'] ?>"><?= $d['country'] ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>

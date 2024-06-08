@@ -310,8 +310,8 @@ class Misc extends BaseController
                     // Jika nama file gambar sebelum dan sesudah sama, masukkan file lama
                     $misc_logo_name = $misc_logo_old;
                 } else {
-                    // Random Name
-                    $this->unlinkImage('assets/website/images/' . $misc_logo_name);
+                    // Remove Image
+                    $this->unlinkImage('assets/website/images/' . $misc_logo_old);
                     // Move Image
                     $misc_logo->move('assets/website/images', $misc_logo_name);
                     // if ($misc_logo_old != 'logo.png') {
@@ -326,7 +326,7 @@ class Misc extends BaseController
                     $misc_logo_white_name = $misc_logo_white_old;
                 } else {
                     // Random Name
-                    $this->unlinkImage('assets/website/images/' . $misc_logo_white_name);
+                    $this->unlinkImage('assets/website/images/' . $misc_logo_white_old);
                     // Move Image
                     $misc_logo_white->move('assets/website/images', $misc_logo_white_name);
                     // if ($misc_logo_white_old != 'logo_white.png') {
